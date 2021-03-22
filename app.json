@@ -1,0 +1,12 @@
+{
+  "name": "BattleshipOnline",
+  "displayName": "BattleshipOnline",
+  "expo": {
+    "name": "BattleshipOnline",
+    "slug": "BattleshipOnline",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  }
+}
