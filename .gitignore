@@ -63,3 +63,4 @@ buck-out/
 # Expo
 .expo/*
 web-build/
+.vs/Frontend-Android/v16/Browse.VC.opendb
