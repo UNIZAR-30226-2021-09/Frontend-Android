@@ -32,7 +32,7 @@ const HomeScreen = ({navigation}) => {
     </View>*/}
 
            {/*
-            <View style={styles.checkboxContainer} >
+            <View style={styles.checkboxContainer} >*
                 <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Sign')}>
                     <Text style={styles.text}>
                         Registrarse

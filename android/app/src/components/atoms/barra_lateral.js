@@ -1,6 +1,6 @@
 import React from 'react';
 import { SafeAreaView, View, Text, TouchableHighlight, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
-import { WHITE, PRIMARY, SECONDARY,BLACK } from '../styles/colors';
+import { WHITE, PRIMARY, SECONDARY,BLACK } from '../../styles/colors';
 
 
 const BarraLateral = ({navigation}) => {
