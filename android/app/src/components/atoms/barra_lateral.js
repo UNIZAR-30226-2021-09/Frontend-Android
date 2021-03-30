@@ -43,10 +43,12 @@ const styles = StyleSheet.create({
     },
     Perfil: {
         fontSize: 12,
-        //fontFamily: "Cochin",
         alignSelf: 'center',
         color: BLACK,
-        //fontWeight: 'bold',
+        
+        marginTop: '25%',
+        
+        
     },
     
     

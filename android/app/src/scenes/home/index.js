@@ -16,6 +16,35 @@ const HomeScreen = ({navigation}) => {
                 <Text style={styles.title}>
                     Juego de barcos
                 </Text>
+                
+                    <TouchableOpacity style={styles.cubito1} onPress={() => navigation.navigate('About')}>
+                    <Text style={styles.textoCubito}>
+                            Partida a ciegas
+                        </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.cubito2} onPress={() => navigation.navigate('About')}>
+                    <Text style={styles.textoCubito}>
+                            Desafiar amigo
+                        </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.cubito3} onPress={() => navigation.navigate('About')}>
+                    <Text style={styles.textoCubito}>
+                            Partida local
+                        </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.cubito4} onPress={() => navigation.navigate('About')}>
+                    <Text style={styles.textoCubito}>
+                            Modo torneo
+                        </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.cubito5} onPress={() => navigation.navigate('About')}>
+                    <Text style={styles.textoCubito}>
+                            Partidas en curso
+                        </Text>
+                    </TouchableOpacity>
+                
+                    
+                
             </View>
             <BarraLateral navigation={navigation}/>
             {/*<View style={styles.cuadroPequeno}>
@@ -53,7 +82,6 @@ const styles = StyleSheet.create({
     cuadroGrande: {
         flex: 4,
         borderColor: BLACK,
-        backgroundColor: 'steelblue',
         borderWidth: 3,
 
     },
@@ -75,18 +103,56 @@ const styles = StyleSheet.create({
     },
     Perfil: {
         fontSize: 12,
-        //fontFamily: "Cochin",
         alignSelf: 'center',
         color: BLACK,
-        //fontWeight: 'bold',
+        
     },
-    input: {
-        height: '8%',
-        width: '70%',
-        marginStart: '15%',
-        marginEnd: '15%',
+    cubito1:{
+        top:30, left:60,
+        width: 140,
+        height:50,
+        backgroundColor: PRIMARY,
+        borderRadius:50,
         borderWidth: 1,
-        borderColor: SECONDARY,
+        
+    },
+    cubito2:{
+        top:-20, left:375,
+        width: 140,
+        height:50,
+        backgroundColor: PRIMARY,
+        borderRadius:50,
+        borderWidth: 1,
+    },
+    cubito3:{
+        top:50, left:60,
+        width: 140,
+        height:50,
+        backgroundColor: PRIMARY,
+        borderRadius:50,
+        borderWidth: 1,
+    },
+    cubito4:{
+        top:0, left:375,
+        width: 140,
+        height:50,
+        backgroundColor: PRIMARY,
+        borderRadius:50,
+        borderWidth: 1,
+    },
+    cubito5:{
+        top:-110, left:218,
+        width: 140,
+        height:50,
+        backgroundColor: PRIMARY,
+        borderRadius:50,
+        borderWidth: 1,
+    },
+    textoCubito:{
+        fontSize: 12,
+        alignSelf: 'center',
+        color: BLACK,
+        marginTop: '10%',
     },
     container: {
         flex: 1,
@@ -103,7 +169,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center'
     },
     title: {
-        fontSize: 42,
+        fontSize: 32,
         alignSelf: 'center',
         color: BLACK,
         fontWeight: 'bold',
