@@ -5,7 +5,7 @@ const plugins = [
             root: ["./android/app/src"],
             extensions: [".js", ".ios.js", ".android.js"],
             alias: {
-                "_assets": "./android/app/srcassets",
+                "_assets": "./android/app/src/assets",
                 "_components": "./android/app/src/components",
                 "_atoms": "./android/app/src/components/atoms",
                 "_molecules": "./android/app/src/components/molecules",

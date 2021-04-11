@@ -27,7 +27,7 @@ const HomeScreen = ({navigation}) => {
                             Desafiar amigo
                         </Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.cubito3} onPress={() => navigation.navigate('About')}>
+                    <TouchableOpacity style={styles.cubito3} onPress={() => navigation.navigate('PlaceShips')}>
                     <Text style={styles.textoCubito}>
                             Partida local
                         </Text>

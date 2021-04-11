@@ -1,9 +1,9 @@
-import { createBottomTabNavigator } from 'react-navigation-tabs';
-
+import { createStackNavigator } from 'react-navigation-stack';
 import HomeScreen from '_scenes/home';
 import AboutScreen from '_scenes/about';
-
-const TabNavigatorConfig = {
+import PlaceShipsScreen from '_scenes/placeShips';
+import GameScreen from '../scenes/game';
+const AppNavigatorConfig = {
     initialRouteName: 'Home',
     header: null,
     headerMode: 'none',
@@ -16,8 +16,14 @@ const RouteConfigs = {
     About: {
         screen: AboutScreen,
     },
+    PlaceShips: {
+        screen: PlaceShipsScreen,
+    },
+    Game: {
+        screen: GameScreen,
+    }
 };
 
-const AppNavigator = createBottomTabNavigator(RouteConfigs, TabNavigatorConfig);
+const AppNavigator = createStackNavigator(RouteConfigs, AppNavigatorConfig);
 
 export default AppNavigator;

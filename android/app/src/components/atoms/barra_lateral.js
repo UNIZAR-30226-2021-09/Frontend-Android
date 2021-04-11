@@ -1,27 +1,26 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { SafeAreaView, View, Text, TouchableHighlight, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
 import { WHITE, PRIMARY, SECONDARY,BLACK } from '../../styles/colors';
 
-
-const BarraLateral = ({navigation}) => {
+export default class BarraLateral extends Component {
     /*const [user, onChangeUsername] = React.useState(null);
     const [pass, onChangePassword] = React.useState(null);*/
-
-    return (
-
+    render() {
+        return (
             <View style={styles.cuadroPequeno}>
                 <View style={styles.cuadroPerfil}>
-                <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('About')}>
-                    <Text style={styles.Perfil}>
-                        Perfil
+                    <TouchableOpacity style={styles.button} onPress={() => this.props.navigation.navigate('About')}>
+                        <Text style={styles.Perfil}>
+                            Perfil
                     </Text>
-                </TouchableOpacity>
+                    </TouchableOpacity>
                 </View>
                 <View style={styles.cuadroAmigos}>
 
                 </View>
             </View>
-    );
+        );
+    }
 };
 
 const styles = StyleSheet.create({
@@ -56,4 +55,3 @@ const styles = StyleSheet.create({
     
 });
 
-export default BarraLateral;

@@ -4,11 +4,13 @@
     "\\android",
     "\\android\\app",
     "\\android\\app\\src",
-    "\\android\\app\\src\\debug",
-    "\\android\\app\\src\\debug\\java\\com",
-    "\\android\\app\\src\\debug\\java\\com\\battleshiponline",
-    "\\android\\app\\src\\main"
+    "\\android\\app\\src\\api",
+    "\\android\\app\\src\\api\\gameLogic",
+    "\\android\\app\\src\\components",
+    "\\android\\app\\src\\scenes",
+    "\\android\\app\\src\\scenes\\placeShips",
+    "\\android\\app\\src\\styles"
   ],
-  "SelectedNode": "\\android\\app\\src\\debug\\java",
+  "SelectedNode": "\\android\\app\\src\\api\\gameLogic\\index.js",
   "PreviewInSolutionExplorer": false
 }
