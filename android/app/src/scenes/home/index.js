@@ -1,5 +1,3 @@
-
-
 import React from 'react';
 import { SafeAreaView, View, Text, TouchableHighlight, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
 import { WHITE, PRIMARY, SECONDARY,BLACK } from '../../styles/colors';
@@ -11,69 +9,39 @@ const HomeScreen = ({navigation}) => {
 
     return (
         <View style={styles.container}>
-
+            
             <View style={styles.cuadroGrande}>
                 <Text style={styles.title}>
                     Juego de barcos
                 </Text>
                 
-                    <TouchableOpacity style={styles.cubito1} onPress={() => navigation.navigate('About')}>
+                    <TouchableOpacity style={styles.cubito1} onPress={() => navigation.navigate('BeginRandom')}>
                     <Text style={styles.textoCubito}>
                             Partida a ciegas
                         </Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.cubito2} onPress={() => navigation.navigate('About')}>
+                <TouchableOpacity style={styles.cubito2} onPress={() => navigation.navigate('BeginFriend')}>
                     <Text style={styles.textoCubito}>
                             Desafiar amigo
                         </Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.cubito3} onPress={() => navigation.navigate('PlaceShips')}>
+                <TouchableOpacity style={styles.cubito3} onPress={() => navigation.navigate('BeginTournament')}>
                     <Text style={styles.textoCubito}>
-                            Partida local
+                        Modo torneo
                         </Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.cubito4} onPress={() => navigation.navigate('About')}>
+                    <TouchableOpacity style={styles.cubito4} onPress={() => navigation.navigate('OngoingGame')}>
                     <Text style={styles.textoCubito}>
-                            Modo torneo
+                        Partidas en curso
                         </Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.cubito5} onPress={() => navigation.navigate('About')}>
+                    <TouchableOpacity style={styles.cubito5} onPress={() => navigation.navigate('PlaceShips')}>
                     <Text style={styles.textoCubito}>
-                            Partidas en curso
+                        Partida contra IA
                         </Text>
                     </TouchableOpacity>
-                
-                    
-                
             </View>
             <BarraLateral navigation={navigation}/>
-            {/*<View style={styles.cuadroPequeno}>
-                <View style={styles.cuadroPerfil}>
-                <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('About')}>
-                    <Text style={styles.Perfil}>
-                        Perfil
-                    </Text>
-                </TouchableOpacity>
-                </View>
-                <View style={styles.cuadroAmigos}>
-
-                </View>
-    </View>*/}
-
-           {/*
-            <View style={styles.checkboxContainer} >*
-                <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Sign')}>
-                    <Text style={styles.text}>
-                        Registrarse
-                    </Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Login')}>
-                    <Text style={styles.text}>
-                        Identificarse
-                    </Text>
-                </TouchableOpacity>
-            </View>
-            */}
         </View>
     );
 };
@@ -125,7 +93,7 @@ const styles = StyleSheet.create({
         borderWidth: 1,
     },
     cubito3:{
-        top:50, left:60,
+        top:30, left:60,
         width: 140,
         height:50,
         backgroundColor: PRIMARY,
@@ -133,7 +101,7 @@ const styles = StyleSheet.create({
         borderWidth: 1,
     },
     cubito4:{
-        top:0, left:375,
+        top:-15, left:375,
         width: 140,
         height:50,
         backgroundColor: PRIMARY,
@@ -141,7 +109,7 @@ const styles = StyleSheet.create({
         borderWidth: 1,
     },
     cubito5:{
-        top:-110, left:218,
+        top:0, left:218,
         width: 140,
         height:50,
         backgroundColor: PRIMARY,
@@ -149,9 +117,9 @@ const styles = StyleSheet.create({
         borderWidth: 1,
     },
     textoCubito:{
-        fontSize: 12,
+        fontSize: 16,
         alignSelf: 'center',
-        color: BLACK,
+        color: WHITE,
         marginTop: '10%',
     },
     container: {

@@ -5,12 +5,12 @@
     "\\android\\app",
     "\\android\\app\\src",
     "\\android\\app\\src\\api",
-    "\\android\\app\\src\\api\\gameLogic",
-    "\\android\\app\\src\\components",
-    "\\android\\app\\src\\scenes",
-    "\\android\\app\\src\\scenes\\placeShips",
-    "\\android\\app\\src\\styles"
+    "\\android\\app\\src\\assets",
+    "\\android\\app\\src\\components\\atoms",
+    "\\android\\app\\src\\components\\molecules",
+    "\\android\\app\\src\\components\\organisms",
+    "\\android\\app\\src\\components\\styles"
   ],
-  "SelectedNode": "\\android\\app\\src\\api\\gameLogic\\index.js",
+  "SelectedNode": "\\android\\app\\src\\debug",
   "PreviewInSolutionExplorer": false
 }
