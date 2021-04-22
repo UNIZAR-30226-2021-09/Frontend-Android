@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { View, Text, TouchableHighlight, TouchableWithoutFeedback, StyleSheet, Image, Alert } from 'react-native';
 import { PRIMARY, SECONDARY, BLACK } from '../../styles/colors';
-import { BarraLateral } from '_atoms'
+import { BarraLateral } from '_organisms'
 import DropDownPicker from 'react-native-dropdown-picker';
 
 export default class BeginRandomScreen extends Component {

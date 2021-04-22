@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { View, Text, TouchableHighlight, TouchableWithoutFeedback, StyleSheet, Image, Alert } from 'react-native';
 import { PRIMARY, SECONDARY, BLACK } from '../../styles/colors';
-import { BarraLateral } from '_atoms'
+import { BarraLateral } from '_organisms'
 import { checkBox, OCEAN_BOX, TOUCHED_BOX, SUNKEN_BOX, NO_ATACK_BOX } from '_api/gameLogic';
 import { Table, TableWrapper, Cell } from 'react-native-table-component'
 import { initBoard, getBox, attack, getSolution, initAttack, initShip, initCoord, IAmove, getCoord } from '../../api/gameLogic';
@@ -16,6 +16,7 @@ export default class GameScreen extends Component {
                 attack: initAttack(),
                 noDetectedShip: initShip(),
                 coordShips: getCoord(),
+                victory: false
             },
             IABoard: {
                 board: initAttack(),
@@ -23,6 +24,7 @@ export default class GameScreen extends Component {
                 attack: initAttack(),
                 noDetectedShip: initShip(),
                 coordShips: boardSolution.coordShips,
+                victory: false
             },
         }
         console.log('board________-'+boardSolution.board);
@@ -32,7 +34,12 @@ export default class GameScreen extends Component {
        this.setState({
            myBoard: attack(row, col, myBoard),
            IABoard: IAmove(IABoard)
-        })
+       })
+        if (this.state.myBoard.victory) {
+            this.props.navigation.navigate('Result', { result: true })
+            //Alert.alert("Has ganado la partida");
+        }
+        console.log("Victoria:::::::::"+this.state.myBoard.victory);
     }
 
     _alertIndex(index, col) {

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { View, Text, TouchableHighlight, TouchableOpacity, StyleSheet, Image, Alert, FlatList, ScrollView } from 'react-native';
 import { PRIMARY, SECONDARY, BLACK } from '../../styles/colors';
-import { BarraLateral } from '_atoms'
+import { BarraLateral } from '_organisms'
 import DropDownPicker from 'react-native-dropdown-picker';
 
 export default class BeginFriendScreen extends Component {

@@ -1,8 +1,5 @@
 import { createStackNavigator } from 'react-navigation-stack';
-
-import RootScreen from '_scenes/root';
-import LoginScreen from '_scenes/login';
-import SignScreen from '_scenes/sign';
+import { RootScreen, LoginScreen, SignScreen } from '_scenes/access';
 import AboutScreen from '_scenes/about'
 
 const AuthNavigatorConfig = {

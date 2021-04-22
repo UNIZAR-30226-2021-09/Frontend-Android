@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import { View, Text, TouchableHighlight, TouchableOpacity, StyleSheet, Image, Alert, FlatList, ScrollView, TextInput } from 'react-native';
+import { View, Text, TouchableHighlight, TouchableOpacity, StyleSheet, Image, Alert, FlatList, ScrollView, TextInput, AsyncStorage } from 'react-native';
 import { PRIMARY, SECONDARY, BLACK } from '../../styles/colors';
-import { BarraLateral } from '_atoms'
+import { BarraLateral } from '_organisms'
 import DropDownPicker from 'react-native-dropdown-picker';
-
+import { addfriend } from '_api/user';
 export default class AddFriendScreen extends Component {
     constructor(props) {
         super(props);
@@ -14,7 +14,32 @@ export default class AddFriendScreen extends Component {
         }
         
     }
-
+    async sendRequest() {
+        if (this.state.selectedFriend == "") {
+            Alert.alert("Introduzca un nombre o enlace");
+            return "error";
+        }
+        var _username = await AsyncStorage.getItem('username');
+        var accessToken = await AsyncStorage.getItem('userToken');
+        var user = {
+            Username: _username,
+            Friendname: this.state.selectedFriend,
+            AccessToken: accessToken
+        };
+        console.log(user);
+        await addfriend(user).then(data => {
+            console.log("Data de addFriend: " + data);
+            if (data != "error") {
+                Alert.alert("Petición enviada");
+            } else {
+                alert('Error de addFriend');
+            }
+        }).catch(err => {
+            console.log("error addFriend")
+            console.log(err)
+            return "error"
+        });
+    }
     send() {
         this.setState({
             estado: ": Esperando"
@@ -22,10 +47,6 @@ export default class AddFriendScreen extends Component {
         Alert.alert("Enviado");
     }
     render() {
-        const getFriend = (option) => {
-
-        }
-        let name="len", lastName = "last";
         return (<View style={styles.container}>
             <View style={styles.cuadroGrande}>
                 <View style={styles.cuadroPequeno}>
@@ -53,8 +74,8 @@ export default class AddFriendScreen extends Component {
                         placeholder="Enlace de invitacion"
                     />
                     <View style={styles.friendContainer}>
-                        <TouchableOpacity style={styles.confirmButton} onPress={() => this.send()}>
-                            <Text style={styles.text} > Enviar peticion </Text>
+                        <TouchableOpacity style={styles.confirmButton} onPress={() => this.sendRequest()}>
+                            <Text style={styles.sendtext} > Enviar peticion </Text>
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -136,6 +157,11 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         color: 'black',
         fontSize: 20,
+    },
+    sendtext: {
+        fontSize: 20,
+        textAlign: 'center',
+        color:'white'
     },
     text: {    
         fontSize: 20,

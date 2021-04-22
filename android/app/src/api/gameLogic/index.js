@@ -105,12 +105,20 @@ export const attack = (row, col, myBoard) => {
 				var coord = myBoard.coordShips[box-1];
 				for (let i = 0; i < coord.length; i++) {
 					myBoard.board[coord[i][0]][coord[i][1]] = SUNKEN_BOX;
-					console.log('CASILLA' + myBoard.board[coord[i][0]][coord[i][1]]);
+					//console.log('CASILLA' + myBoard.board[coord[i][0]][coord[i][1]]);
 				}
 			} else
 				myBoard.board[row][col] = TOUCHED_BOX;
-			console.log('ship'+ box +'detected' + myBoard.noDetectedShip[box - 1]);
+			//console.log('ship'+ box +'detected' + myBoard.noDetectedShip[box - 1]);
 		}
+		let victory = true;
+		for (let i = 0; i < 5; i++) {
+			if (myBoard.noDetectedShip[i] > 0)
+				victory = false;
+			//console.log("VICTORY" + victory + "Barco" + i + "casillas" + myBoard.noDetectedShip[i]);
+
+		}
+		myBoard.victory = victory;
 	} 
 	return myBoard;
 }

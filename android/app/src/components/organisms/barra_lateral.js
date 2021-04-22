@@ -1,41 +1,26 @@
 import React, { Component } from 'react';
-import { SafeAreaView, View, Text, TouchableHighlight, StyleSheet, TextInput, TouchableOpacity, FlatList, Button, Alert } from 'react-native';
+import { SafeAreaView, View, Text, TouchableHighlight, StyleSheet, AsyncStorage, TextInput, TouchableOpacity, FlatList, Button, Alert } from 'react-native';
 import { WHITE, PRIMARY, SECONDARY,BLACK } from '../../styles/colors';
 import Modal from 'react-native-modal';
+import { getFriendList } from '_api/user';
+
 export default class BarraLateral extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
             username: "User",
-            tourList: [
-                { label: 'Torneo 1', value: 'torneo1', },
-                { label: 'Torneo 2', value: 'torneo2' },
-                { label: 'Torneo 3', value: 'torneo3' },
-            ],
             selectedFriend: null,
-            username: "user 1",
             estado: true,
             friendList:
-                [
-                    { name: 'natured', state: true },
-                    { name: 'rollicking', state: true },
-                    { name: 'cheerful', state: true },
-                    { name: 'fun', state: true },
-                    { name: 'sweet', state: true },
-                    { name: 'amiable', state: true },
-                    { name: 'natured', state: true },
-                    { name: 'rollicking', state: false },
-                    { name: 'cheerful', state: false },
-                    { name: 'fun', state: false },
-                    { name: 'sweet', state: false },
-                    { name: 'amiable', state: false },
-                ],
+                ["cheerful", "sweet","natured"],
             show: false,
             showSend: false,
             showReceive: false,
+            refreshing: false,
         }
     }
+
     onClick() {
         const loo = 1;
     }
@@ -52,14 +37,39 @@ export default class BarraLateral extends Component {
         }
     }
 
+    async componentDidMount() {
+        var _username = await AsyncStorage.getItem('username');
+        var accessToken = await AsyncStorage.getItem('userToken');
+        this.setState( {username: _username});
+        var newUser = {
+            Username: _username,
+            AccessToken: accessToken
+        };
+        console.log(newUser);
+        await getFriendList(newUser).then(data => {
+            console.log("Data de barra lateral: " + data);
+            if (data != "error") {
+                this.setState(
+                    { friendList: data }
+                    )
+            } else {
+                alert('Error de registro');
+            }
+        }).catch(err => {
+            console.log("error barra lateral")
+            console.log(err)
+            return "error"
+        }); 
+    }
+    
     render() {
-        
+
         return (
             <View style={styles.cuadroPequeno}>
                 <View style={styles.cuadroPerfil}>
                     <Text style={styles.userText}>
                         {this.state.username}
-                        </Text>
+                    </Text>
                     <TouchableOpacity style={styles.button} onPress={() => this.props.navigation.navigate('Profile')}>
                         <Text style={styles.profileText}>
                             Mi Perfil
@@ -95,10 +105,10 @@ export default class BarraLateral extends Component {
                             renderItem={({ item, index }) => {
                                 return (
                                     <View style={styles.friend}>
-                                        {item.state ?
-                                            <TouchableOpacity style={styles.connectFriend} onPress={() => this.selectFriend(item.name)}>
+                                        {true ?
+                                            <TouchableOpacity style={styles.connectFriend} onPress={() => this.selectFriend(item)}>
                                                 <Text style={styles.friendText}>
-                                                    {item.name}
+                                                    {item}
                                                 </Text>
                                             </TouchableOpacity> :
                                             <TouchableOpacity style={styles.notConnectFriend} onPress={() => this.selectFriend(item.name)}>
@@ -154,11 +164,10 @@ const styles = StyleSheet.create({
         bottom: 6
     },
     button: {
-        height: 29,
+        height: 20,
         width: 60,
         backgroundColor: PRIMARY,
         alignSelf: 'center',
-        paddingTop:10,
         borderRadius: 50,
     },
     addButton: {
@@ -187,6 +196,7 @@ const styles = StyleSheet.create({
         fontSize: 12,
         alignSelf: 'center',
         color: WHITE,
+        
     },
     userText: {
         fontSize: 12,

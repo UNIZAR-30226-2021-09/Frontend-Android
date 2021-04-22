@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { View, Text, TouchableHighlight, TouchableOpacity, StyleSheet, Image, Alert, FlatList, ScrollView } from 'react-native';
 import { PRIMARY, SECONDARY, BLACK, WHITE } from '../../styles/colors';
-import { BarraLateral } from '_atoms'
+import { BarraLateral } from '_organisms'
 import DropDownPicker from 'react-native-dropdown-picker';
 export default class FriendRequestScreen extends Component {
     constructor(props) {
@@ -76,7 +76,7 @@ export default class FriendRequestScreen extends Component {
                                                         <Text style={styles.friendText} > {item.name}</Text>
                                                     </View>
                                                     <View style={styles.gameButton}>
-                                                        <TouchableOpacity style={styles.rejectButton} onPress={() => this.showFriend()}>
+                                                        <TouchableOpacity style={styles.rejectButton} onPress={() => Alert.alert("Funcionalidad futura")}>
                                                             <Text style={styles.rankText} > Cancelar </Text>
                                                         </TouchableOpacity>
                                                     </View>
@@ -105,12 +105,12 @@ export default class FriendRequestScreen extends Component {
                                                     <Text style={styles.friendText} > {item.name}</Text>
                                                 </View>
                                                 <View style={styles.gameButton}>
-                                                    <TouchableOpacity style={styles.acceptButton} onPress={() => this.showFriend()}>
+                                                    <TouchableOpacity style={styles.acceptButton} onPress={() => Alert.alert("Funcionalidad futura")}>
                                                         <Text style={styles.rankText} > Aceptar </Text>
                                                     </TouchableOpacity>
                                                 </View>
                                                 <View style={styles.gameButton}>
-                                                    <TouchableOpacity style={styles.rejectButton} onPress={() => this.showFriend()}>
+                                                    <TouchableOpacity style={styles.rejectButton} onPress={() => Alert.alert("Funcionalidad futura")}>
                                                         <Text style={styles.rankText} > Rechazar </Text>
                                                     </TouchableOpacity>
                                                 </View>

@@ -1,12 +1,48 @@
 import React from 'react';
 import { SafeAreaView, View, Text, TouchableHighlight, StyleSheet, TextInput,TouchableOpacity } from 'react-native';
 import { WHITE, PRIMARY, SECONDARY } from '../../styles/colors';
+import { login } from '_api/user';
 
 const LoginScreen = ({
     navigation,
 }) => {
     const [user, onChangeUsername] = React.useState(null);
+    const [mail, onChangeMail] = React.useState(null);
     const [pass, onChangePassword] = React.useState(null);
+
+    const handleSubmitButton = () => {
+        if (!user) {
+            alert('Introduzca el nombre de usuario');
+            return;
+        }
+        if (!pass) {
+            alert('Introduzca la contraseña');
+            return;
+        }
+        if (!mail) {
+            alert('Introduzca el correo electrónico');
+            return;
+        }
+        var newUser = {
+            Username: user,
+            Password: pass,
+            Mail: mail
+        }
+        console.log(newUser);
+        login(newUser).then(data => {
+            console.log("Data de registro: " + data);
+            if (data != "error") {
+                navigation.navigate('Home')
+            } else {
+                alert('Error de login');
+            }
+        }).catch(err => {
+            console.log("error pantalla register")
+            console.log(err)
+            return "error"
+        });
+    };
+
     return (<View style={styles.container}>
         <View style={styles.headerContainer}>
             <TouchableOpacity style={styles.gobackbutton} onPress={() => navigation.navigate('Root')}>
@@ -26,13 +62,19 @@ const LoginScreen = ({
         />
         <TextInput
             style={styles.input}
+            onChangeText={onChangeMail}
+            value={mail}
+            placeholder="Correo"
+        />
+        <TextInput
+            style={styles.input}
             onChangeText={onChangePassword}
             value={pass}
             secureTextEntry={true}
             placeholder="Contraseña"
         />
-        <View style={styles.checkboxContainer} >
-            <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Home')}>
+        <View style={styles.checkboxContainer}>
+            <TouchableOpacity style={styles.button} onPress={() => handleSubmitButton()}>
                 <Text style={styles.text}>
                     Next
                     </Text>

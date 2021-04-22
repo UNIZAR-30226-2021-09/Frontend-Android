@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
-import { View, Text, TouchableHighlight, TouchableOpacity, StyleSheet, Image, Alert, FlatList, ScrollView } from 'react-native';
+import { View, Text, TouchableHighlight, TouchableOpacity, StyleSheet, Image, Alert, FlatList, ScrollView, AsyncStorage } from 'react-native';
 import { PRIMARY, SECONDARY, BLACK, WHITE } from '../../styles/colors';
-import { BarraLateral } from '_atoms'
+import { BarraLateral } from '_organisms'
 import DropDownPicker from 'react-native-dropdown-picker';
+import { getHistory } from '_api/game';
+
 export default class ProfileScreen extends Component {
     constructor(props) {
         super(props);
@@ -30,26 +32,30 @@ export default class ProfileScreen extends Component {
         }
         
     }
-    showFriend() {
-        const { show } = this.state
-
-        this.setState({
-            show: !show
-        })
-
+    async componentDidMount() {
+        var _username = await AsyncStorage.getItem('username');
+        var accessToken = await AsyncStorage.getItem('userToken');
+        var user = {
+            Username: _username,
+            AccessToken: accessToken
+        };
+        console.log(user);
+        await getHistory(user).then(data => {
+            console.log("Data de getHistory: " + data);
+            if (data != "error") {
+                this.setState(
+                    { gameList: data }
+                )
+            } else {
+                alert('Error de getHistory');
+            }
+        }).catch(err => {
+            console.log("error getHistory")
+            console.log(err)
+            return "error"
+        });
     }
-    selectFriend(friend) {
-        this.setState({
-            selectedFriend: friend,
-            show: false,
-            estado:": Seleccionado"
-        })
-    }
-    send() {
-        this.setState({
-            estado: ": Esperando"
-        })
-    }
+    //{item.state?"(Victoria)":"(Derrota)"}
     render() {
         const getFriend = (option) => {
 
@@ -62,7 +68,7 @@ export default class ProfileScreen extends Component {
                 <View style={styles.cuadroAmigos}>
                     <View style={styles.header}>
                         <Text style={styles.text} > Puntos :{this.state.point}</Text>
-                        <TouchableOpacity style={styles.ranking} onPress={() => this.showFriend()}>
+                        <TouchableOpacity style={styles.ranking} onPress={() => Alert.alert("Funcionalidad futura")}>
                             <Text style={styles.rankText} > Ver Clasificacion </Text>
                         </TouchableOpacity>
                     </View>
@@ -79,10 +85,10 @@ export default class ProfileScreen extends Component {
                                         <View style={styles.friend}>
                                             <View style={styles.gameVictory}>
                                                 <View style={styles.gameItem}>
-                                                    <Text style={styles.friendText} > Partida contra {item.name}</Text>
+                                                    <Text style={styles.friendText} > Partida contra {item.name} </Text>
                                                 </View>
                                                 <View style={styles.gameButton}>
-                                                    <TouchableOpacity style={styles.showButton} onPress={() => this.showFriend()}>
+                                                    <TouchableOpacity style={styles.showButton} onPress={() => Alert.alert("Funcionalidad futura")}>
                                                         <Text style={styles.rankText} > Ver partida </Text>
                                                     </TouchableOpacity>
                                                 </View>
@@ -97,7 +103,7 @@ export default class ProfileScreen extends Component {
                                                     <Text style={styles.friendText} > Partida contra {item.name}</Text>
                                                 </View>
                                                 <View style={styles.gameButton}>
-                                                    <TouchableOpacity style={styles.showButton} onPress={() => this.showFriend()}>
+                                                    <TouchableOpacity style={styles.showButton} onPress={() => Alert.alert("Funcionalidad futura")}>
                                                         <Text style={styles.rankText} > Ver partida </Text>
                                                     </TouchableOpacity>
                                                 </View>
@@ -110,7 +116,7 @@ export default class ProfileScreen extends Component {
                         /> 
                     </View>
                     <View style={styles.cuadroCompartir}>
-                        <TouchableOpacity style={styles.shareButton} onPress={() => this.props.navigation.navigate('Profile')}>
+                        <TouchableOpacity style={styles.shareButton} onPress={() => Alert.alert("Funcionalidad futura")}>
                             <Text style={styles.rankText}>
                                 Compartir
                         </Text>
@@ -231,11 +237,12 @@ const styles = StyleSheet.create({
     },
     shareButton: {
         width: 100,
-        height: 20,
+        height: 30,
         backgroundColor: PRIMARY,
         borderRadius: 50,
         borderWidth: 1,
         alignSelf: 'center',
+        paddingBottom:90
     },
     title: {
         textAlign: 'center',

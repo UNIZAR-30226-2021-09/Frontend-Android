@@ -1,15 +1,13 @@
 import { createStackNavigator } from 'react-navigation-stack';
 import HomeScreen from '_scenes/home';
 import AboutScreen from '_scenes/about';
-import PlaceShipsScreen from '_scenes/placeShips';
-import GameScreen from '_scenes/game';
-import BeginTournamentScreen from '_scenes/beginTournament';
-import BeginRandomScreen from '_scenes/beginRandom';
-import BeginFriendScreen from '_scenes/beginFriend';
-import OngoingGameScreen from '_scenes/ongoingGame';
 import ProfileScreen from '_scenes/profile';
-import AddFriendScreen from '_scenes/addFriend';
-import FriendRequestScreen from '_scenes/friendRequest'
+import { AddFriendScreen, FriendRequestScreen } from '_scenes/friend';
+import { BeginTournamentScreen, BeginRandomScreen, BeginFriendScreen, OngoingGameScreen }
+    from '_scenes/startGame';
+import { GameScreen, PlaceShipsScreen, ResultScreen }  from '_scenes/gameLogic';
+
+
 
 const AppNavigatorConfig = {
     initialRouteName: 'Home',
@@ -50,6 +48,9 @@ const RouteConfigs = {
     },
     FriendRequest: {
         screen: FriendRequestScreen
+    },
+    Result: {
+        screen: ResultScreen
     }
     
 };

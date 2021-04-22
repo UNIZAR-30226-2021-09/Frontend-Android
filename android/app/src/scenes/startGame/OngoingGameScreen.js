@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import { View, Text, TouchableHighlight, TouchableOpacity, StyleSheet, Image, Alert, FlatList, ScrollView } from 'react-native';
+import { View, Text, TouchableHighlight, TouchableOpacity, StyleSheet, Image, Alert, FlatList, ScrollView, AsyncStorage } from 'react-native';
 import { PRIMARY, SECONDARY, BLACK } from '../../styles/colors';
-import { BarraLateral } from '_atoms'
+import { BarraLateral } from '_organisms';
 import DropDownPicker from 'react-native-dropdown-picker';
+import { getGameInProgess } from '_api/game';
 
 export default class OngoingGameScreen extends Component {
     constructor(props) {
@@ -12,29 +13,35 @@ export default class OngoingGameScreen extends Component {
             username: "user 1",
             estado:null,
             gameList:
-                [
-                    { name: 'rollicking' },
-                    { name: 'cheerful' },
-                    { name: 'fun' },
-                    { name: 'sweet' },
-                    { name: 'amiable' },
-                    { name: 'natured' },
-                    { name: 'rollicking' },
-                    { name: 'cheerful' },
-                    { name: 'fun' },
-                    { name: 'sweet' },
-                    { name: 'amiable' },
-                    { name: 'natured' }
-                ],
+                ["cheerful", "sweet", "natured"],
             show: false,
         }
-        
     }
-    
-    render() {
-        const getFriend = (option) => {
+    async componentDidMount() {
+        var _username = await AsyncStorage.getItem('username');
+        var accessToken = await AsyncStorage.getItem('userToken');
+        var user = {
+            Username: _username,
+            AccessToken: accessToken
+        };
+        console.log(user);
+        await getGameInProgess(user).then(data => {
+            console.log("Data de getProgress: " + data);
+            if (data != "error") {
+                this.setState(
+                    { gameList: data }
+                )
+            } else {
+                alert('Error de getProgress');
+            }
+        }).catch(err => {
+            console.log("error getProgress")
+            console.log(err)
+            return "error"
+        });        
+    }
 
-        }
+    render() {
         return (<View style={styles.container}>
             <View style={styles.cuadroGrande}>
                 <View style={styles.cuadroPequeno}>
@@ -47,9 +54,9 @@ export default class OngoingGameScreen extends Component {
                         renderItem={({ item, index }) => {
                             return (
                                 <View style={styles.friend}>
-                                    <TouchableOpacity style={styles.gameButton} onPress={() => this.selectFriend(item.name)}>
+                                    <TouchableOpacity style={styles.gameButton} onPress={() => Alert.alert("Funcionalidad futura")}>
                                         <Text style={styles.friendText}>
-                                            Partido contra {item.name}
+                                            Partido contra {item}
                                         </Text>
                                     </TouchableOpacity>
                                 </View>

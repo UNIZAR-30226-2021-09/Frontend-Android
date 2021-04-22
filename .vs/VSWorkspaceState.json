@@ -5,12 +5,13 @@
     "\\android\\app",
     "\\android\\app\\src",
     "\\android\\app\\src\\api",
-    "\\android\\app\\src\\assets",
-    "\\android\\app\\src\\components\\atoms",
-    "\\android\\app\\src\\components\\molecules",
-    "\\android\\app\\src\\components\\organisms",
-    "\\android\\app\\src\\components\\styles"
+    "\\android\\app\\src\\api\\gameLogic",
+    "\\android\\app\\src\\navigations",
+    "\\android\\app\\src\\scenes",
+    "\\android\\app\\src\\scenes\\access",
+    "\\android\\app\\src\\scenes\\friend",
+    "\\android\\app\\src\\scenes\\profile"
   ],
-  "SelectedNode": "\\android\\app\\src\\debug",
+  "SelectedNode": "\\android\\app\\src\\scenes\\friend\\FriendRequestScreen.js",
   "PreviewInSolutionExplorer": false
 }
