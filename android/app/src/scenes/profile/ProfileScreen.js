@@ -28,7 +28,7 @@ export default class ProfileScreen extends Component {
                     { contricante: 'aurora', resultado: "derrota", id: 2004 },
                 ],
             show: false,
-            point: 0
+            myInfo: []
         }
 
     }
@@ -55,6 +55,20 @@ export default class ProfileScreen extends Component {
             console.log(err)
             return "error"
         });
+        await getInfo(newUser).then(data => {
+            console.log("Data de getInfo: " + JSON.stringify(data));
+            if (data != "error") {
+                this.setState(
+                    { myInfo: data }
+                )
+            } else {
+                alert('Error de getInfo');
+            }
+        }).catch(err => {
+            console.log("error getInfo")
+            console.log(err)
+            return "error"
+        });
     }
     //{item.state?"(Victoria)":"(Derrota)"}
     render() {
@@ -68,7 +82,7 @@ export default class ProfileScreen extends Component {
                 </View>
                 <View style={styles.cuadroPequeno}>
                     <View style={styles.header}>
-                        <Text style={styles.text} > Puntos :{this.state.point}</Text>
+                        <Text style={styles.text} > Puntos :{this.state.myInfo.puntos}</Text>
                         <TouchableOpacity style={styles.ranking} onPress={() => this.props.navigation.navigate('Ranking')}>
                             <Text style={styles.rankText} > Ver Clasificacion </Text>
                         </TouchableOpacity>

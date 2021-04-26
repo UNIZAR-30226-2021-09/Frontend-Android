@@ -3,7 +3,7 @@ import { View, Text, TouchableHighlight, TouchableOpacity, StyleSheet, Image, Al
 import { PRIMARY, SECONDARY, BLACK, WHITE } from '../../styles/colors';
 import { BarraLateral } from '_organisms'
 import DropDownPicker from 'react-native-dropdown-picker';
-import { getRanking } from '_api/user';
+import { getRanking, getInfo } from '_api/user';
 export default class FriendRequestScreen extends Component {
     constructor(props) {
         super(props);
@@ -13,7 +13,8 @@ export default class FriendRequestScreen extends Component {
             accessToken: "",
             estado: null,
             userList: [],
-            myPosition: 0,
+            myInfo: [],
+            myPosition:0,
             listId:1,
         }
 
@@ -28,10 +29,10 @@ export default class FriendRequestScreen extends Component {
         };
         console.log(newUser);
         await getRanking(newUser).then(data => {
-            console.log("Data de getRanking: " + JSON.stringify(data.ranking));
+            console.log("Data de getRanking: " + JSON.stringify(data.me));
             if (data != "error") {
                 this.setState(
-                    { userList: data.ranking, myPosition: data.posicion }
+                    { userList: data.ranking, myPosition: data.me.posicion }
                 )
             } else {
                 alert('Error de getRanking');
@@ -41,10 +42,24 @@ export default class FriendRequestScreen extends Component {
             console.log(err)
             return "error"
         });
-        
+        await getInfo(newUser).then(data => {
+            console.log("Data de getInfo: " + JSON.stringify(data));
+            if (data != "error") {
+                this.setState(
+                    { myInfo: data }
+                )
+            } else {
+                alert('Error de getInfo');
+            }
+        }).catch(err => {
+            console.log("error getInfo")
+            console.log(err)
+            return "error"
+        });
     }
 
     render() {
+        let { myInfo } = this.state
         return (<View style={styles.container}>
             <View style={styles.cuadroGrande}>
                 <View style={styles.cuadroPequeno}>
@@ -119,16 +134,16 @@ export default class FriendRequestScreen extends Component {
                     <View style={styles.cuadroCabecera}>
                         <View style={styles.positionItem}>
                             <View style={styles.rankInfo}>
-                                <Text style={styles.rankUsername} > {this.state.myPosition}. {this.state.username}  </Text>
+                                <Text style={styles.rankUsername} > {this.state.myPosition}. {this.state.myInfo.nombreUsuario}  </Text>
                             </View>
                             <View style={styles.rankInfo}>
-                                <Text style={styles.rankScore} > </Text>
+                                <Text style={styles.rankScore} > {myInfo.puntos} </Text>
                             </View>
                             <View style={styles.rankInfo}>
-                                <Text style={styles.rankScore} >  </Text>
+                                <Text style={styles.rankScore} >  {myInfo.partidasGanadas}</Text>
                             </View>
                             <View style={styles.rankInfo}>
-                                <Text style={styles.rankScore} >  </Text>
+                                <Text style={styles.rankScore} > {myInfo.partidasPerdidas} </Text>
                             </View>
                         </View>
                     </View>

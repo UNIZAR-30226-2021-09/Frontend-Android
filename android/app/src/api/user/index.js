@@ -120,3 +120,16 @@ export const getRanking = (user) => {
         return res.data
     })
 }
+
+export const getInfo = (user) => {
+    console.log("----INFO ")
+
+    console.log(user);
+    return axios.post('https://proyecto-software-09.herokuapp.com/user/me', {
+        nombreUsuario: user.Username,
+        accessToken: user.AccessToken,
+    }).then(res => {
+        console.log(res.data)
+        return res.data
+    })
+}

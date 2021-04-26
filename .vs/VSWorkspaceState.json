@@ -5,12 +5,11 @@
     "\\android\\app",
     "\\android\\app\\src",
     "\\android\\app\\src\\api",
-    "\\android\\app\\src\\api\\user",
-    "\\android\\app\\src\\components",
+    "\\android\\app\\src\\api\\game",
     "\\android\\app\\src\\components\\organisms",
     "\\android\\app\\src\\scenes",
-    "\\android\\app\\src\\scenes\\friend"
+    "\\android\\app\\src\\scenes\\startGame"
   ],
-  "SelectedNode": "\\android\\app\\src\\scenes\\friend\\FriendRequestScreen.js",
+  "SelectedNode": "\\android\\app\\src\\api\\game\\index.js",
   "PreviewInSolutionExplorer": false
 }
