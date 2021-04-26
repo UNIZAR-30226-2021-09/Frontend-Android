@@ -19,10 +19,10 @@ const LoginScreen = ({
             alert('Introduzca la contraseña');
             return;
         }
-        if (!mail) {
+        /*if (!mail) {
             alert('Introduzca el correo electrónico');
             return;
-        }
+        }*/
         var newUser = {
             Username: user,
             Password: pass,

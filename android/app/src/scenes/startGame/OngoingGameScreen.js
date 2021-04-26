@@ -56,7 +56,7 @@ export default class OngoingGameScreen extends Component {
                                 <View style={styles.friend}>
                                     <TouchableOpacity style={styles.gameButton} onPress={() => Alert.alert("Funcionalidad futura")}>
                                         <Text style={styles.friendText}>
-                                            Partido contra {item}
+                                            Partido contra {item.contrincante}
                                         </Text>
                                     </TouchableOpacity>
                                 </View>
@@ -108,7 +108,7 @@ const styles = StyleSheet.create({
         paddingTop: 1,
     },
     gameButton: {
-        width: 200,
+        width: 300,
         height: 30,
         backgroundColor: SECONDARY,
         borderRadius: 50,

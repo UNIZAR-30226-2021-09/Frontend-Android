@@ -65,7 +65,7 @@ export const getGameInProgess = user => {
     }).then(res => {
         console.log("listado partidas en curso")
         console.log(res.data)
-        return res
+        return res.data
     })
 }
 export const acceptFriendGame = (user) => {
@@ -94,8 +94,8 @@ export const getHistory = (user) => {
         nombreUsuario: user.Username,
         accessToken: user.AccessToken,
     }).then(res => {
-        console.log("peticiones entrantes")
+        console.log("getHistory")
         console.log(res.data)
-        return res
+        return res.data
     })
 }

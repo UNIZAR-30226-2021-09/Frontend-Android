@@ -106,16 +106,16 @@ export default class BarraLateral extends Component {
                                 return (
                                     <View style={styles.friend}>
                                         {true ?
-                                            <TouchableOpacity style={styles.connectFriend} onPress={() => this.selectFriend(item)}>
+                                            <View style={styles.connectFriend}>
                                                 <Text style={styles.friendText}>
                                                     {item}
                                                 </Text>
-                                            </TouchableOpacity> :
-                                            <TouchableOpacity style={styles.notConnectFriend} onPress={() => this.selectFriend(item.name)}>
+                                            </View> :
+                                            <View style={styles.notConnectFriend}>
                                                 <Text style={styles.friendText}>
-                                                    {item.name}
+                                                    {item}
                                                 </Text>
-                                            </TouchableOpacity>
+                                            </View>
                                         }
                                     </View>
                                 );

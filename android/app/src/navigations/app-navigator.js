@@ -1,7 +1,7 @@
 import { createStackNavigator } from 'react-navigation-stack';
 import HomeScreen from '_scenes/home';
 import AboutScreen from '_scenes/about';
-import ProfileScreen from '_scenes/profile';
+import { ProfileScreen, RankingScreen } from '_scenes/profile';
 import { AddFriendScreen, FriendRequestScreen } from '_scenes/friend';
 import { BeginTournamentScreen, BeginRandomScreen, BeginFriendScreen, OngoingGameScreen }
     from '_scenes/startGame';
@@ -51,8 +51,10 @@ const RouteConfigs = {
     },
     Result: {
         screen: ResultScreen
+    },
+    Ranking: {
+        screen: RankingScreen
     }
-    
 };
 
 const AppNavigator = createStackNavigator(RouteConfigs, AppNavigatorConfig);

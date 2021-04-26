@@ -1,59 +1,134 @@
 import React, { Component } from 'react';
-import { View, Text, TouchableHighlight, TouchableOpacity, StyleSheet, Image, Alert, FlatList, ScrollView } from 'react-native';
+import { View, Text, TouchableHighlight, TouchableOpacity, StyleSheet, Image, Alert, FlatList, ScrollView, AsyncStorage } from 'react-native';
 import { PRIMARY, SECONDARY, BLACK, WHITE } from '../../styles/colors';
 import { BarraLateral } from '_organisms'
 import DropDownPicker from 'react-native-dropdown-picker';
+import { getIncomingList, getOutgoingList, accept, dismiss } from '_api/user';
 export default class FriendRequestScreen extends Component {
     constructor(props) {
         super(props);
         this.state = {
             selectedFriend: null,
             username: "user 1",
+            accessToken: "",
             estado:null,
-            gameList:
-                [
-                    { name: 'natured', state: true },
-                    { name: 'rollicking', state: true },
-                    { name: 'cheerful', state: true },
-                    { name: 'amiable', state: true },
-                    { name: 'natured', state: true },
-                    { name: 'rollicking', state: false },
-                    { name: 'cheerful', state: false },
-                    { name: 'fun', state: true },
-                    { name: 'sweet', state: true },
-                    { name: 'fun', state: false },
-                    { name: 'sweet', state: false },
-                    { name: 'amiable', state: false },
-                ],
-            show: false,
-            point: 0
+            incomingList: [],
+            outcomingList: []
         }
         
     }
-    showFriend() {
-        const { show } = this.state
+    async componentDidMount() {
+        var _username = await AsyncStorage.getItem('username');
+        var _accessToken = await AsyncStorage.getItem('userToken');
+        this.setState({ username: _username, accessToken: _accessToken });
+        var newUser = {
+            Username: _username,
+            AccessToken: _accessToken
+        };
+        console.log(newUser);
+        this.updateIncoming(newUser);
+        this.updateOutcoming(newUser);
+        
+    }
+    async updateIncoming(newUser) {
+        await getIncomingList(newUser).then(data => {
+            console.log("Data de getIncomingList: " + data);
+            if (data != "error") {
+                this.setState(
+                    { incomingList: data }
+                )
+            } else {
+                alert('Error de getIncomingList');
+            }
+        }).catch(err => {
+            console.log("error getIncomingList")
+            console.log(err)
+            return "error"
+        });
+    }
+    async updateOutcoming(newUser) {
+        await getOutgoingList(newUser).then(data => {
+            console.log("Data de getOutgoingList: " + data);
+            if (data != "error") {
+                this.setState(
+                    { outcomingList: data }
+                )
+            } else {
+                alert('Error de getOutgoingList');
+            }
+        }).catch(err => {
+            console.log("error getOutgoingList")
+            console.log(err)
+            return "error"
+        });
+    }
+    async acceptRequest(friendname) {
+        var newUser = {
+            Username: this.state.username,
+            AccessToken: this.state.accessToken,
+            Friendname: friendname
+        };
+        console.log(newUser);
+        await accept(newUser).then(data => {
+            console.log("Data de acceptRequest: " + data);
+            if (data != "error") {
+                console.log("Aceptado");
+            } else {
+                alert('Error de acceptRequest');
+            }
+        }).catch(err => {
+            console.log("error acceptRequest")
+            console.log(err)
+            return "error"
+        });
+        this.updateIncoming(newUser);
+    }
 
-        this.setState({
-            show: !show
-        })
+    async dismissRequest(friendname) {
+        var newUser = {
+            Username: this.state.username,
+            AccessToken: this.state.accessToken,
+            Friendname: friendname
+        };
+        console.log(newUser);
+        await dismiss(newUser).then(data => {
+            console.log("---Data de dismissRequest: " + data);
+            if (data != "error") {
+                console.log("Rechazado");
+            } else {
+                alert('Error de dismissRequest');
+            }
+        }).catch(err => {
+            console.log("error dismissRequest")
+            console.log(err)
+            return "error"
+        });
+        this.updateIncoming(newUser);
+    }
 
+    async cancelRequest(friendname) {
+        var newUser = {
+            Username: this.state.username,
+            AccessToken: this.state.accessToken,
+            Friendname: friendname
+        };
+        console.log(newUser);
+        await cancel(newUser).then(data => {
+            console.log("Data de cancelRequest: " + data);
+            if (data != "error") {
+                console.log("Cancelado");
+            } else {
+                alert('Error de cancelRequest');
+            }
+        }).catch(err => {
+            console.log("error cancelRequest")
+            console.log(err)
+            return "error"
+        });
+        this.updateOutcoming(newUser);
     }
-    selectFriend(friend) {
-        this.setState({
-            selectedFriend: friend,
-            show: false,
-            estado:": Seleccionado"
-        })
-    }
-    send() {
-        this.setState({
-            estado: ": Esperando"
-        })
-    }
+
     render() {
-        const getFriend = (option) => {
-
-        }
         return (<View style={styles.container}>
             <View style={styles.cuadroGrande}>
                 <View style={styles.cuadroPequeno}>
@@ -62,61 +137,61 @@ export default class FriendRequestScreen extends Component {
                 <View style={styles.cuadroAmigos}>
                     <View style={styles.cuadro}>
                         <View style={styles.friendContainer}>
-                            <Text style={styles.text} > Enviadas:</Text>
-                        </View>
-                        <View style={styles.friendContainer}>
-                            <FlatList
-                                data={this.state.gameList}
-                                extraData={this.state.showItemIndex}
-                                renderItem={({ item, index }) => {
-                                        return (
-                                            <View style={styles.friend}>
-                                                <View style={styles.friendItem}>
-                                                    <View style={styles.gameItem}>
-                                                        <Text style={styles.friendText} > {item.name}</Text>
-                                                    </View>
-                                                    <View style={styles.gameButton}>
-                                                        <TouchableOpacity style={styles.rejectButton} onPress={() => Alert.alert("Funcionalidad futura")}>
-                                                            <Text style={styles.rankText} > Cancelar </Text>
-                                                        </TouchableOpacity>
-                                                    </View>
-                                                </View>
-                                            </View>
-                                        );
-                                }}
-                                keyExtractor={(item, index) => index.toString()}
-                                style={styles.friendContainer}
-                            /> 
-                        </View>
-                    </View>
-                    <View style={styles.cuadro}>
-                        <View style={styles.friendContainer}>
                             <Text style={styles.text} > Recibidas:</Text>
                         </View>
                         <View style={styles.friendContainer}>
                             <FlatList
-                                data={this.state.gameList}
+                                data={this.state.incomingList}
                                 extraData={this.state.showItemIndex}
                                 renderItem={({ item, index }) => {
                                     return (
                                         <View style={styles.friend}>
                                             <View style={styles.friendItem}>
                                                 <View style={styles.gameItem}>
-                                                    <Text style={styles.friendText} > {item.name}</Text>
+                                                    <Text style={styles.friendText} > {item}</Text>
                                                 </View>
                                                 <View style={styles.gameButton}>
-                                                    <TouchableOpacity style={styles.acceptButton} onPress={() => Alert.alert("Funcionalidad futura")}>
+                                                    <TouchableOpacity style={styles.acceptButton} onPress={() => this.acceptRequest(item)}>
                                                         <Text style={styles.rankText} > Aceptar </Text>
                                                     </TouchableOpacity>
                                                 </View>
                                                 <View style={styles.gameButton}>
-                                                    <TouchableOpacity style={styles.rejectButton} onPress={() => Alert.alert("Funcionalidad futura")}>
+                                                    <TouchableOpacity style={styles.rejectButton} onPress={() => this.dismissRequest(item)}>
                                                         <Text style={styles.rankText} > Rechazar </Text>
                                                     </TouchableOpacity>
                                                 </View>
                                             </View>
                                         </View>
                                     );
+                                }}
+                                keyExtractor={(item, index) => index.toString()}
+                                style={styles.friendContainer}
+                            />
+                        </View>
+                    </View>
+                    <View style={styles.cuadro}>
+                        <View style={styles.friendContainer}>
+                            <Text style={styles.text} > Enviadas:</Text>
+                        </View>
+                        <View style={styles.friendContainer}>
+                            <FlatList
+                                data={this.state.outcomingList}
+                                extraData={this.state.showItemIndex}
+                                renderItem={({ item, index }) => {
+                                        return (
+                                            <View style={styles.friend}>
+                                                <View style={styles.friendItem}>
+                                                    <View style={styles.gameItem}>
+                                                        <Text style={styles.friendText} > {item}</Text>
+                                                    </View>
+                                                    <View style={styles.gameButton}>
+                                                        <TouchableOpacity style={styles.rejectButton} onPress={() => this.cancelRequest(item)}>
+                                                            <Text style={styles.rankText} > Cancelar </Text>
+                                                        </TouchableOpacity>
+                                                    </View>
+                                                </View>
+                                            </View>
+                                        );
                                 }}
                                 keyExtractor={(item, index) => index.toString()}
                                 style={styles.friendContainer}
@@ -168,15 +243,16 @@ const styles = StyleSheet.create({
         marginLeft:20
     },
     rejectButton: {
-        width: 70,
+        width: 50,
         height: 20,
         backgroundColor: 'red',
         borderRadius: 50,
         borderWidth: 1,
         alignSelf: 'center',
+        marginRight:40
     },
     acceptButton: {
-        width: 70,
+        width: 40,
         height: 20,
         backgroundColor: 'green',
         borderRadius: 50,
@@ -202,7 +278,7 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         color: 'blue',
         backgroundColor: PRIMARY,
-        width: 250,
+        width: 200,
         height: 25,
     },
     cuadroGrande: {
@@ -226,7 +302,7 @@ const styles = StyleSheet.create({
         margin:10
     },
     friendContainer: {
-        paddingTop: 5,
+        width: '100%',
     },
     friend: {
         paddingTop: 1,
@@ -275,7 +351,7 @@ const styles = StyleSheet.create({
         textAlign: 'center'
     },
     rankText: {
-        fontSize: 12,
+        fontSize:10,
         textAlign: 'center',
         color: WHITE
     },
