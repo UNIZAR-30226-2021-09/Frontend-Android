@@ -14,7 +14,7 @@ export default class AddFriendScreen extends Component {
         }
         
     }
-    async sendRequest() {
+    async sendRequest() { 
         if (this.state.selectedFriend == "") {
             Alert.alert("Introduzca un nombre o enlace");
             return "error";
@@ -30,7 +30,7 @@ export default class AddFriendScreen extends Component {
         await addfriend(user).then(data => {
             console.log("Data de addFriend: " + data);
             if (data != "error") {
-                Alert.alert("Petición enviada");
+                Alert.alert("Peticiï¿½n enviada");
             } else {
                 alert('Error de addFriend');
             }
@@ -50,7 +50,7 @@ export default class AddFriendScreen extends Component {
         return (<View style={styles.container}>
             <View style={styles.cuadroGrande}>
                 <View style={styles.cuadroPequeno}>
-                    <Text style={styles.title} > Añadir amigo</Text>
+                    <Text style={styles.title} > Aï¿½adir amigo</Text>
                 </View>
                 <View style={styles.cuadroAmigos}>
                     <TextInput

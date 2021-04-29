@@ -99,3 +99,17 @@ export const getHistory = (user) => {
         return res.data
     })
 }
+
+//Para el emparajamiento a ciegas
+
+export const emparejamientoACiegas = (user) => {
+    return axios.post('https://proyecto-software-09.herokuapp.com/game/random', {
+        nombreUsuario: user.Username,
+        accessToken: user.AccessToken,
+    }).then(res => {
+        console.log( "emparejamientoCiegas")
+        console.log(res.data)
+        return res.data
+    })
+
+}

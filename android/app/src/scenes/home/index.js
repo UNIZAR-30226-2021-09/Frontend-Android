@@ -3,6 +3,8 @@ import { SafeAreaView, View, Text, TouchableHighlight, StyleSheet, TextInput, To
 import { WHITE, PRIMARY, SECONDARY,BLACK } from '../../styles/colors';
 import {BarraLateral} from '_organisms'; 
 import { beginIA } from '_api/game';
+import { emparejamientoACiegas } from '_api/game';
+
 const HomeScreen = ({ navigation }) => {
     async function startGame(mode) {
         var _username = await AsyncStorage.getItem('username');
@@ -28,18 +30,18 @@ const HomeScreen = ({ navigation }) => {
                 });
                 break;
             case "Random":
-                /*await beginIA(user).then(data => {
-                    console.log("Data de randow: " + data);
+                await emparejamientoACiegas(user).then(data => {
+                    console.log("Data de random: " + data);
                     if (data != "error") {
                         navigation.navigate('BeginRandom');
                     } else {
-                        alert('Error de  random');
+                        alert('Error de  random de partida a ciegas');
                     }
                 }).catch(err => {
                     console.log("error random")
                     console.log(err)
                     return "error"
-                });*/
+                });
                 navigation.navigate('BeginRandom');
 
                 break;
@@ -58,7 +60,7 @@ const HomeScreen = ({ navigation }) => {
                 </View>
                 <View style={styles.cuadroCuaduple}>
                     <View style={styles.cuadroBoton}>
-                        <TouchableOpacity style={styles.cubito} onPress={() => startGame("Random")}>
+                        <TouchableOpacity style={styles.cubito} onPress={() => navigation.navigate('BeginRandom')}>
                             <Text style={styles.textoCubito}>
                                 Partida a ciegas
                             </Text>
