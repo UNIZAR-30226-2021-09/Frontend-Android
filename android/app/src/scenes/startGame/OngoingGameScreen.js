@@ -40,6 +40,16 @@ export default class OngoingGameScreen extends Component {
             return "error"
         });        
     }
+    async obtenerDatosPartida(){
+
+    }
+
+    async alPretar(item){
+        await AsyncStorage.setItem('contrincante', item.contrincante);
+        await AsyncStorage.setItem('idPartida', item.id);
+        console.log("Datos obtenidos al pretar el boton= ");
+        this.props.navigation.navigate("GameScreen");
+    }
 
     render() {
         return (<View style={styles.container}>
@@ -54,7 +64,7 @@ export default class OngoingGameScreen extends Component {
                         renderItem={({ item, index }) => {
                             return (
                                 <View style={styles.friend}>
-                                    <TouchableOpacity style={styles.gameButton} onPress={() => Alert.alert("Funcionalidad futura")}>
+                                    <TouchableOpacity style={styles.gameButton} onPress={() => this.alPretar(item)}>
                                         <Text style={styles.friendText}>
                                             Partido contra {item.contrincante}
                                         </Text>
