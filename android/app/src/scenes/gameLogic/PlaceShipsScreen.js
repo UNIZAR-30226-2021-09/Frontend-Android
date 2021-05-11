@@ -6,8 +6,9 @@ import { checkBox, OCEAN_BOX, TOUCHED_BOX, SUNKEN_BOX, NO_ATACK_BOX } from '_api
 import { Table, TableWrapper, Cell } from 'react-native-table-component'
 import {
     initBoard, getBox, attack, getSolution, initAttack, initShip, IAmove,
-    placeShip, initCoord
+    placeShip, initCoord, SUCCESS, checkIfAllShips
 } from '../../api/gameLogic';
+import { ToastAndroid } from 'react-native';
 const NO_SELECT_COLOR = 'white';
 const SELECT_COLOR = 'cyan';
 const CARRIER = 5;
@@ -40,11 +41,15 @@ export default class PlaceShipsScreen extends Component {
     onClick(row, col) {
         const { myBoard, IABoard, selectShip, shipDirection } = this.state
 
-        console.log(selectShip +'DIR' + shipDirection[selectShip - 1] )
-
+        //console.log(selectShip +'DIR' + shipDirection[selectShip - 1] )
+        //console.log("--COLOCAR BARCO " + result.error);
         if (selectShip != OCEAN) {
+            const result = placeShip(row, col, selectShip, shipDirection[selectShip - 1], myBoard);
+            if (result.error != SUCCESS) {
+                ToastAndroid.show(result.error, ToastAndroid.SHORT)
+            }
             this.setState({
-                myBoard: placeShip(row, col, selectShip, shipDirection[selectShip - 1], myBoard),
+                myBoard: result.board,
                 //IABoard: IAmove(IABoard)
             })
         }
@@ -86,6 +91,14 @@ export default class PlaceShipsScreen extends Component {
             })
         }
     }
+    startGame() {
+        let { myBoard } = this.state
+
+        if (checkIfAllShips(myBoard))
+            this.props.navigation.navigate('Game', { boardSolution: myBoard }) ;
+        else
+            ToastAndroid.show("Coloque todos los barcos", ToastAndroid.SHORT);
+    }
     render() {
         let { myBoard, shipDirection, shipColors } = this.state;
         const getMyBox = (box, row, col) => {
@@ -120,15 +133,17 @@ export default class PlaceShipsScreen extends Component {
             else if (shipDirection[props.ship - 1] == VERTICAL && shipColors[props.ship - 1] == SELECT_COLOR)
                 imageStyle = styles.selectImage;
             return (
-                <TouchableHighlight onPress={() => this.placeShip(props.ship)}>
-                    <Image source={props.src} style={imageStyle} />
-                </TouchableHighlight>);
+                <View style={{}}>
+                    <TouchableHighlight onPress={() => this.placeShip(props.ship)}>
+                        <Image source={props.src} style={imageStyle} />
+                    </TouchableHighlight>
+                </View>
+            );
         }
 
         return (<View style={styles.container}>
             <View style={styles.cuadroGrande}>
                 <View style={styles.cuadroGrande1}>
-
                     <View style={styles.shipContainer}>
                         <View style={styles.shipContainer1}>
                             <ShipButton ship={CARRIER} src={require("_assets/images/carrier.png")} />
@@ -156,11 +171,11 @@ export default class PlaceShipsScreen extends Component {
                         </Table>
                     </View>
                 </View>
-                <TouchableHighlight onPress={() => this.props.navigation.navigate('Game', { boardSolution: myBoard })}>
-                    <View style={styles.button}>
-                        <Text style={styles.btnText}> Comenzar </Text>
-                    </View>
-                </TouchableHighlight>
+                <View style={styles.startButtonContainer}>
+                    <TouchableHighlight style={styles.startButton} onPress={() => this.props.navigation.navigate('Game', { boardSolution: myBoard })}>
+                            <Text style={styles.btnText}> Comenzar </Text>
+                    </TouchableHighlight>
+                </View>
             </View>
             <BarraLateral navigation={this.props.navigation} />
 
@@ -179,11 +194,16 @@ const styles = StyleSheet.create({
         borderWidth: 3,
         flexDirection: 'column',
         alignContent: 'center',
+        backgroundColor:'white'
     },
     cuadroGrande1: {
-        flex: 4,
+        flex:6,
         flexDirection: 'row',
         alignContent: 'center',
+        bottom: -20,
+    },
+    startButtonContainer: {
+        flex:1
     },
     image: {
         width: 90, height: 90, alignSelf: 'center', borderWidth: 1, borderColor: 'white', resizeMode:'center'
@@ -199,12 +219,12 @@ const styles = StyleSheet.create({
     },
     head: { height: 30, backgroundColor: '#808B97' },
     text: { margin: 6 },
-    boardContainer: { flex: 1, width: 260, height: 260, padding: 5, paddingBottom: 40, backgroundColor: '#fff' },
+    boardContainer: { flex: 1, width: 260, height: 260, backgroundColor: 'white' },
     shipContainer: {
-        flex: 1, width: 260, height: 260, padding: 5, paddingBottom: 40, backgroundColor: '#fff', flexDirection: 'column'
+        flex: 1, width: 260, height: 260, flexDirection: 'column'
     },
     shipContainer1: {
-        flex: 1, width: 260, height: 260, padding: 5, paddingBottom: 40, backgroundColor: '#fff', flexDirection: 'row'
+        flex: 1, width: 270, height: 260, backgroundColor: 'white', flexDirection: 'row'
     },
     row: {
         flexDirection: 'row', backgroundColor: 'blue', borderColor: 'black'
@@ -215,6 +235,9 @@ const styles = StyleSheet.create({
     touchedBox: { width: 26, height: 26, backgroundColor: 'red', borderRadius: 0, borderColor: 'blue', borderWidth: 0.2 },
     sunkenBox: { width: 26, height: 26, backgroundColor: 'grey', borderRadius: 0, borderColor: 'blue', borderWidth: 0.2 },
     noAttackBox: { width: 26, height: 26, backgroundColor: 'white', borderRadius: 0, borderColor: 'blue', borderWidth: 0.2 },
+    startButton: { alignSelf: 'center', width: 100, height: 30, bottom: -10, backgroundColor: PRIMARY, borderRadius: 50 },
+    startPressButton: { alignSelf: 'center', width: 100, height: 30, bottom: -10, backgroundColor: 'blue', borderRadius: 50 },
+
 });
 
 

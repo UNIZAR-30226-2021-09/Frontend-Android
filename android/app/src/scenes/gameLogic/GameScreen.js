@@ -8,7 +8,8 @@ import { initBoard, getBox, attack, getSolution, initAttack, initShip, initCoord
 export default class GameScreen extends Component {
     constructor(props) {
         super(props);
-        let boardSolution = this.props.navigation.getParam("boardSolution");
+        let params = this.props.route.params;
+        let boardSolution = params.boardSolution;
         this.state = {
             myBoard: {
                 board: initAttack(),

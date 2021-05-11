@@ -25,6 +25,9 @@ var coord_submarine2 = [[7, 7],[7, 8], [7,9]];
 var coord_crusier = [[7, 3], [8, 3]];
 var no_detected_ship = [2, 1, 2, 3, 4];
 var coord_ships = [[[7, 7], [7, 8], [7, 9]], [[7, 3], [8, 3]],  [[3, 6], [4, 6], [5, 6]], [[0, 3], [0, 4], [0, 5], [0, 6]], [[5, 0], [6, 0], [7, 0], [8, 0], [9, 0]] ];
+export const SUCCESS = "Success";
+export const OUTBOARD = "Está intentando colocar un barco fuera del tablero";
+export const ANOTHERSHIP = "Está intentando colocar un barco sobre otro o a su alrededor";
 
 export const initBoard = () => {
 	return [
@@ -93,6 +96,14 @@ const getShipCoord = (ship, myBoard) => {
 			return [];
 	}
 }
+export const checkIfAllShips = (myBoard) =>{
+	let result = true;
+	for (let i = 0; i < myBoard.coordShips.length; i++) {
+		if (myBoard.coordShips[i][0].length==0)
+			result = false;
+	}
+	return result;
+}
 
 export const attack = (row, col, myBoard) => {
 	if (myBoard.attack[row][col] == NO_ATACK_BOX) {
@@ -135,7 +146,7 @@ export const IAmove = (IABoard) => {
 }
 
 const checkSpace = (row, col, ship, dir, board) => {
-	let result = true, nCell = ship, nRow, nCol;
+	let result = SUCCESS, nCell = ship, nRow, nCol;
 	if (ship == SUBMARINE2) nCell = SUBMARINE1;
 	//console.log('CHECK---------row' + row, 'col' + col, 'nCell' + nCell, 'dir' + dir);
 
@@ -149,7 +160,7 @@ const checkSpace = (row, col, ship, dir, board) => {
 		//console.log('cell--H');
 	} else {
 		//console.log('cell--N');
-		return false;
+		return OUTBOARD;
 	}
 	//console.log('CHECK---------nRow' + nRow, 'nCol' + nCol, 'nCell' + nCell, 'dir' + dir);
 
@@ -158,13 +169,13 @@ const checkSpace = (row, col, ship, dir, board) => {
 			for (let j = col - 1; j < nCol; j++)
 				if (j >= 0 && j < DIM) {
 					if (board[i][j] != OCEAN) {
-						result = false;
+						result = ANOTHERSHIP;
 						break;
 					}
 					//console.log('cell--'+i+'--'+j);
 				}
 		}
-		if (!result) break;
+		if (result!=SUCCESS) break;
 	}
 	//console.log('CORRECTO'+true)
 	return result;
@@ -172,14 +183,23 @@ const checkSpace = (row, col, ship, dir, board) => {
 
 export const placeShip = (row, col, ship, dir, myBoard) => {
 	//console.log('row' + row, 'col' + col, 'ship' + ship, 'dir2' + dir + 'board' + myBoard.board);
-	if (checkSpace(row, col, ship, dir, myBoard.board)) {
+	if (myBoard.coordShips[ship - 1][0].length > 0) {
+		var removeCoord = myBoard.coordShips[ship - 1];
+		console.log('REMOVE ' + removeCoord);
+		for (let i = 0; i < removeCoord.length; i++) {
+			myBoard.board[removeCoord[i][0]][removeCoord[i][1]] = OCEAN_BOX;
+		}
+		myBoard.coordShips[ship - 1] = ([[], []]);
+	}
+	var error = checkSpace(row, col, ship, dir, myBoard.board);
+	if (error==SUCCESS) {
 		let nCell = ship, nRow, nCol;
 		if (ship == SUBMARINE2) nCell = SUBMARINE1;
 		if (dir == VERTICAL) {
 			nRow = row + nCell;
-			nCol = col+1;
+			nCol = col + 1;
 		} else {
-			nRow = row+1;
+			nRow = row + 1;
 			nCol = col + nCell;
 		}
 		let coord = [];
@@ -190,12 +210,10 @@ export const placeShip = (row, col, ship, dir, myBoard) => {
 				coord.push([i, j]);
 			}
 		}
-		myBoard.coordShips[ship-1]=(coord);
+		myBoard.coordShips[ship - 1] = (coord);
 		//console.log('linea:' + coord_ships[nCell]);
-
 	}
 	//console.log('board FINAL');
 
-	return myBoard;
-	
+	return { board: myBoard, error: error };
 }
