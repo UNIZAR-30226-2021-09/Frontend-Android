@@ -4,6 +4,7 @@ import { PRIMARY, SECONDARY, BLACK, WHITE } from '../../styles/colors';
 import { BarraLateral } from '_organisms'
 import DropDownPicker from 'react-native-dropdown-picker';
 import { getHistory } from '_api/game';
+import { getInfo } from '_api/user';
 
 export default class ProfileScreen extends Component {
     constructor(props) {
@@ -133,12 +134,21 @@ export default class ProfileScreen extends Component {
                         />
                     </View>
                 </View>
-                <View style={styles.cuadroPequeno}>
-                    <TouchableOpacity style={styles.shareButton} onPress={() => Alert.alert("Funcionalidad futura")}>
-                        <Text style={styles.rankText}>
-                            Compartir
-                        </Text>
-                    </TouchableOpacity>
+                <View style={styles.cuadroBotones}>
+                    <View style={styles.cuadroPequeno}>
+                        <TouchableOpacity style={styles.shareButton} onPress={() => Alert.alert("Funcionalidad futura")}>
+                            <Text style={styles.rankText}>
+                                Compartir
+                            </Text>
+                        </TouchableOpacity>
+                    </View>
+                    <View style={styles.cuadroPequeno}>
+                        <TouchableOpacity style={styles.logOutButton} onPress={() => this.props.navigation.navigate('Root')}>
+                            <Text style={styles.rankText}>
+                                Cerrar Sesión
+                            </Text>
+                        </TouchableOpacity>
+                    </View>
                 </View>
 
             </View>
@@ -218,6 +228,10 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         alignSelf: 'center',
     },
+    cuadroBotones: {
+        flexDirection: 'row',
+        justifyContent: 'space-around'
+    },
     itemPartida: {
         flex: 4
     },
@@ -274,6 +288,14 @@ const styles = StyleSheet.create({
         borderRadius: 50,
         borderWidth: 1,
         marginBottom:5
+    },
+    logOutButton: {
+        width: 120,
+        height: 30,
+        backgroundColor: 'red',
+        borderRadius: 50,
+        borderWidth: 1,
+        marginBottom: 5
     },
     title: {
         textAlign: 'center',

@@ -1,4 +1,4 @@
-import { createStackNavigator } from 'react-navigation-stack';
+import { createStackNavigator } from '@react-navigation-stack';
 import HomeScreen from '_scenes/home';
 import AboutScreen from '_scenes/about';
 import { ProfileScreen, RankingScreen } from '_scenes/profile';

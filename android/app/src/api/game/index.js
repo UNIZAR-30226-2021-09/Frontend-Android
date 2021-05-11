@@ -1,5 +1,16 @@
 import axios from 'axios'
-import { AsyncStorage } from 'react-native'
+
+export const beginRandom = (user) => {
+    return axios.post('https://proyecto-software-09.herokuapp.com/game/random', {
+        nombreUsuario: user.Username,
+        accessToken: user.AccessToken,
+    }).then(res => {
+        console.log("Begin Random")
+        console.log(res.data)
+        return res.data
+    })
+
+}
 
 export const beginIA = user => {
     return axios.post('https://proyecto-software-09.herokuapp.com/game/ia', {
@@ -100,16 +111,3 @@ export const getHistory = (user) => {
     })
 }
 
-//Para el emparajamiento a ciegas
-
-export const emparejamientoACiegas = (user) => {
-    return axios.post('https://proyecto-software-09.herokuapp.com/game/random', {
-        nombreUsuario: user.Username,
-        accessToken: user.AccessToken,
-    }).then(res => {
-        console.log( "emparejamientoCiegas")
-        console.log(res.data)
-        return res.data
-    })
-
-}

@@ -1,4 +1,4 @@
-import { createStackNavigator } from 'react-navigation-stack';
+import { createStackNavigator } from '@react-navigation-stack';
 import { RootScreen, LoginScreen, SignScreen } from '_scenes/access';
 import AboutScreen from '_scenes/about'
 
