@@ -6,10 +6,11 @@
     "\\android\\app\\src",
     "\\android\\app\\src\\api",
     "\\android\\app\\src\\api\\game",
+    "\\android\\app\\src\\api\\gameLogic",
+    "\\android\\app\\src\\components",
     "\\android\\app\\src\\components\\organisms",
-    "\\android\\app\\src\\scenes",
-    "\\android\\app\\src\\scenes\\startGame"
+    "\\android\\app\\src\\scenes"
   ],
-  "SelectedNode": "\\android\\app\\src\\api\\game\\index.js",
+  "SelectedNode": "\\android\\app\\src\\components\\organisms\\barra_lateral.js",
   "PreviewInSolutionExplorer": false
 }

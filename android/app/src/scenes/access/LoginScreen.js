@@ -2,6 +2,8 @@ import React from 'react';
 import { SafeAreaView, View, Text, TouchableHighlight, StyleSheet, TextInput,TouchableOpacity } from 'react-native';
 import { WHITE, PRIMARY, SECONDARY } from '../../styles/colors';
 import { login } from '_api/user';
+import { logMe } from '_api/user/socket';
+import * as Crypto from 'expo-crypto';
 
 const LoginScreen = ({
     navigation,
@@ -10,7 +12,7 @@ const LoginScreen = ({
     const [mail, onChangeMail] = React.useState(null);
     const [pass, onChangePassword] = React.useState(null);
 
-    const handleSubmitButton = () => {
+    async function handleSubmitButton() {
         if (!user) {
             alert('Introduzca el nombre de usuario');
             return;
@@ -23,11 +25,17 @@ const LoginScreen = ({
             alert('Introduzca el correo electrónico');
             return;
         }*/
+        const hashPass = await Crypto.digestStringAsync(
+            Crypto.CryptoDigestAlgorithm.SHA256,
+            pass,
+            { encoding: 'hex' }
+        );
         var newUser = {
             Username: user,
-            Password: pass,
+            Password: hashPass,
             Mail: mail
         }
+        logMe(newUser);
         console.log(newUser);
         login(newUser).then(data => {
             console.log("Data de registro: " + data);

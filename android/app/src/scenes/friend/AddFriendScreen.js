@@ -4,6 +4,8 @@ import { PRIMARY, SECONDARY, BLACK } from '../../styles/colors';
 import { BarraLateral } from '_organisms'
 import DropDownPicker from 'react-native-dropdown-picker';
 import { addfriend } from '_api/user';
+import { socket, friendPetition } from '_api/user/socket';
+
 export default class AddFriendScreen extends Component {
     constructor(props) {
         super(props);
@@ -30,6 +32,7 @@ export default class AddFriendScreen extends Component {
         await addfriend(user).then(data => {
             console.log("Data de addFriend: " + data);
             if (data != "error") {
+                friendPetition({ Username: this.state.selectedFriend });
                 Alert.alert("Petici�n enviada");
             } else {
                 alert('Error de addFriend');

@@ -9,8 +9,8 @@ export const register = newUser => {
         contrasena: newUser.Password,
     })
         .then(async (response) => {
-            console.log("El response")
-            console.log(response.data)
+            //console.log("El response")
+            //console.log(response.data)
             await AsyncStorage.setItem('userToken', response.data.accessToken)
             await AsyncStorage.setItem('username', response.data.nombreUsuario)
             return response.data
@@ -29,8 +29,8 @@ export const login = newUser => {
         contrasena: newUser.Password,
     })
         .then(async (response) => {
-            console.log("El response")
-            console.log(JSON.stringify(response.data))
+           // console.log("El response")
+           // console.log(JSON.stringify(response.data))
             await AsyncStorage.setItem('userToken',response.data.accessToken)
             await AsyncStorage.setItem('username', response.data.nombreUsuario)
             return response.data
@@ -48,11 +48,12 @@ export const getFriendList = (user) => {
         nombreUsuario: user.Username,
         accessToken: user.AccessToken,
     }).then(res => {
-        //console.log("LISTA AMIGOS")
+        console.log("LISTA AMIGOS")
         //console.log(res.data)
         return res.data
     })
 }
+
 export const addfriend = user => {
     return axios.post('https://proyecto-software-09.herokuapp.com/user/addfriend', {
         nombreUsuario: user.Username,
@@ -60,7 +61,7 @@ export const addfriend = user => {
         accessToken: user.AccessToken,
     }).then(res => {
         console.log("Añadir AMIGOS")
-        console.log(res.data)
+        //console.log(res.data)
         return res.data
     })
 }
@@ -72,7 +73,7 @@ export const accept = (request) => {
         accessToken: request.AccessToken,
     }).then(res => {
         console.log("Aceptar AMIGOS")
-        console.log(res.data)
+        //console.log(res.data)
         return res.data
     })
 }
@@ -83,7 +84,7 @@ export const dismiss = (request) => {
         accessToken: request.AccessToken,
     }).then(res => {
         console.log("Aceptar AMIGOS")
-        console.log(res.data)
+        //console.log(res.data)
         return res.data
     })
 }
@@ -94,7 +95,7 @@ export const getIncomingList = (user) => {
         accessToken: user.AccessToken,
     }).then(res => {
         console.log("peticiones entrantes")
-        console.log(res.data)
+        //console.log(res.data)
         return res.data
     })
 }
@@ -104,8 +105,8 @@ export const getOutgoingList = (user) => {
         nombreUsuario: user.Username,
         accessToken: user.AccessToken,
     }).then(res => {
-        console.log("peticiones entrantes")
-        console.log(res.data)
+        console.log("peticiones salientes")
+        //console.log(res.data)
         return res.data
     })
 }
@@ -116,7 +117,7 @@ export const getRanking = (user) => {
         accessToken: user.AccessToken,
     }).then(res => {
         console.log("rankin ")
-        console.log(res.data)
+        //console.log(res.data)
         return res.data
     })
 }
@@ -124,12 +125,13 @@ export const getRanking = (user) => {
 export const getInfo = (user) => {
     console.log("----INFO ")
 
-    console.log(user);
+    //console.log(user);
     return axios.post('https://proyecto-software-09.herokuapp.com/user/me', {
         nombreUsuario: user.Username,
         accessToken: user.AccessToken,
     }).then(res => {
-        console.log(res.data)
+       // console.log(res)
         return res.data
     })
 }
+

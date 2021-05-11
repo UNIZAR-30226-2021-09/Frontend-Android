@@ -4,6 +4,8 @@ import { PRIMARY, SECONDARY, BLACK, WHITE } from '../../styles/colors';
 import { BarraLateral } from '_organisms'
 import DropDownPicker from 'react-native-dropdown-picker';
 import { getIncomingList, getOutgoingList, accept, dismiss } from '_api/user';
+import { socket, aceptarInvitacionAmigo } from '_api/user/socket';
+
 export default class FriendRequestScreen extends Component {
     constructor(props) {
         super(props);
@@ -26,6 +28,15 @@ export default class FriendRequestScreen extends Component {
             AccessToken: _accessToken
         };
         console.log(newUser);
+        console.log("USER" + newUser.Username);
+        socket.on('llegaInvitacion', () => {
+            console.log("-------- Socket llegaInvitacion a " + newUser.Username)
+            this.updateIncoming(newUser);
+        })
+        socket.on('llegaAceptarInvitacionAmigo', () => {
+            console.log("--------Socket llegaAceptarInvitacionAmigo a " + newUser.Username)
+            this.updateOutcoming(newUser);
+        });
         this.updateIncoming(newUser);
         this.updateOutcoming(newUser);
         
@@ -73,6 +84,7 @@ export default class FriendRequestScreen extends Component {
             console.log("Data de acceptRequest: " + data);
             if (data != "error") {
                 console.log("Aceptado");
+                aceptarInvitacionAmigo({ Username: friendname });
             } else {
                 alert('Error de acceptRequest');
             }

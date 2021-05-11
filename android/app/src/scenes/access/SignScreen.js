@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { SafeAreaView, View, Text, TouchableHighlight, CheckBox, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
 import { WHITE, PRIMARY, SECONDARY } from '../../styles/colors';
 import { register } from '_api/user';
+import * as Crypto from 'expo-crypto';
 
 const SignScreen = ({
     navigation,
@@ -11,7 +12,22 @@ const SignScreen = ({
     const [pass, onChangePassword] = React.useState(null);
     const [repeatPass, onChangeRepeatPassword] = React.useState(null);
     const [isSelected, setSelection] = React.useState(false);
-    const handleSubmitButton = () => {
+    /*
+    async function digestMessage (message) {
+        const msgUint8 = new TextEncoder().encode(message);                           // encode as (utf-8) Uint8Array
+        const hashBuffer = await crypto.subtle.digest('SHA-256', msgUint8);           // hash the message
+        const hashArray = Array.from(new Uint8Array(hashBuffer));                     // convert buffer to byte array
+        const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join(''); // convert bytes to hex string
+        (async () => {
+            const digest = await Crypto.digestStringAsync(
+                Crypto.CryptoDigestAlgorithm.SHA256,
+                'Github stars are neat '
+            );
+            console.log('Digest: ', digest);
+        return hashHex;
+    }*/
+
+    async function handleSubmitButton () {
         if (!user) {
             alert('Introduzca el nombre de usuario');
             return;
@@ -36,6 +52,11 @@ const SignScreen = ({
             alert('Debe aceptar las Condiciones de Uso y la Política de Privacidad para seguir');
             return;
         }
+        const hashPass = await Crypto.digestStringAsync(
+            Crypto.CryptoDigestAlgorithm.SHA256,
+            pass,
+            { encoding: 'hex' }
+        );
 		/*
 		if (/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,}/)) {
 			alert("Password is correct");
@@ -47,7 +68,7 @@ const SignScreen = ({
         var newUser = {
             Username: user,
             Mail: mail,
-            Password: pass,
+            Password: hashPass,
         }
         console.log(newUser);
         register(newUser).then(data => {
@@ -59,7 +80,7 @@ const SignScreen = ({
             }
         }).catch(err => {
             console.log("error pantalla register")
-            console.log(err)
+            Alert.alert("El usuario o el correo ya existen");
             return "error"
         });
     };
