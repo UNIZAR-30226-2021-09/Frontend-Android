@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, TouchableHighlight, TouchableWithoutFeedback, StyleSheet, Image, Alert } from 'react-native';
+import { View, Text, TouchableHighlight, TouchableWithoutFeedback, StyleSheet, Image, Alert, ImageBackground } from 'react-native';
 import { PRIMARY, SECONDARY, BLACK } from '../../styles/colors';
 import { BarraLateral } from '_organisms'
 import { checkBox, OCEAN_BOX, TOUCHED_BOX, SUNKEN_BOX, NO_ATACK_BOX } from '_api/gameLogic';
@@ -158,6 +158,8 @@ export default class PlaceShipsScreen extends Component {
                         </View>
                     </View>
                     <View style={styles.boardContainer}>
+                        {//<ImageBackground style={styles.boardImageContainer} source={require("_assets/images/espacio.jpg")} > 
+                        }
                         <Table borderStyle={{ borderColor: 'transparent' }}>
                             {
                                 myBoard.board.map((rowData, index) => (
@@ -171,6 +173,7 @@ export default class PlaceShipsScreen extends Component {
                                 ))
                             }
                         </Table>
+                        {/* </ImageBackground> */}
                     </View>
                 </View>
                 <View style={styles.startButtonContainer}>
@@ -222,6 +225,8 @@ const styles = StyleSheet.create({
     head: { height: 30, backgroundColor: '#808B97' },
     text: { margin: 6 },
     boardContainer: { flex: 1, width: 260, height: 260, backgroundColor: 'white' },
+    boardImageContainer: { width: 260, height: 260 },
+
     shipContainer: {
         flex: 1, width: 260, height: 260, flexDirection: 'column'
     },
@@ -229,11 +234,11 @@ const styles = StyleSheet.create({
         flex: 1, width: 270, height: 260, backgroundColor: 'white', flexDirection: 'row'
     },
     row: {
-        flexDirection: 'row', backgroundColor: 'blue', borderColor: 'black'
+        flexDirection: 'row', backgroundColor: 'transparent', borderColor: 'black'
     },
     button: { alignSelf: 'center', width: 100, height: 30, bottom: 15, backgroundColor: 'blue', borderRadius: 0, borderWidth: 0.2 },
     btnText: { textAlign: 'center', color: 'white', paddingTop: 5 },
-    oceanBox: { width: 26, height: 26, backgroundColor: 'cyan', borderRadius: 0, borderColor: 'blue', borderWidth: 0.2 },
+    oceanBox: { width: 26, height: 26, backgroundColor: 'transparent', borderRadius: 0, borderColor: 'blue', borderWidth: 0.2, alignSelf: 'center' },
     touchedBox: { width: 26, height: 26, backgroundColor: 'red', borderRadius: 0, borderColor: 'blue', borderWidth: 0.2 },
     sunkenBox: { width: 26, height: 26, backgroundColor: 'grey', borderRadius: 0, borderColor: 'blue', borderWidth: 0.2 },
     noAttackBox: { width: 26, height: 26, backgroundColor: 'white', borderRadius: 0, borderColor: 'blue', borderWidth: 0.2 },
