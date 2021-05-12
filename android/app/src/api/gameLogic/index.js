@@ -28,7 +28,10 @@ var coord_ships = [[[7, 7], [7, 8], [7, 9]], [[7, 3], [8, 3]],  [[3, 6], [4, 6],
 export const SUCCESS = "Success";
 export const OUTBOARD = "Está intentando colocar un barco fuera del tablero";
 export const ANOTHERSHIP = "Está intentando colocar un barco sobre otro o a su alrededor";
-
+export const OCEAN_NOT_ATTACK = 0;
+export const OCEAN_ATTACK = 1;
+export const SHIP_NOT_ATTACK = 2;
+export const SHIP_ATTACK = 3;
 export const initBoard = () => {
 	return [
 		[OCEAN, OCEAN, OCEAN, OCEAN, OCEAN, OCEAN, OCEAN, OCEAN, OCEAN, OCEAN],
@@ -131,6 +134,7 @@ export const attack = (row, col, myBoard) => {
 		}
 		myBoard.victory = victory;
 	} 
+
 	return myBoard;
 }
 
@@ -142,7 +146,7 @@ export const IAmove = (IABoard) => {
 		row = Math.floor(Math.random() * 10);
 		col = Math.floor(Math.random() * 10);
 	}
-	return attack(row, col, IABoard);
+	return enemyAttack(row, col, IABoard);
 }
 
 const checkSpace = (row, col, ship, dir, board) => {
@@ -216,4 +220,37 @@ export const placeShip = (row, col, ship, dir, myBoard) => {
 	//console.log('board FINAL');
 
 	return { board: myBoard, error: error };
+}
+
+export const transformSolution = (newBoard) => {
+	console.log("BOARDSOL-----BEFORE----" + newBoard.solution)
+	console.log("BOARDSOL-----BEFORE----" + newBoard.board)
+
+	for (let i = 0; i < newBoard.solution.length; i++) {
+		for (let j = 0; j < newBoard.solution[i].length; j++) {
+			if (newBoard.board[i][j] != OCEAN)
+				newBoard.solution[i][j] = SHIP_NOT_ATTACK;
+			else
+				newBoard.solution[i][j] = OCEAN_NOT_ATTACK;
+			console.log("BEFORE--" + newBoard.board[i][j] + "   AFTER--" + newBoard.solution[i][j])
+		}
+	}
+	console.log("BOARDSOL-----" + newBoard.solution)
+	return newBoard;
+}
+
+export const enemyAttack = (row, col, myBoard) => {
+	//console.log("BEFORE BOARD--" + (myBoard.board))
+	//console.log("BEFORE BOARDSOL--" + (myBoard.solution))
+
+	if (myBoard.solution[row][col] == OCEAN_NOT_ATTACK)
+		myBoard.board[row][col] = OCEAN_ATTACK;
+	else
+		myBoard.board[row][col] = SHIP_ATTACK;
+	//console.log("AFTER BOARD--" + (myBoard.board))
+	//console.log("AFTER BOARDSOL--" + (myBoard.solution))
+
+	//console.log("BEFORE--" + (myBoard.solution[row][col]) + "   AFTER--" + myBoard.board[row][col])
+
+	return myBoard;
 }

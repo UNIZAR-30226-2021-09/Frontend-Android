@@ -6,7 +6,7 @@ import { checkBox, OCEAN_BOX, TOUCHED_BOX, SUNKEN_BOX, NO_ATACK_BOX } from '_api
 import { Table, TableWrapper, Cell } from 'react-native-table-component'
 import {
     initBoard, getBox, attack, getSolution, initAttack, initShip, IAmove,
-    placeShip, initCoord, SUCCESS, checkIfAllShips
+    placeShip, initCoord, SUCCESS, checkIfAllShips, transformSolution
 } from '../../api/gameLogic';
 import { ToastAndroid } from 'react-native';
 const NO_SELECT_COLOR = 'white';
@@ -26,6 +26,7 @@ export default class PlaceShipsScreen extends Component {
             myBoard: {
                 board: initBoard(),
                 coordShips: initCoord(),
+                solution: initBoard(),
             },
             IABoard: {
                 board: initBoard(),
@@ -94,8 +95,9 @@ export default class PlaceShipsScreen extends Component {
     startGame() {
         let { myBoard } = this.state
 
-        if (checkIfAllShips(myBoard))
-            this.props.navigation.navigate('Game', { boardSolution: myBoard }) ;
+        if (checkIfAllShips(myBoard)) {
+            this.props.navigation.navigate('Game', { boardSolution: transformSolution(myBoard) });
+        }
         else
             ToastAndroid.show("Coloque todos los barcos", ToastAndroid.SHORT);
     }
@@ -172,7 +174,7 @@ export default class PlaceShipsScreen extends Component {
                     </View>
                 </View>
                 <View style={styles.startButtonContainer}>
-                    <TouchableHighlight style={styles.startButton} onPress={() => this.props.navigation.navigate('Game', { boardSolution: myBoard })}>
+                    <TouchableHighlight style={styles.startButton} onPress={() => this.startGame()}>
                             <Text style={styles.btnText}> Comenzar </Text>
                     </TouchableHighlight>
                 </View>
@@ -236,7 +238,6 @@ const styles = StyleSheet.create({
     sunkenBox: { width: 26, height: 26, backgroundColor: 'grey', borderRadius: 0, borderColor: 'blue', borderWidth: 0.2 },
     noAttackBox: { width: 26, height: 26, backgroundColor: 'white', borderRadius: 0, borderColor: 'blue', borderWidth: 0.2 },
     startButton: { alignSelf: 'center', width: 100, height: 30, bottom: -10, backgroundColor: PRIMARY, borderRadius: 50 },
-    startPressButton: { alignSelf: 'center', width: 100, height: 30, bottom: -10, backgroundColor: 'blue', borderRadius: 50 },
 
 });
 

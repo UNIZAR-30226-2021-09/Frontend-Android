@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { View, Text, TouchableHighlight, TouchableWithoutFeedback, StyleSheet, Image, Alert } from 'react-native';
 import { PRIMARY, SECONDARY, BLACK } from '../../styles/colors';
 import { BarraLateral } from '_organisms'
-import { checkBox, OCEAN_BOX, TOUCHED_BOX, SUNKEN_BOX, NO_ATACK_BOX } from '_api/gameLogic';
+import { checkBox, OCEAN_BOX, TOUCHED_BOX, SUNKEN_BOX, NO_ATACK_BOX, OCEAN_NOT_ATTACK, OCEAN_ATTACK, SHIP_NOT_ATTACK, SHIP_ATTACK } from '_api/gameLogic';
 import { Table, TableWrapper, Cell } from 'react-native-table-component'
 import { initBoard, getBox, attack, getSolution, initAttack, initShip, initCoord, IAmove, getCoord } from '../../api/gameLogic';
 export default class GameScreen extends Component {
@@ -20,15 +20,17 @@ export default class GameScreen extends Component {
                 victory: false
             },
             IABoard: {
-                board: initAttack(),
-                solution: boardSolution.board,
+                board: boardSolution.solution,
+                solution: [...boardSolution.solution],
                 attack: initAttack(),
                 noDetectedShip: initShip(),
                 coordShips: boardSolution.coordShips,
                 victory: false
             },
         }
-        console.log('board________-'+boardSolution.board);
+        console.log('board________-' + boardSolution.board);
+        console.log('boardSolution________-' + boardSolution.solution);
+
     }
     onClick(row, col) {
         const { myBoard, IABoard } = this.state
@@ -40,13 +42,13 @@ export default class GameScreen extends Component {
             this.props.navigation.navigate('Result', { result: true })
             //Alert.alert("Has ganado la partida");
         }
-        console.log("Victoria:::::::::"+this.state.myBoard.victory);
+        //console.log("Victoria:::::::::"+this.state.myBoard.victory);
     }
 
     _alertIndex(index, col) {
         Alert.alert(`This is row ${index + 1} + ${col + 1}`);
     }
-    restart() {
+ /*   restart() {
         this.state = {
             myBoard: {
                 board: initAttack(),
@@ -63,7 +65,7 @@ export default class GameScreen extends Component {
                 coordShips: boardSolution.coordShips,
             },
         }
-    }
+    }*/
     render() {
         let { myBoard, IABoard } = this.state;
         const getMyBox = (box, row, col) => {
@@ -80,31 +82,34 @@ export default class GameScreen extends Component {
                         boxStyle = styles.sunkenBox;
                         break;
                 }
-                return (<View style={boxStyle} />);
-            }
+                return (<View style={boxStyle}>
+                    <Image source={require("_assets/images/redX2.png")} style={styles.image} />
+                </View>);
+            } 
             else 
                 return (<TouchableWithoutFeedback onPress={() => this.onClick(row, col)}>
-                    <View style={styles.noAttackBox}>
+                    <View style={styles.oceanBox}>
                     </View>
                 </TouchableWithoutFeedback>);
         };
         const getIABox = (box, row, col) => {
-                let boxStyle = styles.oceanBox;
-                switch (box) {
-                    case OCEAN_BOX:
-                        boxStyle = styles.oceanBox;
-                        break;
-                    case TOUCHED_BOX:
-                        boxStyle = styles.touchedBox;
-                        break;
-                    case SUNKEN_BOX:
-                        boxStyle = styles.sunkenBox;
-                        break;
-                    default:
-                        boxStyle = styles.noAttackBox;
-
-                }
+            
+            let boxStyle = styles.oceanBox;
+            if (box == OCEAN_NOT_ATTACK || box == SHIP_NOT_ATTACK) {
+                if (box == OCEAN_NOT_ATTACK)
+                    boxStyle = styles.oceanBox;
+                else
+                    boxStyle = styles.shipBox;
                 return (<View style={boxStyle} />);
+            } else {
+                if (box == OCEAN_ATTACK)
+                    boxStyle = styles.touchedOcean;
+                else
+                    boxStyle = styles.touchedShip;
+                return (<View style={boxStyle}>
+                    <Image source={require("_assets/images/redX2.png")} style={styles.image} />
+                </View>);
+            }
         };
         return (<View style={styles.container}>
             <View style={styles.cuadroGrande}>
@@ -141,11 +146,12 @@ export default class GameScreen extends Component {
                         </Table>
                     </View>
                 </View>
-                <TouchableHighlight onPress={() => this.props.navigation.navigate('Home')}>
-                    <View style={styles.button}>
-                        <Text style={styles.btnText}> Rendirse</Text>
-                    </View>
-                </TouchableHighlight>
+                <View style={styles.startButtonContainer}>
+                    <TouchableHighlight style={styles.button} onPress={() => this.props.navigation.navigate('Home')}>
+                            <Text style={styles.btnText}> Rendirse</Text>
+                    </TouchableHighlight>
+                </View>
+
             </View>
             <BarraLateral navigation={this.props.navigation} />
 
@@ -177,12 +183,23 @@ const styles = StyleSheet.create({
     row: {
         flexDirection: 'row', backgroundColor: 'blue', borderColor: 'black'
     },
-    button: { alignSelf: 'center', width: 100, height: 30, bottom:15, backgroundColor: 'blue', borderRadius: 0, borderWidth: 0.2 },
+    startButtonContainer: {
+        flex: 1
+    },
+    button: { alignSelf: 'center', width: 100, height: 30, backgroundColor: PRIMARY, borderRadius: 50, top:'30%' },
+
     btnText: { textAlign: 'center', color: 'white', paddingTop: 5 },
-    oceanBox: { width: 26, height: 26, backgroundColor: 'cyan', borderRadius: 0, borderColor: 'blue', borderWidth: 0.2 },
-    touchedBox: { width: 26, height: 26, backgroundColor: 'red', borderRadius: 0, borderColor: 'blue', borderWidth: 0.2 },
-    sunkenBox: { width: 26, height: 26, backgroundColor: 'grey', borderRadius: 0, borderColor: 'blue', borderWidth: 0.2 },
+    oceanBox: { width: 26, height: 26, backgroundColor: 'cyan', borderRadius: 0, borderColor: 'blue', borderWidth: 0.18 },
+    shipBox: { width: 26, height: 26, backgroundColor: 'grey', borderRadius: 0, borderColor: 'blue', borderWidth: 0.2 },
+
+    touchedBox: { width: 26, height: 26, backgroundColor: 'grey', borderRadius: 0, borderColor: 'blue', borderWidth: 0.2 },
+    sunkenBox: { width: 26, height: 26, backgroundColor: 'grey', borderRadius: 0, borderColor: 'red', borderWidth: 1 },
     noAttackBox: { width: 26, height: 26, backgroundColor: 'white', borderRadius: 0, borderColor: 'blue', borderWidth: 0.2 },
+    touchedOcean: { width: 26, height: 26, backgroundColor: 'cyan', borderRadius: 0, borderColor: 'blue', borderWidth: 0.2 },
+    touchedShip: { width: 26, height: 26, backgroundColor: 'grey', borderRadius: 0, borderColor: 'blue', borderWidth: 0.2 },
+    image: {
+        width: 20, height: 20, alignSelf: 'center', resizeMode: 'center',
+    },
 });
 
 
