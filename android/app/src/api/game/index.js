@@ -23,7 +23,7 @@ export const beginIA = user => {
     })
 }
 
-export const beginFriend = (user) => {
+export const beginFriend = user => {
     return axios.post('https://proyecto-software-09.herokuapp.com/game/newGame', {
         nombreUsuario: user.Username,
         nombreAmigo: user.Friendname,
@@ -31,7 +31,7 @@ export const beginFriend = (user) => {
     }).then(res => {
         console.log("begin AMIGOS")
         console.log(res.data)
-        return res
+        return res.data
     })
 }
 

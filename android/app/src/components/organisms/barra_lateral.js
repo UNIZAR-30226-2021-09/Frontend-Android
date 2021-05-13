@@ -14,8 +14,7 @@ export default class BarraLateral extends Component {
             username: "User",
             selectedFriend: null,
             estado: true,
-            friendList:
-                ["cheerful", "sweet","natured"],
+            friendList: [],
             show: false,
             showFriend: false,
             showGameRequest: false,

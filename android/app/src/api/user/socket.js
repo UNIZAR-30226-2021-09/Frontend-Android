@@ -16,7 +16,7 @@ export const aceptarInvitacionAmigo = (user)  => {
     console.log("---Socket aceptarInvitacionAmigo " + user.Username)
 };
 
-export const receiveFriendRequest = (user) => {
+/*export const receiveFriendRequest = (user) => {
     socket.on('llegaInvitacion', message => {
         console.log("222222 Socket llegaInvitacion a " + user.Username)
     });
@@ -34,3 +34,4 @@ export const disconnect = () => async dispatch => {
     });
     socket.off();
 };
+*/

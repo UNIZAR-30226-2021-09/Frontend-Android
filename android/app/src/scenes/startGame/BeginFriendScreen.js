@@ -1,8 +1,16 @@
 import React, { Component } from 'react';
-import { View, Text, TouchableHighlight, TouchableOpacity, StyleSheet, Image, Alert, FlatList, ScrollView } from 'react-native';
+import { View, Text, TouchableHighlight, TouchableOpacity, StyleSheet, Image, Alert, FlatList, ScrollView, AsyncStorage, ToastAndroid } from 'react-native';
 import { PRIMARY, SECONDARY, BLACK } from '../../styles/colors';
 import { BarraLateral } from '_organisms'
 import DropDownPicker from 'react-native-dropdown-picker';
+import { getFriendList } from '_api/user';
+import { beginFriend, beginRandom } from '_api/game';
+
+const ELEGIR = "Invita a un amigo";
+const INVITAR = "Vas a invitar a";
+const CAMBIAR = "Elegir a otro";
+const DESAFIADO = "Has desafiado a ";
+const ANYADIDO = "Se ha añadido la partida a tu lista de partidas";
 
 export default class BeginFriendScreen extends Component {
     constructor(props) {
@@ -13,65 +21,105 @@ export default class BeginFriendScreen extends Component {
                 { label: 'Torneo 2', value: 'torneo2' },
                 { label: 'Torneo 3', value: 'torneo3' },
             ],
-            selectedFriend: null,
-            username: "user 1",
-            estado:null,
-            friendList:
-                [
-                    { name: 'rollicking' },
-                    { name: 'cheerful' },
-                    { name: 'fun' },
-                    { name: 'sweet' },
-                    { name: 'amiable' },
-                    { name: 'natured' },
-                    { name: 'rollicking' },
-                    { name: 'cheerful' },
-                    { name: 'fun' },
-                    { name: 'sweet' },
-                    { name: 'amiable' },
-                    { name: 'natured' }
-                ],
-            show: false,
+            selectedFriend: '',
+            username: '',
+            estado: ELEGIR,
+            friendList: ["cheerful", "sweet", "natured", "cheerful", "sweet", "natured"],
+            show: true,
         }
-        
+
+    }
+    async componentDidMount() {
+        var _username = await AsyncStorage.getItem('username');
+        var _accessToken = await AsyncStorage.getItem('userToken');
+        this.setState({ username: _username, accessToken: _accessToken });
+        var newUser = {
+            Username: _username,
+            AccessToken: _accessToken
+        };
+        this.updateFriendList(newUser);
+    }
+    async updateFriendList(newUser) {
+        await getFriendList(newUser).then(data => {
+            console.log("Data de barra lateral: " + data);
+            if (data != "error") {
+                this.setState(
+                    { friendList: data }
+                )
+            } else {
+                alert('Error de registro');
+            }
+        }).catch(err => {
+            console.log("error barra lateral")
+            console.log(err)
+            return "error"
+        });
     }
     showFriend() {
-        const { show } = this.state
-
+        const { show, estado } = this.state
+        let nuevoEstado = (estado == ELEGIR ? CAMBIAR : ELEGIR)
         this.setState({
-            show: !show
+            show: !show,
+            estado: nuevoEstado
         })
     }
     selectFriend(friend) {
         this.setState({
             selectedFriend: friend,
             show: false,
-            estado:": Seleccionado"
+            estado: CAMBIAR
         })
     }
-    send() {
-        this.setState({
-            estado: ": Esperando"
-        })
-    }
-    render() {
-        const getFriend = (option) => {
+    async send() {
+        let { selectedFriend, username, accessToken } = this.state
+        /*this.setState({
+            show: true,
+            estado: ELEGIR
+        })*/
+        var user = {
+            Username: username,
+            Friendname: selectedFriend,
+            AccessToken: accessToken
+        };
+        console.log(DESAFIADO + selectedFriend + ". " + ANYADIDO )
 
-        }
+        await beginFriend(user).then(data => {
+            console.log("Data de friend: " + JSON.stringify(data));
+            if (data != "error") {
+                console.log("No ha habido fallo al comunicarse con el server")
+                ToastAndroid.show(DESAFIADO + selectedFriend + ". " + ANYADIDO, ToastAndroid.LONG)
+            } else {
+                alert('Error de friendGame');
+            }
+        }).catch(err => {
+            console.log("error random")
+            console.log(err)
+            return "error"
+        });
+        //this.props.navigation.navigate('Home');
+
+    }
+
+    render() {
         return (<View style={styles.container}>
             <View style={styles.cuadroGrande}>
                 <View style={styles.cuadroPequeno}>
                     <Text style={styles.title} > Desafiar amigo</Text>
                 </View>
                 <View style={styles.cuadroAmigos}>
-                    <View style={styles.friendContainer}>
+                    {/*<View style={styles.friendContainer}>
                         <Text style={styles.text} > {this.state.username}: Listo </Text>
-                    </View>
-                    <View style={styles.friendContainer}>
-                        <TouchableOpacity style={styles.friendContainer} onPress={() => this.showFriend()}>
-                            <Text style={styles.messageText} > Invita a un amigo </Text>
-                        </TouchableOpacity>
-                    </View>
+                    </View>*/}
+                    {this.state.estado != ELEGIR ?
+                        <View style={styles.friendContainer}>
+                            <TouchableOpacity style={styles.friendContainer} onPress={() => this.showFriend()}>
+                                <Text style={styles.messageText} > {this.state.estado} </Text>
+                            </TouchableOpacity>
+                        </View> :
+                        <View style={styles.friendContainer}>
+                                <Text style={styles.messageText} > {this.state.estado} </Text>
+                        </View>
+                    }
                     <View style={styles.friendContainer}>
                         {this.state.show ? <FlatList
                             data={this.state.friendList}
@@ -79,9 +127,9 @@ export default class BeginFriendScreen extends Component {
                             renderItem={({ item, index }) => {
                                 return (
                                     <View style={styles.friend}>
-                                        <TouchableOpacity style={styles.friendButton} onPress={() => this.selectFriend(item.name)}>
+                                        <TouchableOpacity style={styles.friendButton} onPress={() => this.selectFriend(item)}>
                                             <Text style={styles.friendText}>
-                                                {item.name}
+                                                {item}
                                             </Text>
                                         </TouchableOpacity>
                                     </View>
@@ -90,7 +138,7 @@ export default class BeginFriendScreen extends Component {
                             keyExtractor={(item, index) => index.toString()}
                             style={styles.friendContainer}
                         /> : <View style={styles.friendContainer}>
-                                <Text style={styles.text} > {this.state.selectedFriend} {this.state.estado}</Text>
+                                <Text style={styles.text} >{INVITAR}: {this.state.selectedFriend}</Text>
                                 <TouchableOpacity style={styles.confirmButton} onPress={() => this.send()}>
                                     <Text style={styles.buttonText}>
                                         Enviar peticion
@@ -164,7 +212,7 @@ const styles = StyleSheet.create({
     },
     buttonText: {
         textAlign: 'center',
-        color: 'black',
+        color: 'white',
         fontSize: 20,
     },
     text: {    
