@@ -65,3 +65,4 @@ buck-out/
 web-build/
 .vs/Frontend-Android/v16/Browse.VC.opendb
 .vs/Frontend-Android/v16/Browse.VC.db
+*.db
