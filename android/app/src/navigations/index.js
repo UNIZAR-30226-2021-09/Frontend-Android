@@ -26,7 +26,7 @@ const Stack = createStackNavigator();
 import { RootScreen, LoginScreen, SignScreen } from '_scenes/access';
 import AboutScreen from '_scenes/about'
 import HomeScreen from '_scenes/home';
-import { ProfileScreen, RankingScreen } from '_scenes/profile';
+import { ProfileScreen, RankingScreen, SettingScreen } from '_scenes/profile';
 import { AddFriendScreen, FriendRequestScreen } from '_scenes/friend';
 import { BeginTournamentScreen, BeginRandomScreen, BeginFriendScreen, OngoingGameScreen }
     from '_scenes/startGame';
@@ -51,6 +51,7 @@ function RootNavigator() {
             <Stack.Screen name="Game" component={GameScreen} />
             <Stack.Screen name="PlaceShips" component={PlaceShipsScreen} />
             <Stack.Screen name="Result" component={ResultScreen} />
+            <Stack.Screen name="Setting" component={SettingScreen} />
         </Stack.Navigator>
     );
 }

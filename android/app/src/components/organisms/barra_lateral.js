@@ -356,16 +356,16 @@ export default class BarraLateral extends Component {
                     </View>
                     <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-around' }}>
                         <View style={{ flex: 1 }}>
-                            <TouchableOpacity style={styles.icon} onPress={() => this.props.navigation.navigate('Profile')}>
+                            <TouchableOpacity style={styles.icon} onPress={() => this.props.navigation.navigate('Home')}>
+                                <Image source={require("_assets/images/house.png")} style={styles.image} />
+                            </TouchableOpacity>
+                        </View>
+                        <View style={{ flex: 1 }}>
+                            <TouchableOpacity style={styles.icon} onPress={() => this.props.navigation.navigate('Setting')}>
                                 <Image source={require("_assets/images/setting.png")} style={styles.image} />
                             </TouchableOpacity>
                         </View>
-                            <View style={{ flex: 1 }}>
-                                <TouchableOpacity style={styles.icon} onPress={() => this.props.navigation.navigate('Profile')}>
-                                    <Image source={require("_assets/images/redX2.png")} style={styles.image} />
-                                </TouchableOpacity>
-                            </View>
-                    </View>
+                    </View>    
                 </View>
                 <View style={styles.cuadroAmigos}>
                     <View style={styles.cuadroPequeno}>
