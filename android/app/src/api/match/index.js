@@ -1,3 +1,13 @@
+import axios from 'axios';
+import { disparo } from '_api/user/socket';
+
+
+export const COLOCANDO = "ColocandoBarcos";
+export const RIVALCOLOCANDO = "ColocandoBarcosRival";
+export const MITURNO = "TuTurno";
+export const TURNORIVAL = "TurnoRival";
+export const COLOCADO = "Colocado";
+
 const DIM = 10;
 const CARRIER = 5;
 const BATTLESHIP = 4;
@@ -18,13 +28,19 @@ export const ATACK_BOX = 0;
 export const INVALID_CLICK = -1; 
 const VERTICAL = 0;
 const HORIZONTAL = 1;
+const HORIZONTAL_LETRA = "horizontal";
+const VERTICAL_LETRA = "vertical";
 var coord_carrier = [[5, 0],[6,0],[7,0],[8,0],[9,0]];
 var coord_battleship = [[0, 3],[0,4],[0,5],[0,6]];
 var coord_submarine1 = [[3, 6],[4,6],[5,6]];
 var coord_submarine2 = [[7, 7],[7, 8], [7,9]];
 var coord_crusier = [[7, 3], [8, 3]];
 var no_detected_ship = [2, 1, 2, 3, 4];
-var coord_ships = [[[7, 7], [7, 8], [7, 9]], [[7, 3], [8, 3]],  [[3, 6], [4, 6], [5, 6]], [[0, 3], [0, 4], [0, 5], [0, 6]], [[5, 0], [6, 0], [7, 0], [8, 0], [9, 0]] ];
+var coordShips = [[[7, 7], [7, 8], [7, 9]],
+	[[7, 3], [8, 3]],
+	[[3, 6], [4, 6], [5, 6]],
+	[[0, 3], [0, 4], [0, 5], [0, 6]],
+	[[5, 0], [6, 0], [7, 0], [8, 0], [9, 0]]];
 export const SUCCESS = "Success";
 export const OUTBOARD = "Está intentando colocar un barco fuera del tablero";
 export const ANOTHERSHIP = "Está intentando colocar un barco sobre otro o a su alrededor";
@@ -67,6 +83,9 @@ export const initShip = () => {
 }
 export const initCoord = () => {
 	return [[[], []], [[], [], []], [[], [], []], [[], [], [], []], [[], [], [], [], []]];
+}
+export const initDir = () => {
+	return [VERTICAL, VERTICAL, VERTICAL, VERTICAL, VERTICAL];
 }
 export const getCoord = () => {
 	return [[[7, 7], [7, 8], [7, 9]], [[7, 3], [8, 3]], [[3, 6], [4, 6], [5, 6]], [[0, 3], [0, 4], [0, 5], [0, 6]], [[5, 0], [6, 0], [7, 0], [8, 0], [9, 0]]];
@@ -189,14 +208,14 @@ export const placeShip = (row, col, ship, dir, myBoard) => {
 	//console.log('row' + row, 'col' + col, 'ship' + ship, 'dir2' + dir + 'board' + myBoard.board);
 	if (myBoard.coordShips[ship - 1][0].length > 0) {
 		var removeCoord = myBoard.coordShips[ship - 1];
-		console.log('REMOVE ' + removeCoord);
+		//console.log('REMOVE ' + removeCoord);
 		for (let i = 0; i < removeCoord.length; i++) {
 			myBoard.board[removeCoord[i][0]][removeCoord[i][1]] = OCEAN_BOX;
 		}
 		myBoard.coordShips[ship - 1] = ([[], []]);
 	}
 	var error = checkSpace(row, col, ship, dir, myBoard.board);
-	if (error==SUCCESS) {
+	if (error == SUCCESS) {
 		let nCell = ship, nRow, nCol;
 		if (ship == SUBMARINE2) nCell = SUBMARINE1;
 		if (dir == VERTICAL) {
@@ -206,6 +225,7 @@ export const placeShip = (row, col, ship, dir, myBoard) => {
 			nRow = row + 1;
 			nCol = col + nCell;
 		}
+		myBoard.shipDir[ship - 1] = dir;
 		let coord = [];
 		for (let i = row; i < nRow; i++) {
 			for (let j = col; j < nCol; j++) {
@@ -215,7 +235,7 @@ export const placeShip = (row, col, ship, dir, myBoard) => {
 			}
 		}
 		myBoard.coordShips[ship - 1] = (coord);
-		//console.log('linea:' + coord_ships[nCell]);
+		//console.log('linea:' + myBoard.shipDir[ship]);
 	}
 	//console.log('board FINAL');
 
@@ -253,4 +273,176 @@ export const enemyAttack = (row, col, myBoard) => {
 	//console.log("BEFORE--" + (myBoard.solution[row][col]) + "   AFTER--" + myBoard.board[row][col])
 
 	return myBoard;
+}
+
+export const startGame = (username, token, gameId, myBoard) => {
+	let { coordShips, shipDir } = myBoard;
+	var directions = [HORIZONTAL_LETRA, HORIZONTAL_LETRA, HORIZONTAL_LETRA, HORIZONTAL_LETRA, HORIZONTAL_LETRA]
+	for (let i = 0; i < shipDir.length; i++) {
+		if (shipDir[i] == VERTICAL)
+			directions[i] = VERTICAL_LETRA;
+	}
+	var data = {
+		nombreUsuario: username,
+		accessToken: token,
+		gameid: gameId,
+		portaaviones: { posicion: { fila: coordShips[CARRIER - 1][0][0], columna: coordShips[CARRIER - 1][0][1] }, direccion: directions[CARRIER - 1] },
+		buque: { posicion: { fila: coordShips[BATTLESHIP - 1][0][0], columna: coordShips[BATTLESHIP - 1][0][1] }, direccion: directions[BATTLESHIP - 1] },
+		submarino1: { posicion: { fila: coordShips[SUBMARINE1 - 1][0][0], columna: coordShips[SUBMARINE1 - 1][0][1] }, direccion: directions[SUBMARINE1 - 1] },
+		submarino2: { posicion: { fila: coordShips[SUBMARINE2 - 1][0][0], columna: coordShips[SUBMARINE2 - 1][0][1] }, direccion: directions[SUBMARINE2-1] },
+		crucero: { posicion: { fila: coordShips[CRUISER - 1][0][0], columna: coordShips[CRUISER - 1][0][1] }, direccion: directions[CRUISER-1] },
+	}
+	console.log("COLOCARBARCOS-------")
+	console.log(data)
+	return axios.post('https://proyecto-software-09.herokuapp.com/match/colocarBarcos', data).then(res => {
+		console.log("colocarBarcosRESPUESTA------")
+		console.log(res.data)
+		if (res.data.turno == TURNORIVAL)
+			disparo(gameId, COLOCADO)
+		return res.data
+	}).catch(error => {
+		console.log("errorrrrrrrrrrrrrrr")
+		if (error.response) {
+			console.log(error.response.data);
+		}
+		return "error"
+	})
+}
+const placeMyShip = (ships, attacks) => {
+	//console.log("MIS DISPAROS----" + JSON.stringify(attacks))
+	//console.log("MIS BARCOS----" + JSON.stringify(ships))
+	var myBoard = initBoard() ;
+	for (let i = 0; i < ships.length; i++) {
+		const thisShip = ships[i];
+		const estado = thisShip.estado, coord = thisShip.coordenadas;
+		if (estado != "hundido") {
+			for (let j = 0; j < coord.length; j++) {
+				myBoard[coord[j].fila][coord[j].columna] = SHIP_NOT_ATTACK;
+			}
+		} else {
+			for (let j = 0; j < coord.length; j++) {
+				myBoard[coord[j].fila][coord[j].columna] = SHIP_ATTACK;
+			}
+        }
+	}
+
+	for (let i = 0; i < attacks.length; i++) {
+		const thisAttack = attacks[i].casilla;
+		if (thisAttack.estado == "acierto") {
+			myBoard[thisAttack.fila][thisAttack.columna] = SHIP_ATTACK;
+		} else {
+			myBoard[thisAttack.fila][thisAttack.columna] = OCEAN_ATTACK;
+		}
+		//console.log("ATAQUE____" + JSON.stringify(thisAttack))
+		//console.log("ESTADO____" + thisAttack.estado)
+
+	}
+
+	/*console.log("TABLERO _______")
+	for (let i = 0; i < myBoard.length; i++) {
+		console.log(...myBoard[i]);
+	}*/
+	return myBoard;
+}
+const placeRivalShip = (ships, attacks) => {
+	var myBoard = initAttack();
+	//console.log("DISPAROS----" + JSON.stringify(attacks))
+	//console.log("BARCOS----" + JSON.stringify(ships))
+
+	for (let i = 0; i < attacks.length; i++) {
+		const thisAttack = attacks[i].casilla;
+		if (thisAttack.estado == "acierto") {
+			myBoard[thisAttack.fila][thisAttack.columna] = TOUCHED_BOX;
+		} else {
+			myBoard[thisAttack.fila][thisAttack.columna] = OCEAN_BOX;
+        }
+	}
+
+	for (let i = 0; i < ships.length; i++) {
+		const thisShip = ships[i];
+		const estado = thisShip.estado, coord = thisShip.coordenadas;
+		if (estado == "hundido") {
+			for (let j = 0; j < coord.length; j++) {
+				myBoard[coord[j].fila][coord[j].columna] = SUNKEN_BOX;
+			}
+		}
+	}
+
+	/*console.log("TABLERO RIVAL_______")
+	for (let i = 0; i < myBoard.length; i++) {
+		console.log(...myBoard[i]);
+	}*/
+	return myBoard;
+}
+const adaptBoard = (data) => {
+	var board = {
+		myBoard: placeRivalShip(data.barcosHundidosRival, data.disparos),
+		rivalBoard: placeMyShip(data.tusBarcos, data.tuTablero),
+		myState: data.turno
+	}
+	//console.log("BOARD_______" + JSON.stringify(board))
+	return board;
+}
+
+export const getBoard = (username, token, gameId) => {
+	var data = {
+		nombreUsuario: username,
+		accessToken: token,
+		gameid: gameId
+	}
+	return axios.post('https://proyecto-software-09.herokuapp.com/match/cogerTablero', data).then(res => {
+		//console.log("getBOARD------")
+		//console.log(res.data)
+		//console.log(res.data.tuTablero)
+		//console.log(res.data.disparos)
+
+		return adaptBoard(res.data);
+	}).catch(error => {
+		console.log("errorrrrrrrrrrrrrrr  "+ error)
+		if (error.response) {
+			console.log(error.response.data);
+		}
+		return "error"
+	})
+}
+
+export const movement = (username, token, gameId, row, col) => {
+	var data = {
+		nombreUsuario: username,
+		accessToken: token,
+		gameid: gameId,
+		fila: row,
+		columna: col
+	}
+	return axios.post('https://proyecto-software-09.herokuapp.com/match/movimiento', data).then(res => {
+		console.log("movimiento------")
+		console.log(res.data)
+
+		return res.data;
+	}).catch(error => {
+		console.log("errorrrrrrrrrrrrrrr")
+		if (error.response) {
+			console.log(error.response.data);
+		}
+		return { error: "error", tipo: error.response.data };
+	})
+}
+
+export const infoPartida = (username, token, gameId) => {
+	var data = {
+		nombreUsuario: username,
+		accessToken: token,
+		gameid: gameId,
+	}
+	return axios.post('https://proyecto-software-09.herokuapp.com/match/infoPartida', data).then(res => {
+		console.log("infoPartida------")
+		console.log(res.data)
+		return res.data.infoPartida;
+	}).catch(error => {
+		console.log("errorrrrrrrrrrrrrrr")
+		if (error.response) {
+			console.log(error.response.data);
+		}
+		return { error: "error", tipo: error.response.data };
+	})
 }

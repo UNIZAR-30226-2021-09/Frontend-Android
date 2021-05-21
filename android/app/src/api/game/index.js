@@ -52,9 +52,9 @@ export const gameIncomingRequest = (user) => {
         nombreUsuario: user.Username,
         accessToken: user.AccessToken,
     }).then(res => {
-        console.log("peticiones RECIBIDAS de partidas contra AMIGOS")
-        console.log(res.data)
-        return res
+       // console.log("peticiones RECIBIDAS de partidas contra AMIGOS")
+        //console.log(res.data)
+        return res.data
     })
 }
 //get
@@ -65,7 +65,7 @@ export const gameOutgoingRequest = (request) => {
     }).then(res => {
         console.log("peticiones ENVIADAS de partidas contra AMIGOS")
         console.log(res.data)
-        return res
+        return res.data
     })
 }
 //get
@@ -75,7 +75,7 @@ export const getGameInProgess = user => {
         accessToken: user.AccessToken,
     }).then(res => {
         console.log("listado partidas en curso")
-        console.log(res.data)
+        //console.log(res.data)
         return res.data
     })
 }
@@ -83,16 +83,19 @@ export const acceptFriendGame = (user) => {
     return axios.post('https://proyecto-software-09.herokuapp.com/game/accept', {
         nombreUsuario: user.Username,
         accessToken: user.AccessToken,
+        gameid: user.GameId
     }).then(res => {
         console.log(" aceptar peticiones de partida contra amigo")
         console.log(res.data)
         return res
     })
 }
+
 export const dismissFriendGame = (user) => {
     return axios.post('https://proyecto-software-09.herokuapp.com/game/dismiss', {
         nombreUsuario: user.Username,
         accessToken: user.AccessToken,
+        gameid: user.GameId
     }).then(res => {
         console.log("rechazar peticiones de partida contra amigo")
         console.log(res.data)

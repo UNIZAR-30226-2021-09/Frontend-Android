@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
-import { View, Text, TouchableHighlight, TouchableWithoutFeedback, StyleSheet, Image, Alert, ImageBackground } from 'react-native';
+import { View, Text, TouchableHighlight, TouchableWithoutFeedback, StyleSheet, Image, Alert, ImageBackground, AsyncStorage } from 'react-native';
 import { PRIMARY, SECONDARY, BLACK } from '../../styles/colors';
 import { BarraLateral } from '_organisms'
-import { checkBox, OCEAN_BOX, TOUCHED_BOX, SUNKEN_BOX, NO_ATACK_BOX } from '_api/gameLogic';
+import { checkBox, OCEAN_BOX, TOUCHED_BOX, SUNKEN_BOX, NO_ATACK_BOX } from '_api/match';
 import { Table, TableWrapper, Cell } from 'react-native-table-component'
 import {
     initBoard, getBox, attack, getSolution, initAttack, initShip, IAmove,
-    placeShip, initCoord, SUCCESS, checkIfAllShips, transformSolution
-} from '../../api/gameLogic';
+    placeShip, initCoord, SUCCESS, checkIfAllShips, transformSolution, initDir,
+    startGame
+} from '_api/match';
 import { ToastAndroid } from 'react-native';
 const NO_SELECT_COLOR = 'white';
 const SELECT_COLOR = 'cyan';
@@ -27,6 +28,7 @@ export default class PlaceShipsScreen extends Component {
                 board: initBoard(),
                 coordShips: initCoord(),
                 solution: initBoard(),
+                shipDir: initDir(),
             },
             IABoard: {
                 board: initBoard(),
@@ -92,11 +94,14 @@ export default class PlaceShipsScreen extends Component {
             })
         }
     }
-    startGame() {
+    async start() {
         let { myBoard } = this.state
-
         if (checkIfAllShips(myBoard)) {
-            this.props.navigation.navigate('Game', { boardSolution: transformSolution(myBoard) });
+            var _username = await AsyncStorage.getItem('username');
+            var _accessToken = await AsyncStorage.getItem('userToken');
+            var _gameId = await AsyncStorage.getItem('gameId');
+            startGame(_username, _accessToken, _gameId, myBoard);
+            this.props.navigation.navigate('Game');
         }
         else
             ToastAndroid.show("Coloque todos los barcos", ToastAndroid.SHORT);
@@ -177,9 +182,16 @@ export default class PlaceShipsScreen extends Component {
                     </View>
                 </View>
                 <View style={styles.startButtonContainer}>
-                    <TouchableHighlight style={styles.startButton} onPress={() => this.startGame()}>
-                            <Text style={styles.btnText}> Comenzar </Text>
-                    </TouchableHighlight>
+                        <View style={{ flex: 1 }}>
+                        <TouchableHighlight style={styles.button} onPress={() => this.start()}>
+                                <Text style={styles.btnText}> Rendirse</Text>
+                            </TouchableHighlight>
+                        </View>
+                    <View style={{ flex: 1 }}>
+                        <TouchableHighlight style={styles.button} onPress={() => this.props.navigation.navigate("OnGoingGame")}>
+                            <Text style={styles.btnText}> Volver </Text>
+                        </TouchableHighlight>
+                    </View>
                 </View>
             </View>
             <BarraLateral navigation={this.props.navigation} />
@@ -208,8 +220,12 @@ const styles = StyleSheet.create({
         bottom: -20,
     },
     startButtonContainer: {
-        flex:1
+        flex: 1,
+        flexDirection: 'row',
+
     },
+    button: { alignSelf: 'center', width: 100, height: 30, backgroundColor: PRIMARY, borderRadius: 50, top: '30%' },
+
     image: {
         width: 90, height: 90, alignSelf: 'center', borderWidth: 1, borderColor: 'white', resizeMode:'center'
     },
@@ -236,7 +252,6 @@ const styles = StyleSheet.create({
     row: {
         flexDirection: 'row', backgroundColor: 'transparent', borderColor: 'black'
     },
-    button: { alignSelf: 'center', width: 100, height: 30, bottom: 15, backgroundColor: 'blue', borderRadius: 0, borderWidth: 0.2 },
     btnText: { textAlign: 'center', color: 'white', paddingTop: 5 },
     oceanBox: { width: 26, height: 26, backgroundColor: 'transparent', borderRadius: 0, borderColor: 'blue', borderWidth: 0.2, alignSelf: 'center' },
     touchedBox: { width: 26, height: 26, backgroundColor: 'red', borderRadius: 0, borderColor: 'blue', borderWidth: 0.2 },
