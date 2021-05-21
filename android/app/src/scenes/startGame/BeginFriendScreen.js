@@ -4,7 +4,8 @@ import { PRIMARY, SECONDARY, BLACK } from '../../styles/colors';
 import { BarraLateral } from '_organisms'
 import DropDownPicker from 'react-native-dropdown-picker';
 import { getFriendList } from '_api/user';
-import { beginFriend, beginRandom } from '_api/game';
+import { beginFromFriend, beginRandom } from '_api/game';
+import { challenge } from '_api/user/socket';
 
 const ELEGIR = "Invita a un amigo";
 const INVITAR = "Vas a invitar a";
@@ -46,6 +47,7 @@ export default class BeginFriendScreen extends Component {
                 this.setState(
                     { friendList: data }
                 )
+
             } else {
                 alert('Error de registro');
             }
@@ -83,10 +85,11 @@ export default class BeginFriendScreen extends Component {
         };
         console.log(DESAFIADO + selectedFriend + ". " + ANYADIDO )
 
-        await beginFriend(user).then(data => {
+        await beginFromFriend(user).then(data => {
             console.log("Data de friend: " + JSON.stringify(data));
             if (data != "error") {
                 console.log("No ha habido fallo al comunicarse con el server")
+                challenge(selectedFriend);
                 ToastAndroid.show(DESAFIADO + selectedFriend + ". " + ANYADIDO, ToastAndroid.LONG)
             } else {
                 alert('Error de friendGame');

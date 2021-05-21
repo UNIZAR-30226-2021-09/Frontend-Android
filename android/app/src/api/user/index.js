@@ -17,7 +17,9 @@ export const register = newUser => {
         })
         .catch(err => {
             console.log("errorrrrrrrrrrrrrrr")
-            console.log(err)
+            if (err.response) {
+                console.log(err.response.data);
+            }
             return "error"
         })
 }
@@ -37,7 +39,9 @@ export const login = newUser => {
         })
         .catch(err => {
             console.log("errorrrrrrrrrrrrrrr")
-            console.log(err)
+            if (err.response) {
+                console.log(err.response.data);
+            }
             return "error"
         })
 }

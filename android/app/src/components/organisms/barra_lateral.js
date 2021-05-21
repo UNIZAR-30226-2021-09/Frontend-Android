@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
-import { SafeAreaView, View, Text, TouchableHighlight, StyleSheet, AsyncStorage, TextInput, TouchableOpacity, FlatList, Button, Alert } from 'react-native';
+import { SafeAreaView, View, Text, TouchableHighlight, StyleSheet, AsyncStorage, TextInput, TouchableOpacity, FlatList, Button, Alert, Image } from 'react-native';
 import { WHITE, PRIMARY, SECONDARY,BLACK } from '../../styles/colors';
 import Modal from 'react-native-modal';
 import { getFriendList } from '_api/user';
 import { getIncomingList, getOutgoingList, accept, dismiss } from '_api/user';
-import { socket, aceptarInvitacionAmigo } from '_api/user/socket';
-
+import { socket, aceptarInvitacionAmigo, aceptarChallenge, joinGame } from '_api/user/socket';
+import { acceptFriendGame, dismissFriendGame, gameIncomingRequest} from '_api/game'
 export default class BarraLateral extends Component {
 
     constructor(props) {
@@ -20,8 +20,10 @@ export default class BarraLateral extends Component {
             showGameRequest: false,
             refreshing: false,
             incomingList: ["cheerful", "sweet", "natured", "cheerful", "sweet", "natured"],
-            outcomingList: [],
+            challengeList: [],
             accessToken: "",
+            newPetition: 0,
+            newRequest:0,
         }
     }
     setShowFriend() {
@@ -31,6 +33,7 @@ export default class BarraLateral extends Component {
         })
 
     }
+
     setShowGameRequest() {
         const { showGameRequest } = this.state
         this.setState({
@@ -48,25 +51,38 @@ export default class BarraLateral extends Component {
             AccessToken: _accessToken
         };
         console.log("USER" + newUser.Username);
-        socket.on('llegaInvitacion', () => {
-            console.log("-------- Socket llegaInvitacion a " + newUser.Username)
+        await socket.on('llegaInvitacion', () => {
+            console.log("-------- Socket llegaInvitacion2 a " + newUser.Username)
             this.updateIncoming(newUser);
+
         })
-        socket.on('llegaAceptarInvitacionAmigo', () => {
+        await socket.on('llegaAceptarInvitacionAmigo',  () => {
             console.log("--------Socket llegaAceptarInvitacionAmigo a " + newUser.Username)
             this.updateIncoming(newUser);
             this.updateFriendList(newUser);
         });
-        console.log("LIST" + this.state.incomingList)
-        this.updateFriendList(newUser);
-        this.updateIncoming(newUser);
+        await socket.on('llegaChallenge', () => {
+            console.log("--------Socket llegaChallenge a " + newUser.Username)
+            this.updateChallengeList(newUser);
+        });
+
+        await socket.on('llegaAceptarChallenge', gameid => {
+            console.log("--------Socket llegaAceptarChallenge a " + newUser.Username + "GAME: " + gameid)
+            joinGame(gameid)
+        });
+        //console.log("LIST" + this.state.incomingList)
+        await this.updateFriendList(newUser);
+        await this.updateIncoming(newUser);
+        await this.updateChallengeList(newUser);
     }
     async updateFriendList(newUser) {
         await getFriendList(newUser).then(data => {
             console.log("Data de barra lateral: " + data);
             if (data != "error") {
                 this.setState(
-                    { friendList: data }
+                    {
+                        friendList: data,
+                    }
                 )
             } else {
                 alert('Error de registro');
@@ -82,7 +98,10 @@ export default class BarraLateral extends Component {
             console.log("Data de getIncomingList: " + data);
             if (data != "error") {
                 this.setState(
-                    { incomingList: data }
+                    {
+                        incomingList: data,
+                        newPetition: data.length
+                    }
                 )
             } else {
                 alert('Error de getIncomingList');
@@ -93,18 +112,23 @@ export default class BarraLateral extends Component {
             return "error"
         });
     }
-    async updateOutcoming(newUser) {
-        await getOutgoingList(newUser).then(data => {
-            console.log("Data de getOutgoingList: " + data);
+    async updateChallengeList(newUser) {
+        await gameIncomingRequest(newUser).then(data => {
+            console.log("Data de updateChallengeList: " + JSON.stringify(data));
             if (data != "error") {
                 this.setState(
-                    { outcomingList: data }
+                    {
+                        challengeList: data,
+                        newRequest: data.length
+                    }
                 )
+                console.log("Data de challengeList: " + JSON.stringify(this.state.challengeList));
+
             } else {
-                alert('Error de getOutgoingList');
+                alert('Error de updateChallengeList');
             }
         }).catch(err => {
-            console.log("error getOutgoingList")
+            console.log("error updateChallengeList")
             console.log(err)
             return "error"
         });
@@ -153,28 +177,52 @@ export default class BarraLateral extends Component {
         });
         this.updateIncoming(newUser);
     }
-
-    async cancelRequest(friendname) {
+    async acceptGame(gameID, contrincante) {
         var newUser = {
-            Username: this.state.username,
+            Username: contrincante,
             AccessToken: this.state.accessToken,
-            Friendname: friendname
+            GameId: gameID
         };
         console.log(newUser);
-        await cancel(newUser).then(data => {
-            console.log("Data de cancelRequest: " + data);
+        await acceptFriendGame(newUser).then(data => {
+            console.log("Data de acceptRequest: " + data);
             if (data != "error") {
-                console.log("Cancelado");
+                console.log("Aceptado");
+                aceptarChallenge(newUser);
+                joinGame(gameID);
             } else {
-                alert('Error de cancelRequest');
+                alert('Error de acceptRequest');
             }
         }).catch(err => {
-            console.log("error cancelRequest")
+            console.log("error acceptRequest")
             console.log(err)
             return "error"
         });
-        this.updateOutcoming(newUser);
+        this.updateChallengeList(newUser);
     }
+
+    async dismissGame(gameID) {
+        var newUser = {
+            Username: this.state.username,
+            AccessToken: this.state.accessToken,
+            GameId: gameID
+        };
+        console.log(newUser);
+        await dismissFriendGame(newUser).then(data => {
+            console.log("---Data de dismissRequest: " + data);
+            if (data != "error") {
+                console.log("Rechazado");
+            } else {
+                alert('Error de dismissRequest');
+            }
+        }).catch(err => {
+            console.log("error dismissRequest")
+            console.log(err)
+            return "error"
+        });
+        this.updateChallengeList(newUser);
+    }
+
     render() {
 
         return (
@@ -250,23 +298,23 @@ export default class BarraLateral extends Component {
                                 <Text style={styles.modalHeaderText}>Peticiones de partidas amistosas</Text>
                             </View>
                             <View style={styles.friendList2}>
-                                {this.state.incomingList.length > 0 ? <FlatList
-                                    data={this.state.incomingList}
+                                {this.state.challengeList.length > 0 ? <FlatList
+                                    data={this.state.challengeList}
                                     extraData={this.state.showItemIndex}
                                     renderItem={({ item, index }) => {
                                         return (
                                             <View style={styles.friend2}>
                                                 <View style={styles.friendItem}>
                                                     <View style={styles.gameItem}>
-                                                        <Text style={styles.friendText} > {item}</Text>
+                                                        <Text style={styles.friendText} > {item.contrincante}</Text>
                                                     </View>
                                                     <View style={styles.gameButton}>
-                                                        <TouchableOpacity style={styles.acceptButton} onPress={() => this.acceptRequest(item)}>
+                                                        <TouchableOpacity style={styles.acceptButton} onPress={() => this.acceptGame(item.id, item.contrincante)}>
                                                             <Text style={styles.rankText} > Aceptar </Text>
                                                         </TouchableOpacity>
                                                     </View>
                                                     <View style={styles.gameButton}>
-                                                        <TouchableOpacity style={styles.rejectButton} onPress={() => this.dismissRequest(item)}>
+                                                        <TouchableOpacity style={styles.rejectButton} onPress={() => this.dismissGame(item.id)}>
                                                             <Text style={styles.rankText} > Rechazar </Text>
                                                         </TouchableOpacity>
                                                     </View>
@@ -294,34 +342,69 @@ export default class BarraLateral extends Component {
 
                 </Modal>
                 <View style={styles.cuadroPerfil}>
-                    <Text style={styles.userText}>
-                        {this.state.username}
-                    </Text>
-                    <TouchableOpacity style={styles.button} onPress={() => this.props.navigation.navigate('Profile')}>
-                        <Text style={styles.profileText}>
-                            Mi Perfil
+                    <View style={{flex:1}}>
+                        <Text style={styles.userText}>
+                            {this.state.username}
                         </Text>
-                    </TouchableOpacity>
+                    </View>
+                    <View style={{ flex: 1 }}>
+                        <TouchableOpacity style={styles.button} onPress={() => this.props.navigation.navigate('Profile')}>
+                            <Text style={styles.profileText}>
+                                Mi Perfil
+                            </Text>
+                        </TouchableOpacity>
+                    </View>
+                    <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-around' }}>
+                        <View style={{ flex: 1 }}>
+                            <TouchableOpacity style={styles.icon} onPress={() => this.props.navigation.navigate('Profile')}>
+                                <Image source={require("_assets/images/setting.png")} style={styles.image} />
+                            </TouchableOpacity>
+                        </View>
+                            <View style={{ flex: 1 }}>
+                                <TouchableOpacity style={styles.icon} onPress={() => this.props.navigation.navigate('Profile')}>
+                                    <Image source={require("_assets/images/redX2.png")} style={styles.image} />
+                                </TouchableOpacity>
+                            </View>
+                    </View>
                 </View>
                 <View style={styles.cuadroAmigos}>
                     <View style={styles.cuadroPequeno}>
                         <View style={styles.cuadroAdd}>
                             <TouchableOpacity style={styles.peticion} onPress={() => this.setShowFriend()}>
-                                <Text style={styles.peticionText}>
-                                    Peticiones de amistad
-                                </Text>
+                                <View style={{flex:4}}>
+                                    <Text style={styles.peticionText}>
+                                            Peticiones de amistad
+                                    </Text>
+                                </View>
+                                <View style={{flex: 1}}>
+                                    <View style={styles.circle} >
+                                        <Text style={styles.peticionText}>
+                                            {this.state.newPetition}
+                                        </Text>
+                                    </View>
+                                </View>
                             </TouchableOpacity>
                         </View>
                     </View>
                     <View style={styles.cuadroPequeno}>
                         <View style={styles.cuadroAdd}>
                             <TouchableOpacity style={styles.peticion} onPress={() => this.setShowGameRequest()}>
-                                <Text style={styles.peticionText}>
-                                    Invitaciones de amigos
-                                </Text>
+                                <View style={{ flex: 4 }}>
+                                    <Text style={styles.peticionText}>
+                                        Invitaciones de amigos
+                                    </Text>
+                                </View>
+                                <View style={{ flex: 1 }}>
+                                    <View style={styles.circle} >
+                                        <Text style={styles.peticionText}>
+                                            {this.state.newRequest}
+                                        </Text>
+                                    </View>
+                                </View>
                             </TouchableOpacity>
                         </View>
                     </View>
+
                     <View style={styles.cuadroPequeno}>
                         <View style={styles.cuadroAdd}>
                             <Text style={styles.text}>
@@ -383,21 +466,21 @@ const styles = StyleSheet.create({
         flex: 1,
         borderColor: BLACK,
         flexDirection: 'row',
-        alignSelf: 'center'
+        alignSelf: 'center',
+        padding:2
     },
     peticion: {
         height: 20,
-        width: 110,
+        width: '100%',
         backgroundColor: PRIMARY,
-        alignSelf: 'center',
-        paddingTop: 10,
         borderRadius: 50,
+        flexDirection: 'row',
+        padding:1
     },
     peticionText: {
         fontSize: 10,
         color: WHITE,
-        left: 5,
-        bottom: 6
+        textAlign: 'center'
     },
     button: {
         height: 20,
@@ -596,6 +679,24 @@ const styles = StyleSheet.create({
         fontSize: 10,
         textAlign: 'center',
         color: WHITE
+    },
+    circle: {
+        backgroundColor: 'red',
+        borderRadius: 50,
+        width: 12,
+        height: 12
+    },
+    icon: {
+        borderRadius: 50,
+        width: 20,
+        height: 20,
+        alignSelf: 'center'
+    },
+    image: {
+        width: 20,
+        height: 20,
+        alignSelf: 'center',
+        resizeMode: 'center',
     },
 });
 
