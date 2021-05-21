@@ -3,6 +3,7 @@ import { SafeAreaView, View, Text, TouchableHighlight, CheckBox, StyleSheet, Tex
 import { WHITE, PRIMARY, SECONDARY } from '../../styles/colors';
 import { register } from '_api/user';
 import * as Crypto from 'expo-crypto';
+import { logMe, getIntoAllGames } from '_api/user/socket';
 
 const SignScreen = ({
     navigation,
@@ -75,9 +76,12 @@ const SignScreen = ({
             console.log("Data de registro: " + data);
             if (data != "error") {
                 navigation.navigate('Home');
+                logMe(newUser);
+                getIntoAllGames(user);
             } else {
                 alert('No se ha podido registrar');
             }
+
         }).catch(err => {
             console.log("error pantalla register")
             Alert.alert("El usuario o el correo ya existen");

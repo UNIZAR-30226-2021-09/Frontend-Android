@@ -16,6 +16,30 @@ export const aceptarInvitacionAmigo = (user)  => {
     console.log("---Socket aceptarInvitacionAmigo " + user.Username)
 };
 
+export const disparo = (gameId, turno) => {
+    socket.emit('movement', { game: gameId, nuevoTurno: turno });
+    console.log("---Socket movement " + gameId, turno )
+};
+
+export const joinGame = (gameId) => {
+    socket.emit('joinGame', gameId);
+    console.log("---Socket joinGame " + gameId)
+};
+
+export const getIntoAllGames = (username) => {
+    socket.emit('getIntoAllGames', { nombreUsuario: username });
+    console.log("---Socket getIntoAllGames " + username)
+};
+
+export const challenge = (username) => {
+    socket.emit('challenge', { nombreUsuario: username });
+    console.log("---Socket challenge " + username)
+};
+
+export const aceptarChallenge = (data) => {
+    socket.emit('aceptarChallenge', { nombreUsuario: data.Username, game: data.GameId});
+    console.log("---Socket aceptarChallenge " + data.Username)
+};
 /*export const receiveFriendRequest = (user) => {
     socket.on('llegaInvitacion', message => {
         console.log("222222 Socket llegaInvitacion a " + user.Username)

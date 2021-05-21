@@ -2,7 +2,7 @@ import React from 'react';
 import { SafeAreaView, View, Text, TouchableHighlight, StyleSheet, TextInput,TouchableOpacity } from 'react-native';
 import { WHITE, PRIMARY, SECONDARY } from '../../styles/colors';
 import { login } from '_api/user';
-import { logMe } from '_api/user/socket';
+import { logMe, getIntoAllGames } from '_api/user/socket';
 import * as Crypto from 'expo-crypto';
 
 const LoginScreen = ({
@@ -35,12 +35,14 @@ const LoginScreen = ({
             Password: hashPass,
             Mail: mail
         }
-        logMe(newUser);
+
         console.log(newUser);
         login(newUser).then(data => {
             console.log("Data de registro: " + data);
             if (data != "error") {
                 navigation.navigate('Home')
+                logMe(newUser);
+                getIntoAllGames(user);
             } else {
                 alert('Error de login');
             }

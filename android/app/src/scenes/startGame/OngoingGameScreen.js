@@ -4,6 +4,7 @@ import { PRIMARY, SECONDARY, BLACK } from '../../styles/colors';
 import { BarraLateral } from '_organisms';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { getGameInProgess } from '_api/game';
+import { COLOCANDO, RIVALCOLOCANDO, MITURNO, TURNORIVAL } from '_api/match';
 
 export default class OngoingGameScreen extends Component {
     constructor(props) {
@@ -12,8 +13,7 @@ export default class OngoingGameScreen extends Component {
             selectedFriend: null,
             username: "user 1",
             estado:null,
-            gameList:
-                ["cheerful", "sweet", "natured"],
+            gameList: [],
             show: false,
         }
     }
@@ -24,9 +24,9 @@ export default class OngoingGameScreen extends Component {
             Username: _username,
             AccessToken: accessToken
         };
-        console.log(user);
+        console.log("USER " + JSON.stringify(user));
         await getGameInProgess(user).then(data => {
-            console.log("Data de getProgress: " + data);
+            //console.log("Data de getProgress: " + JSON.stringify(data));
             if (data != "error") {
                 this.setState(
                     { gameList: data }
@@ -44,11 +44,18 @@ export default class OngoingGameScreen extends Component {
 
     }
 
-    async alPretar(item){
+    async goToPlaceShip(item){
         await AsyncStorage.setItem('contrincante', item.contrincante);
-        await AsyncStorage.setItem('idPartida', item.id);
-        console.log("Datos obtenidos al pretar el boton= ");
-        this.props.navigation.navigate("GameScreen");
+        await AsyncStorage.setItem('gameId', item.id);
+        console.log("Datos obtenidos al pretar el boton= "+item.id);
+        this.props.navigation.navigate("PlaceShips");
+    }
+
+    async goToGame(item) {
+        await AsyncStorage.setItem('contrincante', item.contrincante);
+        await AsyncStorage.setItem('gameId', item.id);
+        console.log("Datos obtenidos al pretar el boton= " + item.id);
+        this.props.navigation.navigate("Game");
     }
 
     render() {
@@ -62,15 +69,26 @@ export default class OngoingGameScreen extends Component {
                         data={this.state.gameList}
                         extraData={this.state.showItemIndex}
                         renderItem={({ item, index }) => {
-                            return (
-                                <View style={styles.friend}>
-                                    <TouchableOpacity style={styles.gameButton} onPress={() => this.alPretar(item)}>
-                                        <Text style={styles.friendText}>
-                                            Partido contra {item.contrincante}
-                                        </Text>
-                                    </TouchableOpacity>
-                                </View>
-                            );
+                            if (item.tuTurno != COLOCANDO)
+                                return (
+                                    <View style={styles.friend}>
+                                        <TouchableOpacity style={styles.gameButton} onPress={() => this.goToGame(item)}>
+                                            <Text style={styles.friendText}>
+                                                Partido contra {item.contrincante}
+                                            </Text>
+                                        </TouchableOpacity>
+                                    </View>
+                                );
+                            else
+                                return (
+                                    <View style={styles.friend}>
+                                        <TouchableOpacity style={styles.gameButton} onPress={() => this.goToPlaceShip(item)}>
+                                            <Text style={styles.friendText}>
+                                                Partido contra {item.contrincante}
+                                            </Text>
+                                        </TouchableOpacity>
+                                    </View>
+                                );
                         }}
                         keyExtractor={(item, index) => index.toString()}
                         style={styles.friendContainer}
@@ -121,6 +139,14 @@ const styles = StyleSheet.create({
         width: 300,
         height: 30,
         backgroundColor: SECONDARY,
+        borderRadius: 50,
+        borderWidth: 1,
+        alignSelf: 'center',
+    },
+    myTurnButton: {
+        width: 300,
+        height: 30,
+        backgroundColor: 'green',
         borderRadius: 50,
         borderWidth: 1,
         alignSelf: 'center',
