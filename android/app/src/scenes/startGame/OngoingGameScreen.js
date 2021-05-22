@@ -5,6 +5,7 @@ import { BarraLateral } from '_organisms';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { getGameInProgess } from '_api/game';
 import { COLOCANDO, RIVALCOLOCANDO, MITURNO, TURNORIVAL } from '_api/match';
+import { socket, joinGame } from '_api/user/socket';
 
 export default class OngoingGameScreen extends Component {
     constructor(props) {
@@ -25,6 +26,20 @@ export default class OngoingGameScreen extends Component {
             AccessToken: accessToken
         };
         console.log("USER " + JSON.stringify(user));
+        await this.updateList(user);
+        await socket.on('llegaAceptarChallenge', gameid => {
+            console.log("--------Socket llegaAceptarChallenge a 2" + user.Username + "GAME: " + gameid)
+            joinGame(gameid)
+            this.updateList(user);
+        });
+        await socket.on('llegaChallenge', () => {
+            console.log("--------Socket llegaChallenge a 2" + user.Username)
+            this.updateList(user);
+        });
+    }
+
+    async updateList(user) {
+
         await getGameInProgess(user).then(data => {
             //console.log("Data de getProgress: " + JSON.stringify(data));
             if (data != "error") {
@@ -38,12 +53,8 @@ export default class OngoingGameScreen extends Component {
             console.log("error getProgress")
             console.log(err)
             return "error"
-        });        
+        });  
     }
-    async obtenerDatosPartida(){
-
-    }
-
     async goToPlaceShip(item){
         await AsyncStorage.setItem('contrincante', item.contrincante);
         await AsyncStorage.setItem('gameId', item.id);

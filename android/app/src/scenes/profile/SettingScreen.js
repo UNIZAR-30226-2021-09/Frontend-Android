@@ -1,11 +1,23 @@
 import React, { Component } from 'react';
-import { View, Text, TouchableHighlight, TouchableWithoutFeedback, StyleSheet, Image, Alert, AsyncStorage } from 'react-native';
+import { View, Text, TouchableHighlight, TouchableWithoutFeedback, StyleSheet, Image, Alert, AsyncStorage, TouchableOpacity } from 'react-native';
 import { PRIMARY, SECONDARY, BLACK } from '../../styles/colors';
 import { BarraLateral } from '_organisms'
 import DropDownPicker from 'react-native-dropdown-picker';
 import { getFriendList } from '_api/user';
 import { Picker } from '@react-native-picker/picker';
 
+import i18n from 'i18n-js';
+import { StackActions } from '@react-navigation/native';
+
+// Set the key-value pairs for the different languages you want to support.
+i18n.translations = {
+    en: { welcome: 'Hello', name: 'Charlie' },
+    es: { welcome: 'hola' },
+};
+// Set the locale once at the beginning of your app.
+i18n.locale = 'en';
+// When a value is missing from a language it'll fallback to another language with the key present.
+i18n.fallbacks = true;
 
 export default class SettingScreen extends Component {
     constructor(props) {
@@ -19,9 +31,21 @@ export default class SettingScreen extends Component {
             TokenAmigo3: "",
             listaAmigos: ["Oceano", "Desierto", "Cesped", "Espacio", "Lava"],
             //listaAmigosDDP: [{label:"", nombre:""}],
+            language:false
         }
     }
- 
+    changeEn = () => {
+        i18n.locale = 'en';
+        this.props.navigation.dispatch(
+            StackActions.replace('Setting')
+        );
+    }
+    changeEs = () => {
+        i18n.locale = 'es';
+        this.props.navigation.dispatch(
+            StackActions.replace('Setting')
+        );
+    }
     async componentDidMount() {
 
     }
@@ -52,7 +76,18 @@ export default class SettingScreen extends Component {
                             return (<Picker.Item label={item} value={index} key={index} />)
                         })}
                     </Picker>
-
+                    <Text style={styles.text}>
+                        {i18n.t('welcome')} {i18n.t('name')}
+                    </Text>
+                    <TouchableOpacity style={styles.button} onPress={() => this.changeEs()}>
+                        <Text style={styles.text}>
+                            changeEs
+                </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.button} onPress={() => this.changeEn()}>
+                        <Text style={styles.text}>
+                            changeEn
+                </Text></TouchableOpacity>
                 </View>
                 <View style={styles.opcion}>
                     <View style={styles.opcion2}>
@@ -142,7 +177,13 @@ const styles = StyleSheet.create({
     },
     text: {
         fontSize: 18
+    },
+    button: {
+        width: 100,
+        height: 50,
+        backgroundColor:'yellow'
     }
+    
 });
 
 

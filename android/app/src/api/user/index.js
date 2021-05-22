@@ -32,7 +32,7 @@ export const login = newUser => {
     })
         .then(async (response) => {
            // console.log("El response")
-           // console.log(JSON.stringify(response.data))
+            console.log(response.data.accessToken)
             await AsyncStorage.setItem('userToken',response.data.accessToken)
             await AsyncStorage.setItem('username', response.data.nombreUsuario)
             return response.data

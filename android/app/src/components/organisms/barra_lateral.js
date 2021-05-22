@@ -5,7 +5,9 @@ import Modal from 'react-native-modal';
 import { getFriendList } from '_api/user';
 import { getIncomingList, getOutgoingList, accept, dismiss } from '_api/user';
 import { socket, aceptarInvitacionAmigo, aceptarChallenge, joinGame } from '_api/user/socket';
-import { acceptFriendGame, dismissFriendGame, gameIncomingRequest} from '_api/game'
+import { acceptFriendGame, dismissFriendGame, gameIncomingRequest } from '_api/game';
+import { StackActions } from '@react-navigation/native';
+
 export default class BarraLateral extends Component {
 
     constructor(props) {
@@ -23,7 +25,7 @@ export default class BarraLateral extends Component {
             challengeList: [],
             accessToken: "",
             newPetition: 0,
-            newRequest:0,
+            newRequest: 0,
         }
     }
     setShowFriend() {
@@ -31,7 +33,6 @@ export default class BarraLateral extends Component {
         this.setState ( {
             showFriend: !showFriend
         })
-
     }
 
     setShowGameRequest() {
@@ -66,15 +67,16 @@ export default class BarraLateral extends Component {
             this.updateChallengeList(newUser);
         });
 
-        await socket.on('llegaAceptarChallenge', gameid => {
+        /*await socket.on('llegaAceptarChallenge', gameid => {
             console.log("--------Socket llegaAceptarChallenge a " + newUser.Username + "GAME: " + gameid)
             joinGame(gameid)
-        });
+        });*/
         //console.log("LIST" + this.state.incomingList)
         await this.updateFriendList(newUser);
         await this.updateIncoming(newUser);
         await this.updateChallengeList(newUser);
     }
+    
     async updateFriendList(newUser) {
         await getFriendList(newUser).then(data => {
             console.log("Data de barra lateral: " + data);
@@ -93,6 +95,7 @@ export default class BarraLateral extends Component {
             return "error"
         }); 
     }
+
     async updateIncoming(newUser) {
         await getIncomingList(newUser).then(data => {
             console.log("Data de getIncomingList: " + data);
@@ -179,7 +182,7 @@ export default class BarraLateral extends Component {
     }
     async acceptGame(gameID, contrincante) {
         var newUser = {
-            Username: contrincante,
+            Username: this.state.username,
             AccessToken: this.state.accessToken,
             GameId: gameID
         };
@@ -188,7 +191,7 @@ export default class BarraLateral extends Component {
             console.log("Data de acceptRequest: " + data);
             if (data != "error") {
                 console.log("Aceptado");
-                aceptarChallenge(newUser);
+                aceptarChallenge({ Username: contrincante, GameId: gameID });
                 joinGame(gameID);
             } else {
                 alert('Error de acceptRequest');
@@ -356,7 +359,9 @@ export default class BarraLateral extends Component {
                     </View>
                     <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-around' }}>
                         <View style={{ flex: 1 }}>
-                            <TouchableOpacity style={styles.icon} onPress={() => this.props.navigation.navigate('Home')}>
+                            <TouchableOpacity style={styles.icon} onPress={() => this.props.navigation.dispatch(
+                                StackActions.replace('Home')
+                            )}>
                                 <Image source={require("_assets/images/house.png")} style={styles.image} />
                             </TouchableOpacity>
                         </View>

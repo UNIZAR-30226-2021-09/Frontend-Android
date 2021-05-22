@@ -182,20 +182,19 @@ export default class PlaceShipsScreen extends Component {
                     </View>
                 </View>
                 <View style={styles.startButtonContainer}>
-                        <View style={{ flex: 1 }}>
-                        <TouchableHighlight style={styles.button} onPress={() => this.start()}>
-                                <Text style={styles.btnText}> Rendirse</Text>
-                            </TouchableHighlight>
-                        </View>
                     <View style={{ flex: 1 }}>
-                        <TouchableHighlight style={styles.button} onPress={() => this.props.navigation.navigate("OnGoingGame")}>
+                        <TouchableHighlight style={styles.button} onPress={() => this.props.navigation.navigate("OngoingGame")}>
                             <Text style={styles.btnText}> Volver </Text>
+                        </TouchableHighlight>
+                    </View>
+                    <View style={{ flex: 1 }}>
+                    <TouchableHighlight style={styles.button} onPress={() => this.start()}>
+                            <Text style={styles.btnText}> Comenzar</Text>
                         </TouchableHighlight>
                     </View>
                 </View>
             </View>
             <BarraLateral navigation={this.props.navigation} />
-
         </View>);
     }
 };
