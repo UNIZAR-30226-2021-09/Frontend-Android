@@ -4,6 +4,7 @@ import { WHITE, PRIMARY, SECONDARY } from '../../styles/colors';
 import { register } from '_api/user';
 import * as Crypto from 'expo-crypto';
 import { logMe, getIntoAllGames } from '_api/user/socket';
+import i18n from 'i18n-js';
 
 const SignScreen = ({
     navigation,
@@ -34,23 +35,23 @@ const SignScreen = ({
             return;
         }
         if (!mail) {
-            alert('Introduzca un correo electrónico');
+            alert('Introduzca un correo electrï¿½nico');
             return;
         }
         if (!mail.includes('@')) {
-            alert('Introduzca un correo electrónico válido');
+            alert('Introduzca un correo electrï¿½nico vï¿½lido');
             return;
         }
         if (!pass) {
-            alert('Introduzca una contraseña');
+            alert('Introduzca una contraseï¿½a');
             return;
         }
         if (pass != repeatPass) {
-            alert('Las contraseñas no coinciden');
+            alert('Las contraseï¿½as no coinciden');
             return;
         }
         if (!isSelected) {
-            alert('Debe aceptar las Condiciones de Uso y la Política de Privacidad para seguir');
+            alert('Debe aceptar las Condiciones de Uso y la Polï¿½tica de Privacidad para seguir');
             return;
         }
         const hashPass = await Crypto.digestStringAsync(
@@ -117,14 +118,14 @@ const SignScreen = ({
                 style={styles.input}
                 onChangeText={onChangePassword}
                 value={pass}
-                placeholder="Contraseña"
+                placeholder="Contraseï¿½a"
                 secureTextEntry={true}
             />
             <TextInput
                 style={styles.input}
                 onChangeText={onChangeRepeatPassword}
                 value={repeatPass}
-                placeholder="Repetir contraseña"
+                placeholder="Repetir contraseï¿½a"
                 secureTextEntry={true}
             />
             <View style={styles.checkboxContainer}>
@@ -133,7 +134,7 @@ const SignScreen = ({
                     onValueChange={setSelection}
                     style={styles.checkbox}
                 />
-                <Text style={styles.label}>Acepto las Condiciones de Uso y la Política de Privacidad</Text>
+                <Text style={styles.label}>Acepto las Condiciones de Uso y la Polï¿½tica de Privacidad</Text>
 
             </View>
             <View style={styles.checkboxContainer} >

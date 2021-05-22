@@ -4,6 +4,7 @@ import { WHITE, PRIMARY, SECONDARY,BLACK } from '../../styles/colors';
 import {BarraLateral} from '_organisms'; 
 import { beginIA } from '_api/game';
 import { emparejamientoACiegas } from '_api/game';
+import i18n from 'i18n-js';
 
 const HomeScreen = ({ navigation }) => {
     async function startGame(mode) {

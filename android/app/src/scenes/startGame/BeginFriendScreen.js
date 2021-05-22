@@ -6,12 +6,13 @@ import DropDownPicker from 'react-native-dropdown-picker';
 import { getFriendList } from '_api/user';
 import { beginFromFriend, beginRandom } from '_api/game';
 import { challenge } from '_api/user/socket';
+import i18n from 'i18n-js';
 
 const ELEGIR = "Invita a un amigo";
 const INVITAR = "Vas a invitar a";
 const CAMBIAR = "Elegir a otro";
 const DESAFIADO = "Has desafiado a ";
-const ANYADIDO = "Se ha añadido la partida a tu lista de partidas";
+const ANYADIDO = "Se ha aï¿½adido la partida a tu lista de partidas";
 
 export default class BeginFriendScreen extends Component {
     constructor(props) {

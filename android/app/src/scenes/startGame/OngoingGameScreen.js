@@ -6,6 +6,7 @@ import DropDownPicker from 'react-native-dropdown-picker';
 import { getGameInProgess } from '_api/game';
 import { COLOCANDO, RIVALCOLOCANDO, MITURNO, TURNORIVAL } from '_api/match';
 import { socket, joinGame } from '_api/user/socket';
+import i18n from 'i18n-js';
 
 export default class OngoingGameScreen extends Component {
     constructor(props) {

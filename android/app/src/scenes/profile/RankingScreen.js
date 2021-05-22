@@ -4,6 +4,7 @@ import { PRIMARY, SECONDARY, BLACK, WHITE } from '../../styles/colors';
 import { BarraLateral } from '_organisms'
 import DropDownPicker from 'react-native-dropdown-picker';
 import { getRanking, getInfo } from '_api/user';
+import i18n from 'i18n-js';
 export default class FriendRequestScreen extends Component {
     constructor(props) {
         super(props);

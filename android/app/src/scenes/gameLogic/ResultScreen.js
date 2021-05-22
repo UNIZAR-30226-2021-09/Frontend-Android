@@ -5,6 +5,7 @@ import { BarraLateral } from '_organisms'
 import { checkBox, OCEAN_BOX, TOUCHED_BOX, SUNKEN_BOX, NO_ATACK_BOX } from '_api/match';
 import { Table, TableWrapper, Cell } from 'react-native-table-component'
 import { infoPartida } from '_api/match';
+import i18n from 'i18n-js';
 export default class ResultScreen extends Component {
     constructor(props) {
         super(props);

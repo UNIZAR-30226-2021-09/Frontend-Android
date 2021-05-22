@@ -1,6 +1,7 @@
 import React from 'react';
 import { SafeAreaView, View, Text, TouchableHighlight, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
 import { WHITE, PRIMARY, SECONDARY } from '../../styles/colors';
+import i18n from 'i18n-js';
 
 const RootScreen = ({
     navigation,

@@ -5,6 +5,7 @@ import { BarraLateral } from '_organisms'
 import DropDownPicker from 'react-native-dropdown-picker';
 import { addfriend } from '_api/user';
 import { socket, friendPetition } from '_api/user/socket';
+import i18n from 'i18n-js';
 
 export default class AddFriendScreen extends Component {
     constructor(props) {

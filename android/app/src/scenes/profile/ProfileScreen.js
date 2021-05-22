@@ -5,6 +5,7 @@ import { BarraLateral } from '_organisms'
 import DropDownPicker from 'react-native-dropdown-picker';
 import { getHistory } from '_api/game';
 import { getInfo } from '_api/user';
+import i18n from 'i18n-js';
 
 export default class ProfileScreen extends Component {
     constructor(props) {
@@ -145,7 +146,7 @@ export default class ProfileScreen extends Component {
                     <View style={styles.cuadroPequeno}>
                         <TouchableOpacity style={styles.logOutButton} onPress={() => this.props.navigation.navigate('Root')}>
                             <Text style={styles.rankText}>
-                                Cerrar Sesión
+                                Cerrar Sesiï¿½n
                             </Text>
                         </TouchableOpacity>
                     </View>
