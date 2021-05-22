@@ -6,6 +6,7 @@ import DropDownPicker from 'react-native-dropdown-picker';
 import { getGameInProgess } from '_api/game';
 import { COLOCANDO, RIVALCOLOCANDO, MITURNO, TURNORIVAL } from '_api/match';
 import { socket, joinGame } from '_api/user/socket';
+import { StackActions } from '@react-navigation/native';
 
 export default class OngoingGameScreen extends Component {
     constructor(props) {
@@ -58,15 +59,18 @@ export default class OngoingGameScreen extends Component {
     async goToPlaceShip(item){
         await AsyncStorage.setItem('contrincante', item.contrincante);
         await AsyncStorage.setItem('gameId', item.id);
-        console.log("Datos obtenidos al pretar el boton= "+item.id);
-        this.props.navigation.navigate("PlaceShips");
+        console.log("Datos obtenidos al pretar el boton= " + item.id);
+        this.props.navigation.dispatch(
+            StackActions.replace("PlaceShips")
+        );
+        //this.props.navigation.replace("PlaceShips");
     }
 
     async goToGame(item) {
         await AsyncStorage.setItem('contrincante', item.contrincante);
         await AsyncStorage.setItem('gameId', item.id);
         console.log("Datos obtenidos al pretar el boton= " + item.id);
-        this.props.navigation.navigate("Game");
+        this.props.navigation.replace("Game");
     }
 
     render() {

@@ -51,11 +51,11 @@ export default class ResultScreen extends Component {
                         <Text style={styles.text} > Barcos destruidos: {barcosDestruidos}</Text>
                     </View>
                     <View style={styles.cuadroPequeno}>
-                        <TouchableHighlight onPress={() => this.props.navigation.navigate('Home')}>
-                            <View style={styles.button}>
-                                <Text style={styles.btnText}> Terminar </Text>
-                            </View>
-                        </TouchableHighlight>
+                        <View style={{ flex: 1 }}>
+                            <TouchableHighlight style={styles.button} onPress={() => this.props.navigation.navigate('Home')}>
+                                    <Text style={styles.btnText}> Terminar </Text>
+                            </TouchableHighlight>
+                        </View>
                     </View>
                 </View>
 

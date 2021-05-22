@@ -1,3 +1,4 @@
+import 'styles/gameStyle'
 
 import React from 'react';
 

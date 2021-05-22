@@ -446,3 +446,22 @@ export const infoPartida = (username, token, gameId) => {
 		return { error: "error", tipo: error.response.data };
 	})
 }
+
+export const rendirse = (username, token, gameId) => {
+	var data = {
+		nombreUsuario: username,
+		accessToken: token,
+		gameid: gameId,
+	}
+	return axios.post('https://proyecto-software-09.herokuapp.com/match/rendirse', data).then(res => {
+		console.log("rendirse------")
+		console.log(res.data)
+		return res.data.infoPartida;
+	}).catch(error => {
+		console.log("errorrrrrrrrrrrrrrr")
+		if (error.response) {
+			console.log(error.response.data);
+		}
+		return { error: "error", tipo: error.response.data };
+	})
+}
