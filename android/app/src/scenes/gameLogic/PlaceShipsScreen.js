@@ -9,6 +9,8 @@ import {
     placeShip, initCoord, SUCCESS, checkIfAllShips, transformSolution, initDir,
     startGame
 } from '_api/match';
+import { getShipColor, getBoardImage, getBoardColor } from '../../styles/gameStyle';
+
 import { ToastAndroid } from 'react-native';
 const NO_SELECT_COLOR = 'white';
 const SELECT_COLOR = 'cyan';
@@ -109,30 +111,22 @@ export default class PlaceShipsScreen extends Component {
     render() {
         let { myBoard, shipDirection, shipColors } = this.state;
         const getMyBox = (box, row, col) => {
+            var color = getBoardColor();
+            console.log("BOARD COLOR"+color);
             if (box != NO_ATACK_BOX) {
-                let boxStyle = styles.oceanBox;
-                switch (box) {
-                    case OCEAN_BOX:
-                        boxStyle = styles.oceanBox;
-                        break;
-                    default:
-                        boxStyle = styles.sunkenBox;
-                        break;
-                }
+                let boxStyle = { width: 26, height: 26, backgroundColor: 'transparent', borderRadius: 0, borderColor: color, borderWidth: 0.2, alignSelf: 'center' };
+                if (box != OCEAN_BOX)
+                    boxStyle = { width: 26, height: 26, backgroundColor: getShipColor(), borderRadius: 0, borderColor: color, borderWidth: 0.2 };
                 return (<TouchableWithoutFeedback onPress={() => this.onClick(row, col)}>
                     <View style={boxStyle}>
                     </View>
                 </TouchableWithoutFeedback>);
             }
-            else
-                return (<TouchableWithoutFeedback onPress={() => this.onClick(row, col)}>
-                    <View style={styles.noAttackBox}>
-                    </View>
-                </TouchableWithoutFeedback>);
         };
         const ShipButton = (props) => {
             let { shipDirection, shipColors } = this.state;
             let imageStyle = styles.image;
+            var color = getShipColor();
             if (shipDirection[props.ship - 1] == HORIZONTAL && shipColors[props.ship - 1] == NO_SELECT_COLOR)
                 imageStyle = styles.rotateImage;
             else if (shipDirection[props.ship - 1] == HORIZONTAL && shipColors[props.ship - 1] == SELECT_COLOR)
@@ -142,7 +136,7 @@ export default class PlaceShipsScreen extends Component {
             return (
                 <View style={{}}>
                     <TouchableHighlight onPress={() => this.placeShip(props.ship)}>
-                        <Image source={props.src} style={imageStyle} />
+                        <Image source={props.src} style={imageStyle} tintColor={color} />
                     </TouchableHighlight>
                 </View>
             );
@@ -163,8 +157,7 @@ export default class PlaceShipsScreen extends Component {
                         </View>
                     </View>
                     <View style={styles.boardContainer}>
-                        {//<ImageBackground style={styles.boardImageContainer} source={require("_assets/images/espacio.jpg")} > 
-                        }
+                        <ImageBackground style={styles.boardImageContainer} source={getBoardImage()} >
                         <Table borderStyle={{ borderColor: 'transparent' }}>
                             {
                                 myBoard.board.map((rowData, index) => (
@@ -178,7 +171,7 @@ export default class PlaceShipsScreen extends Component {
                                 ))
                             }
                         </Table>
-                        {/* </ImageBackground> */}
+                        </ImageBackground> 
                     </View>
                 </View>
                 <View style={styles.startButtonContainer}>
@@ -249,13 +242,12 @@ const styles = StyleSheet.create({
         flex: 1, width: 270, height: 260, backgroundColor: 'white', flexDirection: 'row'
     },
     row: {
-        flexDirection: 'row', backgroundColor: 'transparent', borderColor: 'black'
+        flexDirection: 'row', backgroundColor: 'transparent'
     },
     btnText: { textAlign: 'center', color: 'white', paddingTop: 5 },
-    oceanBox: { width: 26, height: 26, backgroundColor: 'transparent', borderRadius: 0, borderColor: 'blue', borderWidth: 0.2, alignSelf: 'center' },
+    oceanBox: { width: 26, height: 26, backgroundColor: getShipColor(), borderRadius: 0, borderColor: 'blue', borderWidth: 0.2, alignSelf: 'center' },
     touchedBox: { width: 26, height: 26, backgroundColor: 'red', borderRadius: 0, borderColor: 'blue', borderWidth: 0.2 },
     sunkenBox: { width: 26, height: 26, backgroundColor: 'grey', borderRadius: 0, borderColor: 'blue', borderWidth: 0.2 },
-    noAttackBox: { width: 26, height: 26, backgroundColor: 'white', borderRadius: 0, borderColor: 'blue', borderWidth: 0.2 },
     startButton: { alignSelf: 'center', width: 100, height: 30, bottom: -10, backgroundColor: PRIMARY, borderRadius: 50 },
 
 });

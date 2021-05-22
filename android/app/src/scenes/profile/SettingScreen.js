@@ -8,6 +8,7 @@ import { Picker } from '@react-native-picker/picker';
 
 import i18n from 'i18n-js';
 import { StackActions } from '@react-navigation/native';
+import { setBoardImage, setShipColor, getShipColor,  } from '../../styles/gameStyle';
 
 // Set the key-value pairs for the different languages you want to support.
 i18n.translations = {
@@ -23,15 +24,12 @@ export default class SettingScreen extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            Amigo1: "",
-            TokenAmigo1: "",
-            Amigo2: "",
-            TokenAmigo2: "",
-            Amigo3: "",
-            TokenAmigo3: "",
-            listaAmigos: ["Oceano", "Desierto", "Cesped", "Espacio", "Lava"],
-            //listaAmigosDDP: [{label:"", nombre:""}],
-            language:false
+            shipColor: "",
+            boardColor: "",
+            language: "",
+            listShip: ["blue", "red", "green"],
+            listBoard: ["Oceano", "Desierto", "Cesped", "Espacio", "Lava"],
+            listLanguage: ["en", "es"],
         }
     }
     changeEn = () => {
@@ -49,7 +47,21 @@ export default class SettingScreen extends Component {
     async componentDidMount() {
 
     }
+    changeLanguage(select) {
+        //setLanguage(select);
+        //var color = getLanguage()
+        console.log("SELECT LANGUAGE " + select)
+    }
+    changeBoard(select) {
+        setBoardImage(select);
+        console.log("SELECT BOARD " + select)
+    }
+    changeShip(select) {
+        setShipColor(select);
+        var color = getShipColor();
 
+        console.log("SELECT SHIP " + color)
+    }
     render() {
         return (<View style={styles.container}>
             <View style={styles.cuadroGrande}>
@@ -69,25 +81,25 @@ export default class SettingScreen extends Component {
                         labelStyle={styles.listText}
                         placeholderStyle={styles.text}
                         mode="dropdown"
-                        selectedValue={this.state.Amigo1}
+                        selectedValue={this.state.shipColor}
                         itemStyle={{ backgroundColor: "grey", color: "blue", fontFamily: "Ebrima", fontSize: 17 }}
-                        onValueChange={() => { }}>
-                        {this.state.listaAmigos.map((item, index) => {
-                            return (<Picker.Item label={item} value={index} key={index} />)
+                        onValueChange={(s) => this.changeShip(s)}>
+                        {this.state.listShip.map((item, index) => {
+                            return (<Picker.Item label={item} value={item} key={index} />)
                         })}
                     </Picker>
-                    <Text style={styles.text}>
+                    {/*<Text style={styles.text}>
                         {i18n.t('welcome')} {i18n.t('name')}
                     </Text>
-                    <TouchableOpacity style={styles.button} onPress={() => this.changeEs()}>
-                        <Text style={styles.text}>
-                            changeEs
+                        <TouchableOpacity style={styles.button} onPress={() => this.changeEs()}>
+                            <Text style={styles.text}>
+                                changeEs
                 </Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.button} onPress={() => this.changeEn()}>
-                        <Text style={styles.text}>
-                            changeEn
-                </Text></TouchableOpacity>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.button} onPress={() => this.changeEn()}>
+                            <Text style={styles.text}>
+                                changeEn
+                </Text></TouchableOpacity>*/}
                 </View>
                 <View style={styles.opcion}>
                     <View style={styles.opcion2}>
@@ -98,10 +110,10 @@ export default class SettingScreen extends Component {
                     <Picker
                         style={styles.opcion3}
                         mode="dropdown"
-                        selectedValue={this.state.Amigo2}
-                        onValueChange={() => { }}>
-                        {this.state.listaAmigos.map((item, index) => {
-                            return (<Picker.Item label={item} value={index} key={index} />)
+                        selectedValue={this.state.boardColor}
+                        onValueChange={(s) => this.changeBoard(s)}>
+                        {this.state.listBoard.map((item, index) => {
+                            return (<Picker.Item label={item} value={item} key={index} />)
                         })}
                     </Picker>
                 </View>
@@ -114,10 +126,10 @@ export default class SettingScreen extends Component {
                     <Picker
                         style={styles.opcion3}
                         mode="dropdown"
-                        selectedValue={this.state.Amigo2}
-                        onValueChange={() => { }}>
-                        {this.state.listaAmigos.map((item, index) => {
-                            return (<Picker.Item label={item} value={index} key={index} />)
+                        selectedValue={this.state.boardColor}
+                        onValueChange={(s) => this.changeLanguage(s)}>
+                        {this.state.listLanguage.map((item, index) => {
+                            return (<Picker.Item label={item} value={item} key={index} />)
                         })}
                     </Picker>
                 </View>

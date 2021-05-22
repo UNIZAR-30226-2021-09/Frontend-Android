@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
-import { View, Text, TouchableHighlight, TouchableWithoutFeedback, StyleSheet, Image, Alert, AsyncStorage, ToastAndroid } from 'react-native';
+import { View, Text, TouchableHighlight, TouchableWithoutFeedback, StyleSheet, Image, Alert, AsyncStorage, ToastAndroid, ImageBackground } from 'react-native';
 import { PRIMARY, SECONDARY, BLACK } from '../../styles/colors';
 import { BarraLateral } from '_organisms'
 import { checkBox, OCEAN_BOX, TOUCHED_BOX, SUNKEN_BOX, NO_ATACK_BOX, OCEAN_NOT_ATTACK, OCEAN_ATTACK, SHIP_NOT_ATTACK, SHIP_ATTACK, COLOCADO } from '_api/match';
 import { Table, TableWrapper, Cell } from 'react-native-table-component'
-import { initBoard, attack, getSolution, initAttack, initShip, initCoord, IAmove, getCoord, getBoard, placeMovement, movement } from '_api/match';
+import { initBoard, attack, getSolution, initAttack, initShip, initCoord, IAmove, getCoord, getBoard, placeMovement, movement, rendirse } from '_api/match';
 import { socket, disparo } from '_api/user/socket';
+import { getShipColor, getBoardImage, getBoardColor } from '../../styles/gameStyle';
+
 const GANADO = "GANADO"
 const PERDIDO = "PERDIDO"
 const MITURNO = "tuTurno"
@@ -92,13 +94,17 @@ export default class GameScreen extends Component {
         await movement(username, accessToken, gameId, row, col).then(data => {
             console.log("Data de movement: " + JSON.stringify(data));
             if (data.error != "error") {
-                if (!data.fin && data.disparo == "fallo") {
+                if (data.movimientoIA) {
+
+                }
+                else if (!data.fin && data.disparo == "fallo") {
                     disparo(gameId, MITURNO)
                     //ToastAndroid.show("Has fallado, es turno de tu rival", ToastAndroid.SHORT)
                 } else if (!data.fin) {
                     disparo(gameId, TURNORIVAL)
                     //ToastAndroid.show("Has acertado, sigue siendo tu turno", ToastAndroid.SHORT)
-                } else if (data.fin && data.infoPartida.ganador) {
+                }
+                if (data.fin && data.infoPartida.ganador) {
                     disparo(gameId, PERDIDO)
                     this.setState({ fin: true, ganador: true })
                 } else if (data.fin && !data.infoPartida.ganador) {
@@ -121,21 +127,28 @@ export default class GameScreen extends Component {
     _alertIndex(index, col) {
         Alert.alert(`This is row ${index + 1} + ${col + 1}`);
     }
-
+    async giveUp() {
+        let { username, accessToken, gameId } = this.state
+        await rendirse(username, accessToken, gameId)
+            .then(data => {
+                this.props.navigation.navigate('Result')
+            })
+    }
     render() {
         let { board } = this.state;
+        const color = getBoardColor();
+        var oceanBox = { width: 26, height: 26, backgroundColor: 'transparent', borderRadius: 0, borderColor: color, borderWidth: 0.2, alignSelf: 'center' }
+        var touchedBox = { width: 26, height: 26, backgroundColor: getShipColor(), borderRadius: 0, borderColor: getBoardColor(), borderWidth: 0.2 };
         const getMyBox = (box, row, col) => {
+            var sunkenBox = { width: 26, height: 26, backgroundColor: 'grey', borderRadius: 0, borderColor: color, borderWidth: 0.2 };
                 if (box != NO_ATACK_BOX) {
-                    let boxStyle = styles.oceanBox;
+                    let boxStyle = oceanBox;
                     switch (box) {
-                        case OCEAN_BOX:
-                            boxStyle = styles.oceanBox;
-                            break;
                         case TOUCHED_BOX:
-                            boxStyle = styles.touchedBox;
+                            boxStyle = touchedBox;
                             break;
                         case SUNKEN_BOX:
-                            boxStyle = styles.sunkenBox;
+                            boxStyle = sunkenBox;
                             break;
                     }
                     return (<View style={boxStyle}>
@@ -144,32 +157,32 @@ export default class GameScreen extends Component {
                 }
                 else if (board.myState == TURNORIVAL ) {
                     return (<TouchableWithoutFeedback onPress={() => ToastAndroid.show("Es turno de tu rival", ToastAndroid.SHORT) }>
-                        <View style={styles.oceanBox}>
+                        <View style={oceanBox}>
                         </View>
                     </TouchableWithoutFeedback>);
                 }
                 else if (!this.state.fin)
                     return (<TouchableWithoutFeedback onPress={() => this.onClick(row, col)}>
-                        <View style={styles.oceanBox}>
+                        <View style={oceanBox}>
                         </View>
                     </TouchableWithoutFeedback>);
                 else 
-                    return (<View style={styles.oceanBox}/>);
+                    return (<View style={oceanBox}/>);
         };
 
         const getIABox = (box, row, col) => {
-            let boxStyle = styles.oceanBox;
+            let boxStyle = oceanBox;
             if (box == OCEAN_NOT_ATTACK || box == SHIP_NOT_ATTACK) {
                 if (box == OCEAN_NOT_ATTACK)
-                    boxStyle = styles.oceanBox;
+                    boxStyle = oceanBox;
                 else
-                    boxStyle = styles.shipBox;
+                    boxStyle = touchedBox;
                 return (<View style={boxStyle} />);
             } else {
                 if (box == OCEAN_ATTACK)
-                    boxStyle = styles.touchedOcean;
+                    boxStyle = oceanBox;
                 else
-                    boxStyle = styles.touchedShip;
+                    boxStyle = touchedBox;
                 return (<View style={boxStyle}>
                     <Image source={require("_assets/images/redX2.png")} style={styles.image} />
                 </View>);
@@ -180,6 +193,8 @@ export default class GameScreen extends Component {
                 <View style={styles.cuadroGrande1}>
                     
                     <View style={styles.boardContainer}>
+                        <ImageBackground style={styles.boardImageContainer} source={getBoardImage()} >
+
                         <Table borderStyle={{ borderColor: 'transparent' }}>
                             {
                                 board.rivalBoard.map((rowData, index) => (
@@ -192,9 +207,12 @@ export default class GameScreen extends Component {
                                     </TableWrapper>
                                 ))
                             }
-                        </Table>
+                            </Table>
+                        </ImageBackground> 
                     </View>
-                    <View style={styles.boardContainer}>
+                        <View style={styles.boardContainer}>
+                            <ImageBackground style={styles.boardImageContainer} source={getBoardImage()} >
+
                         <Table borderStyle={{ borderColor: 'transparent' }}>
                             {
                                 board.myBoard.map((rowData, index) => (
@@ -207,7 +225,8 @@ export default class GameScreen extends Component {
                                     </TableWrapper>
                                 ))
                             }
-                        </Table>
+                            </Table>
+                        </ImageBackground> 
                     </View>
                 </View>
                 <View style={styles.startButtonContainer}>
@@ -218,7 +237,7 @@ export default class GameScreen extends Component {
                             </TouchableHighlight>
                         </View> :
                         <View style={{ flex: 1 }}>
-                            <TouchableHighlight style={styles.button} onPress={() => this.props.navigation.navigate('Home')}>
+                            <TouchableHighlight style={styles.button} onPress={() => this.giveUp()}>
                                 <Text style={styles.btnText}> Rendirse</Text>
                             </TouchableHighlight>
                         </View>
@@ -266,7 +285,7 @@ const styles = StyleSheet.create({
     boardContainer: { flex: 1, width: 260, height: 260, padding: 5, paddingBottom: 40, backgroundColor: '#fff' },
 
     row: {
-        flexDirection: 'row', backgroundColor: 'blue', borderColor: 'black'
+        flexDirection: 'row', backgroundColor: 'transparent', 
     },
     startButtonContainer: {
         flex: 1,
@@ -280,14 +299,16 @@ const styles = StyleSheet.create({
     shipBox: { width: 26, height: 26, backgroundColor: 'grey', borderRadius: 0, borderColor: 'blue', borderWidth: 0.2 },
 
     touchedBox: { width: 26, height: 26, backgroundColor: 'grey', borderRadius: 0, borderColor: 'blue', borderWidth: 0.2 },
-    sunkenBox: { width: 26, height: 26, backgroundColor: 'grey', borderRadius: 0, borderColor: 'red', borderWidth: 1 },
+    sunkenBox: { width: 26, height: 26, backgroundColor: 'grey', borderRadius: 0, borderColor: 'grey', borderWidth: 1 },
     noAttackBox: { width: 26, height: 26, backgroundColor: 'white', borderRadius: 0, borderColor: 'blue', borderWidth: 0.2 },
     touchedOcean: { width: 26, height: 26, backgroundColor: 'cyan', borderRadius: 0, borderColor: 'blue', borderWidth: 0.2 },
     touchedShip: { width: 26, height: 26, backgroundColor: 'grey', borderRadius: 0, borderColor: 'blue', borderWidth: 0.2 },
     image: {
         width: 20, height: 20, alignSelf: 'center', resizeMode: 'center',
     },
-    turnText: { textAlign: 'center', color: PRIMARY, fontSize:20 },
+    turnText: { textAlign: 'center', color: PRIMARY, fontSize: 20 },
+    boardImageContainer: { width: 260, height: 260 },
+
 });
 
 
