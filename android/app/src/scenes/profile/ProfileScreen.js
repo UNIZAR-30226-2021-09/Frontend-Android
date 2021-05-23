@@ -6,6 +6,7 @@ import DropDownPicker from 'react-native-dropdown-picker';
 import { getHistory } from '_api/game';
 import { getInfo } from '_api/user';
 import i18n from 'i18n-js';
+//import Clipboard from '@react-native-community/clipboard';
 
 export default class ProfileScreen extends Component {
     constructor(props) {

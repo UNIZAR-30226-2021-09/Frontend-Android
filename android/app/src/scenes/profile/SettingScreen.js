@@ -100,6 +100,7 @@ i18n.translations = {
         NoHayPeticiones: 'No new requests',
         Cerrar: 'Close',
         PetPartAmis: 'Friendly game requests',
+        Torneo: 'Tournament',
 
     },
     es: { 
@@ -190,6 +191,7 @@ i18n.translations = {
         NoHayPeticiones: 'No hay peticiones nuevas',
         Cerrar: 'Cerrar',
         PetPartAmis: 'Peticiones de partidas amistosas',
+        Torneo: 'Torneo',
 
 
         

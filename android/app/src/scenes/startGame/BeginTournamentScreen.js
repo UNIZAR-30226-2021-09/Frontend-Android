@@ -10,6 +10,16 @@ import { StackActions } from '@react-navigation/native';
 import { BarraLateral } from '_organisms'
 import i18n from 'i18n-js';
 
+/*
+<View style={styles.cuadroPequeno2}>
+                        
+                    <Text style={styles.titulo}>
+                    {i18n.t('Selec3Amigos')}
+                    </Text>
+
+                    <FlatList
+                        data={this.state.friendList}
+*/
 
 
 export default class BeginTournamentScreen extends Component {
@@ -130,11 +140,11 @@ export default class BeginTournamentScreen extends Component {
                     console.log("No ha habido fallo al comunicarse con el server " + data)
                     //Ahora hacer que muestre un mensaje u otro dependiendo del resultado
                     if (data.mensaje) {
-                        //ToastAndroid.show('No hay nadie esperando partida, cuando aparezca un contrincante se añadira la partida a tu lista de partidas', ToastAndroid.SHORT);
-                        //this.setState({ textValue: 'No hay nadie esperando partida, cuando aparezca un contrincante se añadira la partida a tu lista de partidas' })
+                        //ToastAndroid.show('No hay nadie esperando partida, cuando aparezca un contrincante se aï¿½adira la partida a tu lista de partidas', ToastAndroid.SHORT);
+                        //this.setState({ textValue: 'No hay nadie esperando partida, cuando aparezca un contrincante se aï¿½adira la partida a tu lista de partidas' })
                     } else {
                         //Aqui se ha encontrado partida asi que redirige a la partida 
-                        ToastAndroid.show('Se ha añadido una partida', ToastAndroid.SHORT);
+                        ToastAndroid.show('Se ha aï¿½adido una partida', ToastAndroid.SHORT);
                         //this.props.navigation.navigate('Home');
                     }
                 } else {
@@ -147,35 +157,23 @@ export default class BeginTournamentScreen extends Component {
             });
             //this.props.navigation.navigate('Home');
         } else if (restantes == 1) {
-            ToastAndroid.show('Elija ' + restantes + ' amigo más', ToastAndroid.SHORT);
+            ToastAndroid.show('Elija ' + restantes + ' amigo mï¿½s', ToastAndroid.SHORT);
         } else {
-            ToastAndroid.show('Elija ' + restantes + ' amigos más', ToastAndroid.SHORT);
+            ToastAndroid.show('Elija ' + restantes + ' amigos mï¿½s', ToastAndroid.SHORT);
         }
     }
     render() {
         let { restantes } = this.state
         return (
             <View style={styles.container}>
-<<<<<<< HEAD
-                    <View style={styles.cuadroPequeno2}>
-                        
-                    <Text style={styles.titulo}>
-                    {i18n.t('Selec3Amigos')}
-                    </Text>
-
-                    <FlatList
-                        data={this.state.friendList}
-                        
-=======
                 <View style={styles.cuadroGrande}>
                     <View style={styles.cuadroPequeno}>
                         <Text style={styles.titulo}>
-                                Torneo
+                                {i18n.t('Torneo')}
                         </Text>
                     </View>
                     <View style={styles.cuadroContenido}>
                         <View style={styles.cuadroAmigos}>
->>>>>>> f26583cc12fee04f3499bd8ab4d01590cc7a8ca7
 
                             <Text style={styles.seleccionar}>
                                 {restantes != 0 ? " Selecciona "+ restantes +" amigos:": "Comienza el torneo"}
