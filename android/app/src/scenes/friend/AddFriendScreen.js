@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { View, Text, TouchableHighlight, TouchableOpacity, StyleSheet, Image, Alert, FlatList, ScrollView, TextInput, AsyncStorage } from 'react-native';
-import { PRIMARY, SECONDARY, BLACK } from '../../styles/colors';
+import { PRIMARY, SECONDARY, BLACK, GRAY_MEDIUM, GRAY_LIGHT, TITLE } from '../../styles/colors';
 import { BarraLateral } from '_organisms'
 import DropDownPicker from 'react-native-dropdown-picker';
 import { addfriend } from '_api/user';
@@ -98,8 +98,6 @@ const styles = StyleSheet.create({
     },
     cuadroGrande: {
         flex: 4,
-        borderColor: BLACK,
-        borderWidth: 3,
         flexDirection: 'column',
         alignContent: 'center',
     },
@@ -118,7 +116,7 @@ const styles = StyleSheet.create({
     input: {
         width: 280,
         height: 40,
-        backgroundColor: SECONDARY,
+        backgroundColor: GRAY_LIGHT,
         borderRadius: 50,
         borderWidth: 1,
         alignSelf: 'center',
@@ -128,7 +126,7 @@ const styles = StyleSheet.create({
         padding: 10
     },
     friendContainer: {
-        paddingTop: 10,
+        flex:1
     },
     friend: {
         paddingTop: 1,
@@ -147,12 +145,18 @@ const styles = StyleSheet.create({
         height: 40,
         backgroundColor: PRIMARY,
         borderRadius: 50,
-        borderWidth: 1,
         alignSelf:'center'
+    },
+    sendtext: {
+        fontSize: 20,
+        textAlign: 'center',
+        color: 'white',
+        textAlignVertical: 'bottom',
+        top:'10%'
     },
     title: {
         textAlign: 'center',
-        color: 'black',
+        color: TITLE,
         paddingTop: 20,
         fontSize: 38,
         fontWeight: 'bold',
@@ -162,11 +166,7 @@ const styles = StyleSheet.create({
         color: 'black',
         fontSize: 20,
     },
-    sendtext: {
-        fontSize: 20,
-        textAlign: 'center',
-        color:'white'
-    },
+
     text: {    
         fontSize: 20,
         textAlign: 'center'

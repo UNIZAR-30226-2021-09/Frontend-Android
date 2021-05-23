@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { View, Text, TouchableHighlight, TouchableWithoutFeedback, StyleSheet, Image, Alert, AsyncStorage, TouchableOpacity } from 'react-native';
-import { PRIMARY, SECONDARY, BLACK } from '../../styles/colors';
+import { PRIMARY, SECONDARY, BLACK, TITLE, GRAY_MEDIUM } from '../../styles/colors';
 import { BarraLateral } from '_organisms'
 import DropDownPicker from 'react-native-dropdown-picker';
 import { getFriendList } from '_api/user';
@@ -172,8 +172,6 @@ const styles = StyleSheet.create({
     },
     cuadroGrande: {
         flex: 4,
-        borderColor: BLACK,
-        borderWidth: 3,
         flexDirection: 'column',
         alignContent: 'center',
     },
@@ -189,18 +187,19 @@ const styles = StyleSheet.create({
     },
     opcion3: {
         flex: 1,
-        width:'40%'
+        width: '40%',
     },
     titleContainer: {
         flex:1
     },
     opcionText: {
         fontSize: 24,
-        fontWeight:'bold'
+        fontWeight: 'bold',
+        color: PRIMARY
     },
     title: {
         textAlign: 'center',
-        color: 'black',
+        color: TITLE,
         paddingTop: 20,
         paddingBottom: 20,
         fontSize: 38,

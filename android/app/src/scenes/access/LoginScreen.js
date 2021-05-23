@@ -1,6 +1,6 @@
 import React from 'react';
 import { SafeAreaView, View, Text, TouchableHighlight, StyleSheet, TextInput,TouchableOpacity } from 'react-native';
-import { WHITE, PRIMARY, SECONDARY } from '../../styles/colors';
+import { WHITE, PRIMARY, SECONDARY, GRAY_MEDIUM, GRAY_LIGHT, TITLE } from '../../styles/colors';
 import { login } from '_api/user';
 import { logMe, getIntoAllGames } from '_api/user/socket';
 import * as Crypto from 'expo-crypto';
@@ -97,12 +97,15 @@ const LoginScreen = ({
 const styles = StyleSheet.create({
     input: {
         height: '8%',
-        width: '70%',
-        marginStart: '15%',
-        marginEnd: '15%',
+        width: '60%',
+        marginStart: '20%',
         borderWidth: 1,
-        borderColor: SECONDARY,
+        backgroundColor: GRAY_LIGHT,
+        textAlign: 'center',
+        borderColor: 'grey',
+        borderRadius:50
     },
+
     container: {
         flex: 1,
         width: '100%',
@@ -118,9 +121,9 @@ const styles = StyleSheet.create({
         marginTop: 10
     },
     title: {
-        fontSize: 50,
+        fontSize: 40,
         alignSelf: 'center',
-        color: PRIMARY,
+        color: TITLE,
         fontWeight: 'bold',
     },
     checkboxContainer: {
@@ -137,8 +140,8 @@ const styles = StyleSheet.create({
         fontSize: 11,
     },
     button: {
-        height: 46,
-        width: 120,
+        height: 40,
+        width: 100,
         backgroundColor: PRIMARY,
         flexDirection: "row",
         justifyContent: 'center',
@@ -146,7 +149,7 @@ const styles = StyleSheet.create({
     },
     text: {
         color: WHITE,
-        fontSize: 28,
+        fontSize: 26,
         fontWeight: 'bold',
         textAlignVertical: "center",
     },
@@ -156,9 +159,9 @@ const styles = StyleSheet.create({
         textAlignVertical: "center",
         height: 30,
         width: 70,
-        backgroundColor: WHITE,
         borderRadius: 50,
-        backgroundColor: SECONDARY,
+        backgroundColor: GRAY_MEDIUM,
+        top: '35%'
     },
     gobacktext: {
         color: WHITE,

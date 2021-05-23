@@ -27,7 +27,7 @@ import { RootScreen, LoginScreen, SignScreen } from '_scenes/access';
 import AboutScreen from '_scenes/about'
 import HomeScreen from '_scenes/home';
 import { ProfileScreen, RankingScreen, SettingScreen, ResultListScreen } from '_scenes/profile';
-import { AddFriendScreen, FriendRequestScreen } from '_scenes/friend';
+import { AddFriendScreen } from '_scenes/friend';
 import { BeginTournamentScreen, BeginRandomScreen, BeginFriendScreen, OngoingGameScreen }
     from '_scenes/startGame';
 import { GameScreen, PlaceShipsScreen, ResultScreen, BoardResultScreen } from '_scenes/gameLogic';
@@ -43,7 +43,6 @@ function RootNavigator() {
             <Stack.Screen name="Profile" component={ProfileScreen} />
             <Stack.Screen name="Ranking" component={RankingScreen} />
             <Stack.Screen name="AddFriend" component={AddFriendScreen} />
-            <Stack.Screen name="FriendRequest" component={FriendRequestScreen} />
             <Stack.Screen name="BeginTournament" component={BeginTournamentScreen} />
             <Stack.Screen name="BeginRandom" component={BeginRandomScreen} />
             <Stack.Screen name="BeginFriend" component={BeginFriendScreen} />

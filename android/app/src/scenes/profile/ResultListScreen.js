@@ -1,6 +1,6 @@
 ﻿import React, { Component } from 'react';
 import { View, Text, TouchableHighlight, TouchableOpacity, StyleSheet, Image, Alert, FlatList, ScrollView, AsyncStorage } from 'react-native';
-import { PRIMARY, SECONDARY, BLACK, WHITE } from '../../styles/colors';
+import { PRIMARY, SECONDARY, BLACK, WHITE, TITLE, SUCCESS, WARNING, ALERT, GRAY_LIGHT, GRAY_DARK, GRAY_MEDIUM } from '../../styles/colors';
 import { BarraLateral } from '_organisms'
 import DropDownPicker from 'react-native-dropdown-picker';
 import { getHistory } from '_api/game';
@@ -58,8 +58,9 @@ export default class ResultListScreen extends Component {
             return "error"
         });
     }
-    async goToResult(id) {
-        await AsyncStorage.setItem('gameId', id);
+    async goToResult(item) {
+        await AsyncStorage.setItem('contrincante', item.contrincante);
+        await AsyncStorage.setItem('gameId', item.id);
         this.props.navigation.navigate("BoardResult");
     }
     //{item.state?"(Victoria)":"(Derrota)"}
@@ -83,8 +84,8 @@ export default class ResultListScreen extends Component {
                                                     <Text style={styles.friendText} > Partida contra {item.contrincante} ({item.resultado}) </Text>
                                                 </View>
                                                 <View style={styles.gameButton}>
-                                                    <TouchableOpacity style={styles.showButton} onPress={() => this.goToResult(item.id)}>
-                                                        <Text style={styles.rankText} > Ver partida </Text>
+                                                    <TouchableOpacity style={styles.showButton} onPress={() => this.goToResult(item)}>
+                                                        <Text style={styles.viewText} > Ver partida </Text>
                                                     </TouchableOpacity>
                                                 </View>
                                             </View>
@@ -99,7 +100,7 @@ export default class ResultListScreen extends Component {
                                                 </View>
                                                 <View style={styles.gameButton}>
                                                     <TouchableOpacity style={styles.showButton} onPress={() => this.goToResult(item.id)}>
-                                                        <Text style={styles.rankText} > Ver partida </Text>
+                                                        <Text style={styles.viewText} > Ver partida </Text>
                                                     </TouchableOpacity>
                                                 </View>
                                             </View>
@@ -169,34 +170,32 @@ const styles = StyleSheet.create({
         height: 20,
         backgroundColor: PRIMARY,
         borderRadius: 50,
-        borderWidth: 1,
         alignSelf: 'center',
     },
     gameLose: {
         flexDirection: 'row',
         alignSelf: 'center',
         alignContent: 'center',
-        borderWidth: 1,
-        color: 'blue',
-        backgroundColor: 'red',
+        backgroundColor: GRAY_DARK,
         width: 360,
         height: 25,
-
+        borderRadius:5,
+        borderWidth: 1,
+        borderColor: 'transparent'
     },
     gameVictory: {
         flexDirection: 'row',
         alignSelf: 'center',
         alignContent: 'center',
-        borderWidth: 1,
-        color: 'blue',
-        backgroundColor: 'green',
+        backgroundColor: SUCCESS,
         width: 360,
         height: 25,
+        borderRadius: 5,
+        borderWidth: 1,
+        borderColor:'transparent'
     },
     cuadroGrande: {
         flex: 4,
-        borderColor: BLACK,
-        borderWidth: 3,
         flexDirection: 'column',
         alignContent: 'center',
     },
@@ -263,7 +262,6 @@ const styles = StyleSheet.create({
         height: 30,
         backgroundColor: PRIMARY,
         borderRadius: 50,
-        borderWidth: 1,
         marginBottom: 5
     },
     logOutButton: {
@@ -271,12 +269,11 @@ const styles = StyleSheet.create({
         height: 30,
         backgroundColor: 'red',
         borderRadius: 50,
-        borderWidth: 1,
         marginBottom: 5
     },
     title: {
         textAlign: 'center',
-        color: 'black',
+        color: TITLE,
         paddingTop: 0,
         fontSize: 38,
         fontWeight: 'bold',
@@ -285,6 +282,7 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         color: 'black',
         fontSize: 20,
+        top:'20%'
     },
     text: {
         fontSize: 20,
@@ -293,7 +291,14 @@ const styles = StyleSheet.create({
     rankText: {
         fontSize: 15,
         textAlign: 'center',
-        color: WHITE
+        color: WHITE,
+        top:'10%'
+    },
+    viewText: {
+        fontSize: 15,
+        textAlign: 'center',
+        color: WHITE,
+        bottom:'10%'
     },
     friendText: {
         fontSize: 15,

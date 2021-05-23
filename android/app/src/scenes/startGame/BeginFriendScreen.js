@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { View, Text, TouchableHighlight, TouchableOpacity, StyleSheet, Image, Alert, FlatList, ScrollView, AsyncStorage, ToastAndroid } from 'react-native';
-import { PRIMARY, SECONDARY, BLACK } from '../../styles/colors';
+import { PRIMARY, SECONDARY, BLACK, WHITE, TITLE, GRAY_MEDIUM } from '../../styles/colors';
 import { BarraLateral } from '_organisms'
 import DropDownPicker from 'react-native-dropdown-picker';
 import { getFriendList } from '_api/user';
@@ -115,11 +115,7 @@ export default class BeginFriendScreen extends Component {
                         <Text style={styles.text} > {this.state.username}: Listo </Text>
                     </View>*/}
                     {this.state.estado != ELEGIR ?
-                        <View style={styles.friendContainer}>
-                            <TouchableOpacity style={styles.friendContainer} onPress={() => this.showFriend()}>
-                                <Text style={styles.messageText} > {this.state.estado} </Text>
-                            </TouchableOpacity>
-                        </View> :
+                        null :
                         <View style={styles.friendContainer}>
                                 <Text style={styles.messageText} > {this.state.estado} </Text>
                         </View>
@@ -143,6 +139,9 @@ export default class BeginFriendScreen extends Component {
                             style={styles.friendContainer}
                         /> : <View style={styles.friendContainer}>
                                 <Text style={styles.text} >{INVITAR}: {this.state.selectedFriend}</Text>
+                                <TouchableOpacity style={styles.chooseButton} onPress={() => this.showFriend()}>
+                                    <Text style={styles.buttonChooseText} > {this.state.estado} </Text>
+                                </TouchableOpacity>
                                 <TouchableOpacity style={styles.confirmButton} onPress={() => this.send()}>
                                     <Text style={styles.buttonText}>
                                         Enviar peticion
@@ -167,8 +166,6 @@ const styles = StyleSheet.create({
     },
     cuadroGrande: {
         flex: 4,
-        borderColor: BLACK,
-        borderWidth: 3,
         flexDirection: 'column',
         alignContent: 'center',
     },
@@ -191,47 +188,61 @@ const styles = StyleSheet.create({
         paddingTop: 1,
     },
     friendButton: {
-        width: 100,
-        height: 20,
+        width: 120,
+        height: 26,
         backgroundColor: SECONDARY,
-        borderRadius: 50,
-        borderWidth: 1,
+        borderRadius: 5,
         alignSelf: 'center',
     },
     confirmButton: {
-        top: 30, 
-        width: 180,
+        top: '50%', 
+        width: 160,
         height: 40,
         backgroundColor: PRIMARY,
         borderRadius: 50,
-        borderWidth: 1,
         alignSelf:'center'
+    },
+    chooseButton: {
+        top: '20%',
+        width: 120,
+        height: 30,
+        backgroundColor: GRAY_MEDIUM,
+        borderRadius: 50,
+        alignSelf: 'center'
     },
     title: {
         textAlign: 'center',
-        color: 'black',
+        color: TITLE,
         paddingTop: 20,
         fontSize: 38,
         fontWeight: 'bold',
     },
     buttonText: {
+        top:'15%',
         textAlign: 'center',
         color: 'white',
         fontSize: 20,
     },
+    buttonChooseText: {
+        top: '15%',
+        textAlign: 'center',
+        color: 'white',
+        fontSize: 16,
+    },
     text: {    
         fontSize: 25,
-        textAlign: 'center'
+        textAlign: 'center',
+        color: SECONDARY
     },
     friendText: {
         fontSize: 15,
         textAlign: 'center',
-        color: PRIMARY
+        color: WHITE
     },
     messageText: {
-        fontSize: 17,
+        fontSize: 22,
         textAlign: 'center',
-        color: 'grey'
+        color: SECONDARY
     },
     listContainer: {
         height: 50, width: 260, alignSelf: 'center'

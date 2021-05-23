@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { View, Text, TouchableHighlight, TouchableOpacity, StyleSheet, Image, Alert, FlatList, ScrollView, AsyncStorage } from 'react-native';
-import { PRIMARY, SECONDARY, BLACK } from '../../styles/colors';
+import { PRIMARY, SECONDARY, BLACK, TITLE, WHITE } from '../../styles/colors';
 import { BarraLateral } from '_organisms';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { getGameInProgess } from '_api/game';
@@ -42,7 +42,7 @@ export default class OngoingGameScreen extends Component {
     async updateList(user) {
 
         await getGameInProgess(user).then(data => {
-            //console.log("Data de getProgress: " + JSON.stringify(data));
+            console.log("Data de getProgress: " + JSON.stringify(data));
             if (data != "error") {
                 this.setState(
                     { gameList: data }
@@ -85,8 +85,9 @@ export default class OngoingGameScreen extends Component {
                                 return (
                                     <View style={styles.friend}>
                                         <TouchableOpacity style={styles.gameButton} onPress={() => this.goToGame(item)}>
+                                            
                                             <Text style={styles.friendText}>
-                                                Partido contra {item.contrincante}
+                                                Partido contra {item.contrincante} {item.tipo == "torneo" ? "(" + item.torneo +")": ""} 
                                             </Text>
                                         </TouchableOpacity>
                                     </View>
@@ -123,8 +124,6 @@ const styles = StyleSheet.create({
     },
     cuadroGrande: {
         flex: 4,
-        borderColor: BLACK,
-        borderWidth: 3,
         flexDirection: 'column',
         alignContent: 'center',
     },
@@ -151,8 +150,7 @@ const styles = StyleSheet.create({
         width: 300,
         height: 30,
         backgroundColor: SECONDARY,
-        borderRadius: 50,
-        borderWidth: 1,
+        borderRadius: 5,
         alignSelf: 'center',
     },
     myTurnButton: {
@@ -174,7 +172,7 @@ const styles = StyleSheet.create({
     },
     title: {
         textAlign: 'center',
-        color: 'black',
+        color: TITLE,
         paddingTop: 20,
         fontSize: 38,
         fontWeight: 'bold',
@@ -191,7 +189,7 @@ const styles = StyleSheet.create({
     friendText: {
         fontSize: 15,
         textAlign: 'center',
-        color: PRIMARY
+        color: WHITE
     },
     messageText: {
         fontSize: 17,

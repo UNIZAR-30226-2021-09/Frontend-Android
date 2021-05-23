@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { SafeAreaView, View, Text, TouchableHighlight, StyleSheet, AsyncStorage, TextInput, TouchableOpacity, FlatList, ToastAndroid } from 'react-native';
-import { WHITE, PRIMARY, SECONDARY,BLACK } from '../../styles/colors';
+import { WHITE, PRIMARY, SECONDARY,BLACK, TITLE, GRAY_MEDIUM } from '../../styles/colors';
 import Modal from 'react-native-modal';
 import { getFriendList } from '_api/user';
 import { getIncomingList, getOutgoingList, accept, dismiss } from '_api/user';
@@ -275,7 +275,6 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         borderRadius: 50,
         borderWidth: 1,
-        
     },
     division: {
         flex: 1,
@@ -301,7 +300,7 @@ const styles = StyleSheet.create({
     casilla: {
         width: '90%',
         height: '25%',
-        backgroundColor: SECONDARY,
+        backgroundColor: GRAY_MEDIUM,
         color: PRIMARY,
         textAlign: 'center',
         textAlignVertical: 'center',
@@ -312,7 +311,7 @@ const styles = StyleSheet.create({
     casillaFinal: {
         width: '50%',
         height: '50%',
-        backgroundColor: SECONDARY,
+        backgroundColor: GRAY_MEDIUM,
         color: PRIMARY,
         textAlign: 'center',
         textAlignVertical: 'center',
@@ -326,7 +325,7 @@ const styles = StyleSheet.create({
     casillaFinal2: {
         width: '50%',
         height: '50%',
-        backgroundColor: SECONDARY,
+        backgroundColor: GRAY_MEDIUM,
         color: PRIMARY,
         textAlign: 'center',
         textAlignVertical: 'center',
@@ -379,13 +378,16 @@ const styles = StyleSheet.create({
     titulo:{
         flex: 1,
         height: 100,
-        fontSize: 25,
+        fontSize: 30,
         alignSelf: 'center',
+        color: TITLE,
+        fontWeight:'bold'
     },
     seleccionar: {
         fontSize: 16,
         alignSelf: 'center',
-        top:'-4%'
+        top: '-4%',
+        color:SECONDARY
     },
     container: {
         flex: 1,
@@ -485,9 +487,8 @@ const styles = StyleSheet.create({
     connectFriend: {
         width: 120,
         height: 26,
-        backgroundColor: PRIMARY,
-        borderRadius: 50,
-        borderWidth: 1,
+        backgroundColor: SECONDARY,
+        borderRadius: 5,
         alignSelf: 'center',
     },
     notConnectFriend: {

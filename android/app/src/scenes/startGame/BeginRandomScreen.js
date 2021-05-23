@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { View, Text, ToastAndroid, TouchableHighlight, TouchableWithoutFeedback, StyleSheet, Image, Alert, AsyncStorage, TouchableOpacity } from 'react-native';
-import { PRIMARY, SECONDARY, BLACK, WHITE } from '../../styles/colors';
+import { PRIMARY, SECONDARY, BLACK, WHITE, TITLE } from '../../styles/colors';
 import { BarraLateral } from '_organisms'
 import DropDownPicker from 'react-native-dropdown-picker';
 import { beginRandom } from '_api/game';
@@ -79,7 +79,6 @@ const styles = StyleSheet.create({
         height: 45,
         backgroundColor: PRIMARY,
         borderRadius: 50,
-        borderWidth: 1,
         justifyContent: 'center',
         flexDirection: 'column'
     },
@@ -90,13 +89,11 @@ const styles = StyleSheet.create({
     },
     cuadroGrande: {
         flex: 4,
-        borderColor: BLACK,
-        borderWidth: 3,
         flexDirection: 'column',
         alignContent: 'center',
     },
     cuadroPequeno: {
-        flex: 1,
+        flex: 2,
         borderColor: BLACK,
         flexDirection: 'column',
         alignSelf: 'center',
@@ -110,7 +107,7 @@ const styles = StyleSheet.create({
     },
     title: {
         textAlign: 'center',
-        color: 'black',
+        color: TITLE,
         paddingTop: 20,
         paddingBottom: 20,
         fontSize: 38,

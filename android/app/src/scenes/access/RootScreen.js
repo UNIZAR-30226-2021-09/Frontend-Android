@@ -1,6 +1,6 @@
 import React from 'react';
 import { SafeAreaView, View, Text, TouchableHighlight, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
-import { WHITE, PRIMARY, SECONDARY } from '../../styles/colors';
+import { WHITE, PRIMARY, SECONDARY, TITLE } from '../../styles/colors';
 import i18n from 'i18n-js';
 
 const RootScreen = ({
@@ -55,7 +55,7 @@ const styles = StyleSheet.create({
     title: {
         fontSize: 42,
         alignSelf: 'center',
-        color: PRIMARY,
+        color: TITLE,
         fontWeight: 'bold',
     },
     checkboxContainer: {

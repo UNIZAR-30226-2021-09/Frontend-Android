@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { View, Text, TouchableHighlight, TouchableOpacity, StyleSheet, Image, Alert, FlatList, ScrollView, AsyncStorage } from 'react-native';
-import { PRIMARY, SECONDARY, BLACK, WHITE } from '../../styles/colors';
+import { PRIMARY, SECONDARY, BLACK, WHITE, GRAY_LIGHT, SUCCESS, WARNING, ALERT, TITLE } from '../../styles/colors';
 import { BarraLateral } from '_organisms'
 import DropDownPicker from 'react-native-dropdown-picker';
 import { getRanking, getInfo } from '_api/user';
@@ -30,7 +30,7 @@ export default class FriendRequestScreen extends Component {
         };
         console.log(newUser);
         await getRanking(newUser).then(data => {
-            console.log("Data de getRanking: " + JSON.stringify(data.me));
+            console.log("Data de getRanking: " + JSON.stringify(data));
             if (data != "error") {
                 this.setState(
                     { userList: data.ranking, myPosition: data.me.posicion }
@@ -116,13 +116,13 @@ export default class FriendRequestScreen extends Component {
                                                     <Text style={styles.rankUsername} > {index + 1}. {item.nombreUsuario} </Text>
                                                 </View>
                                                 <View style={styles.rankInfo}>
-                                                    <Text style={styles.rankScore} > {item.puntos} </Text>
+                                                    <Text style={styles.rankScore} >{item.puntos != null ? item.puntos : 0}</Text>
                                                 </View>
                                                 <View style={styles.rankInfo}>
-                                                    <Text style={styles.rankScore} > {item.partidasPerdidas} </Text>
+                                                    <Text style={styles.rankScore} >{item.partidasPerdidas != null ? item.partidasPerdidas : 0} </Text>
                                                 </View>
                                                 <View style={styles.rankInfo}>
-                                                    <Text style={styles.rankScore} > {item.partidasGanadas} </Text>
+                                                    <Text style={styles.rankScore} > {item.partidasGanadas != null ? item.partidasGanadas : 0} </Text>
                                                 </View>
                                             </View>
                                         </View>
@@ -138,13 +138,13 @@ export default class FriendRequestScreen extends Component {
                                 <Text style={styles.rankUsername} > {this.state.myPosition}. {this.state.myInfo.nombreUsuario}  </Text>
                             </View>
                             <View style={styles.rankInfo}>
-                                <Text style={styles.rankScore} > {myInfo.puntos} </Text>
+                                <Text style={styles.rankScore} > {myInfo.puntos != null ? myInfo.puntos : 0}  </Text>
                             </View>
                             <View style={styles.rankInfo}>
-                                <Text style={styles.rankScore} >  {myInfo.partidasPerdidas}</Text>
+                                <Text style={styles.rankScore} >  {myInfo.partidasPerdidas != null ? myInfo.partidasPerdidas : 0} </Text>
                             </View>
                             <View style={styles.rankInfo}>
-                                <Text style={styles.rankScore} > {myInfo.partidasGanadas } </Text>
+                                <Text style={styles.rankScore} > {myInfo.partidasGanadas!=null ? myInfo.partidasGanadas : 0 } </Text>
                             </View>
                         </View>
                     </View>
@@ -195,7 +195,6 @@ const styles = StyleSheet.create({
         height: 20,
         backgroundColor: PRIMARY,
         borderRadius: 50,
-        borderWidth: 1,
         alignSelf: 'center',
         marginLeft: 20
     },
@@ -204,7 +203,6 @@ const styles = StyleSheet.create({
         height: 20,
         backgroundColor: 'red',
         borderRadius: 50,
-        borderWidth: 1,
         alignSelf: 'center',
         marginRight: 40
     },
@@ -213,7 +211,6 @@ const styles = StyleSheet.create({
         height: 20,
         backgroundColor: 'green',
         borderRadius: 50,
-        borderWidth: 1,
         alignSelf: 'center',
     },
 
@@ -221,7 +218,6 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignSelf: 'center',
         alignContent: 'center',
-        borderWidth: 1,
         color: 'blue',
         backgroundColor: 'red',
         width: 300,
@@ -233,25 +229,26 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         alignContent: 'center',
         borderWidth: 0.5,
-        color: 'blue',
+        borderColor:'transparent',
         backgroundColor: PRIMARY,
         width: 500,
         height: 25,
+        borderRadius:5
     },
     positionItem: {
         flexDirection: 'row',
         alignSelf: 'center',
         alignContent: 'center',
         borderWidth: 0.5,
-        color: 'blue',
-        backgroundColor: SECONDARY,
+        borderColor: 'transparent',
+        backgroundColor: '#33ccff',
         width: 500,
         height: 25,
+        borderRadius: 5
     },
     cuadroGrande: {
         flex: 4,
         borderColor: BLACK,
-        borderWidth: 3,
         flexDirection: 'column',
         alignContent: 'center',
     },
@@ -288,8 +285,7 @@ const styles = StyleSheet.create({
         width: 100,
         height: 20,
         backgroundColor: SECONDARY,
-        borderRadius: 50,
-        borderWidth: 1,
+        borderRadius: 5,
         alignSelf: 'center',
     },
     confirmButton: {
@@ -298,7 +294,6 @@ const styles = StyleSheet.create({
         height: 40,
         backgroundColor: PRIMARY,
         borderRadius: 50,
-        borderWidth: 1,
         alignSelf: 'center'
     },
     shareButton: {
@@ -306,12 +301,11 @@ const styles = StyleSheet.create({
         height: 20,
         backgroundColor: PRIMARY,
         borderRadius: 50,
-        borderWidth: 1,
         alignSelf: 'center',
     },
     title: {
         textAlign: 'center',
-        color: 'black',
+        color: TITLE,
         paddingTop: 0,
         fontSize: 38,
         fontWeight: 'bold',

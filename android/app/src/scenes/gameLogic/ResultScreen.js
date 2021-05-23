@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { View, Text, TouchableHighlight, TouchableWithoutFeedback, StyleSheet, Image, Alert, AsyncStorage } from 'react-native';
-import { PRIMARY, SECONDARY, BLACK } from '../../styles/colors';
+import { PRIMARY, SECONDARY, BLACK, TITLE } from '../../styles/colors';
 import { BarraLateral } from '_organisms'
 import { checkBox, OCEAN_BOX, TOUCHED_BOX, SUNKEN_BOX, NO_ATACK_BOX } from '_api/match';
 import { Table, TableWrapper, Cell } from 'react-native-table-component'
@@ -73,8 +73,6 @@ const styles = StyleSheet.create({
     },
     cuadroGrande: {
         flex: 4,
-        borderColor: BLACK,
-        borderWidth: 3,
         flexDirection: 'column',
         alignContent: 'center',
     },
@@ -92,14 +90,14 @@ const styles = StyleSheet.create({
     },
     title: {
         textAlign: 'center',
-        color: 'black',
+        color: TITLE,
         paddingTop: 16,
         paddingBottom: 20,
         fontSize: 34,
         fontWeight: 'bold',
     },
     text: {
-        fontSize: 24,
+        fontSize: 24, color: PRIMARY
     },
     listContainer: {
         height: 50, width: 260, alignSelf: 'center'

@@ -392,7 +392,7 @@ export const getBoard = (username, token, gameId) => {
 	}
 	return axios.post('https://proyecto-software-09.herokuapp.com/match/cogerTablero', data).then(res => {
 		console.log("getBOARD------")
-		console.log(res.data)
+		//console.log(res.data)
 		//console.log(res.data.tuTablero)
 		//console.log(res.data.disparos)
 
@@ -416,7 +416,7 @@ export const movement = (username, token, gameId, row, col) => {
 	}
 	return axios.post('https://proyecto-software-09.herokuapp.com/match/movimiento', data).then(res => {
 		console.log("movimiento------")
-		console.log(res.data)
+		console.log(res.data.disparo)
 
 		return res.data;
 	}).catch(error => {

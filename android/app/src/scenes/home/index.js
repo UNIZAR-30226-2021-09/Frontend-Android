@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { SafeAreaView, View, Text, TouchableHighlight, StyleSheet, TextInput, TouchableOpacity, AsyncStorage } from 'react-native';
-import { WHITE, PRIMARY, SECONDARY,BLACK } from '../../styles/colors';
+import { WHITE, PRIMARY, SECONDARY,BLACK, TITLE } from '../../styles/colors';
 import {BarraLateral} from '_organisms'; 
 import { beginIA } from '_api/game';
 import { emparejamientoACiegas } from '_api/game';
@@ -109,13 +109,9 @@ const HomeScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
     cuadroGrande: {
         flex: 4,
-        borderColor: BLACK,
-        borderWidth: 3,
-
     },
     cuadroPequeno: {
         flex: 1,
-        borderColor: BLACK,
         flexDirection: 'column',
     },
     cuadroCuaduple: {
@@ -134,7 +130,6 @@ const styles = StyleSheet.create({
         height: 50,
         backgroundColor: PRIMARY,
         borderRadius: 50,
-        borderWidth: 1,
         alignSelf:'center'
     },
     cuadroTitulo: {
@@ -223,7 +218,7 @@ const styles = StyleSheet.create({
     title: {
         fontSize: 32,
         alignSelf: 'center',
-        color: BLACK,
+        color: TITLE,
         fontWeight: 'bold',
     },
     checkboxContainer: {

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { View, Text, TouchableHighlight, TouchableOpacity, StyleSheet, Image, Alert, FlatList, ScrollView, AsyncStorage } from 'react-native';
-import { PRIMARY, SECONDARY, BLACK, WHITE } from '../../styles/colors';
+import { PRIMARY, SECONDARY, BLACK, WHITE, TITLE } from '../../styles/colors';
 import { BarraLateral } from '_organisms'
 import DropDownPicker from 'react-native-dropdown-picker';
 import { getHistory } from '_api/game';
@@ -145,11 +145,10 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
     },
     ranking: {
-        width: 140,
-        height: 20,
+        width: 155,
+        height: 25,
         backgroundColor: PRIMARY,
         borderRadius: 50,
-        borderWidth: 1,
         alignSelf: 'center',
         marginLeft: 20
     },
@@ -158,7 +157,6 @@ const styles = StyleSheet.create({
         height: 20,
         backgroundColor: PRIMARY,
         borderRadius: 50,
-        borderWidth: 1,
         alignSelf: 'center',
     },
     gameLose: {
@@ -184,8 +182,6 @@ const styles = StyleSheet.create({
     },
     cuadroGrande: {
         flex: 4,
-        borderColor: BLACK,
-        borderWidth: 3,
         flexDirection: 'column',
         alignContent: 'center',
     },
@@ -205,7 +201,8 @@ const styles = StyleSheet.create({
     },
     cuadroPartidas: {
         alignSelf: 'center',
-        flex: 1
+        flex: 1,
+        top:'3%'
     },
     cuadroAmigos: {
         flex: 3,
@@ -252,7 +249,6 @@ const styles = StyleSheet.create({
         height: 30,
         backgroundColor: PRIMARY,
         borderRadius: 50,
-        borderWidth: 1,
         marginBottom:5
     },
     logOutButton: {
@@ -260,12 +256,11 @@ const styles = StyleSheet.create({
         height: 30,
         backgroundColor: 'red',
         borderRadius: 50,
-        borderWidth: 1,
         marginBottom: 5
     },
     title: {
         textAlign: 'center',
-        color: 'black',
+        color: TITLE,
         paddingTop: 0,
         fontSize: 38,
         fontWeight: 'bold',
@@ -277,16 +272,20 @@ const styles = StyleSheet.create({
     },
     text: {
         fontSize: 20,
-        textAlign: 'center'
+        textAlign: 'center',
+        color: PRIMARY
     },
     infoText: {
         fontSize: 20,
-        textAlign: 'left'
+        textAlign: 'left',
+        color: SECONDARY
+
     },
     rankText: {
         fontSize: 15,
         textAlign: 'center',
-        color: WHITE
+        color: WHITE,
+        top:'10%'
     },
     friendText: {
         fontSize: 15,
