@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
+﻿import React, { Component } from 'react';
 import { View, Text, TouchableHighlight, TouchableWithoutFeedback, StyleSheet, Image, Alert, AsyncStorage, ToastAndroid, ImageBackground } from 'react-native';
-import { PRIMARY, SECONDARY, BLACK } from '../../styles/colors';
+import { PRIMARY, SECONDARY, BLACK, GRAY_LIGHT, GRAY_MEDIUM } from '../../styles/colors';
 import { BarraLateral } from '_organisms'
 import { checkBox, OCEAN_BOX, TOUCHED_BOX, SUNKEN_BOX, NO_ATACK_BOX, OCEAN_NOT_ATTACK, OCEAN_ATTACK, SHIP_NOT_ATTACK, SHIP_ATTACK, COLOCADO } from '_api/match';
 import { Table, TableWrapper, Cell } from 'react-native-table-component'
@@ -8,7 +8,7 @@ import { initBoard, attack, getSolution, initAttack, initShip, initCoord, IAmove
 import { socket, disparo } from '_api/user/socket';
 import { getShipColor, getBoardImage, getBoardColor } from '../../styles/gameStyle';
 import i18n from 'i18n-js';
-
+import { playBomb, playWater, playHit } from '../../assets/sound/PlaySound';
 const GANADO = "GANADO"
 const PERDIDO = "PERDIDO"
 const MITURNO = "tuTurno"
@@ -30,7 +30,8 @@ export default class BoardResultScreen extends Component {
             gameId: "",
             fin: false,
             ganador: false,
-            turnMsg: ""
+            turnMsg: "",
+            contrincante:""
         }
 
     }
@@ -40,23 +41,39 @@ export default class BoardResultScreen extends Component {
         var _username = await AsyncStorage.getItem('username');
         var _accessToken = await AsyncStorage.getItem('userToken');
         var _gameId = await AsyncStorage.getItem('gameId');
+        var _contrincante = await AsyncStorage.getItem('contrincante');
+        this.setState({ username: _username, accessToken: _accessToken, gameId: _gameId, contrincante: _contrincante });
 
-        this.setState({ username: _username, accessToken: _accessToken, gameId: _gameId });
+        await socket.on('llegaMovement', (data) => {
+            //console.log("-------- Socket llegaMovement a " + _username + " Turno: " + data)
+            if (data.nuevoTurno == MITURNO) {
+                //ToastAndroid.show("Tu rival ha fallado, es tu turno", ToastAndroid.SHORT)
+            } else if (data.nuevoTurno == TURNORIVAL) {
+                //ToastAndroid.show("Tu rival ha acertado, sigue siendo su turno", ToastAndroid.SHORT)
+            } else if (data.nuevoTurno == GANADO) {
+                this.setState({ fin: true, ganador: true })
+            } else if (data.nuevoTurno == PERDIDO) {
+                this.setState({ fin: true, ganador: false })
+            }
+            this.updateBoard();
+        })
+
         await this.updateBoard();
     }
     async componentWillUnmount() {
         this._ismounted = false;
     }
     async updateBoard() {
-        let { username, accessToken, gameId } = this.state
+        let { username, accessToken, gameId, fin, ganador } = this.state
         var msg = "";
         await getBoard(username, accessToken, gameId).then(data => {
-            //console.log("Data de getBoard: " + JSON.stringify(data));
+            //console.log("Data de getBoard: " + data);
             if (data != "error") {
                 if (data.myState == MITURNO)
-                    msg = i18n.t('Victoria')
+                    msg = "Victoria"
                 else if (data.myState == TURNORIVAL)
-                    msg = i18n.t('Derrota')
+                    msg = "Derrota"
+                //console.log("TURNO:    ---" + this.state.board.myState + fin + ganador + msg)
                 this.setState(
                     { board: data, turnMsg: msg }
                 )
@@ -65,7 +82,6 @@ export default class BoardResultScreen extends Component {
             }
         });
     }
-
     render() {
         let { board } = this.state;
         const color = getBoardColor();
@@ -90,13 +106,14 @@ export default class BoardResultScreen extends Component {
             else if (board.myState == TURNORIVAL) {
                 return (
                     <View style={oceanBox}>
-                    </View>);
+                    </View>
+);
             }
             else if (!this.state.fin)
                 return (
                     <View style={oceanBox}>
                     </View>
-                );
+);
             else
                 return (<View style={oceanBox} />);
         };
@@ -121,6 +138,17 @@ export default class BoardResultScreen extends Component {
         };
         return (<View style={styles.container}>
             <View style={styles.cuadroGrande}>
+                <View style={styles.startButtonContainer}>
+                    <View style={{ flex: 1 }}>
+                        <Text style={styles.turnText}> {this.state.turnMsg} contra {this.state.contrincante} </Text>
+                    </View>
+                    <View style={{ flex: 1 }}>
+
+                        <TouchableHighlight style={styles.button} onPress={() => this.props.navigation.navigate('Home')}>
+                            <Text style={styles.btnText}> Salir</Text>
+                        </TouchableHighlight>
+                    </View>
+                </View>
                 <View style={styles.cuadroGrande1}>
 
                     <View style={styles.boardContainer}>
@@ -160,16 +188,6 @@ export default class BoardResultScreen extends Component {
                         </ImageBackground>
                     </View>
                 </View>
-                <View style={styles.startButtonContainer}>
-                    <View style={{ flex: 1 }}>
-                        <TouchableHighlight style={styles.button} onPress={() => this.props.navigation.navigate('ResultList')}>
-                            <Text style={styles.btnText}> {i18n.t('Volver')}</Text>
-                        </TouchableHighlight>
-                    </View>
-                    <View style={{ flex: 1, top:'2%' }}>
-                        <Text style={styles.turnText}> {this.state.turnMsg} </Text>
-                    </View>
-                </View>
 
             </View>
             <BarraLateral navigation={this.props.navigation} />
@@ -188,8 +206,6 @@ const styles = StyleSheet.create({
     },
     cuadroGrande: {
         flex: 4,
-        borderColor: BLACK,
-        borderWidth: 3,
         flexDirection: 'column',
         alignContent: 'center',
     },
@@ -200,7 +216,7 @@ const styles = StyleSheet.create({
     },
     head: { height: 30, backgroundColor: '#808B97' },
     text: { margin: 6 },
-    boardContainer: { flex: 1, width: 260, height: 260, padding: 5, paddingBottom: 40, backgroundColor: '#fff' },
+    boardContainer: { flex: 1, width: 260, height: 260, left: '8%', bottom: '1%' },
 
     row: {
         flexDirection: 'row', backgroundColor: 'transparent',
@@ -210,8 +226,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
 
     },
-    button: { alignSelf: 'center', width: 100, height: 30, backgroundColor: PRIMARY, borderRadius: 50, top: '30%' },
-
+    button: { alignSelf: 'center', width: 100, height: 30, backgroundColor: GRAY_MEDIUM, borderRadius: 50, top:'5%' },
     btnText: { textAlign: 'center', color: 'white', paddingTop: 5 },
     oceanBox: { width: 26, height: 26, backgroundColor: 'cyan', borderRadius: 0, borderColor: 'blue', borderWidth: 0.18 },
     shipBox: { width: 26, height: 26, backgroundColor: 'grey', borderRadius: 0, borderColor: 'blue', borderWidth: 0.2 },
@@ -224,7 +239,7 @@ const styles = StyleSheet.create({
     image: {
         width: 20, height: 20, alignSelf: 'center', resizeMode: 'center',
     },
-    turnText: { textAlign: 'center', color: PRIMARY, fontSize: 26 },
+    turnText: { textAlign: 'center', color: PRIMARY, fontSize: 24, fontWeight:'bold' },
     boardImageContainer: { width: 260, height: 260 },
 
 });

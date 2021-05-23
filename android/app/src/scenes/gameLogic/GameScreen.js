@@ -8,7 +8,7 @@ import { initBoard, attack, getSolution, initAttack, initShip, initCoord, IAmove
 import { socket, disparo } from '_api/user/socket';
 import { getShipColor, getBoardImage, getBoardColor } from '../../styles/gameStyle';
 import i18n from 'i18n-js';
-
+import { playBomb, playWater, playHit } from '../../assets/sound/PlaySound';
 const GANADO = "GANADO"
 const PERDIDO = "PERDIDO"
 const MITURNO = "tuTurno"
@@ -40,8 +40,8 @@ export default class GameScreen extends Component {
         var _username = await AsyncStorage.getItem('username');
         var _accessToken = await AsyncStorage.getItem('userToken');
         var _gameId = await AsyncStorage.getItem('gameId');
-
-        this.setState({ username: _username, accessToken: _accessToken, gameId: _gameId });
+        var _contrincante = await AsyncStorage.getItem('contrincante');
+        this.setState({ username: _username, accessToken: _accessToken, gameId: _gameId, contrincante: _contrincante });
 
         await socket.on('llegaMovement', (data) => {
             //console.log("-------- Socket llegaMovement a " + _username + " Turno: " + data)
@@ -69,15 +69,15 @@ export default class GameScreen extends Component {
             //console.log("Data de getBoard: " + data);
             if (data != "error") {
                 if (data.myState == MITURNO) 
-                    msg = i18n.t('TuTurno')
+                    msg = "Tu turno"
                 else if (data.myState == TURNORIVAL)
-                    msg = i18n.t('TurnoRival')
+                    msg = "Turno del rival"
 
                 if (fin && ganador)
-                    msg = i18n.t('HasGanado');
+                    msg = "Has ganado";
                 else if (fin)
-                    msg = i18n.t('HasGanado');
-                console.log("TURNO:    ---" + this.state.board.myState + fin + ganador + msg)
+                    msg = "Has perdido";
+                //console.log("TURNO:    ---" + this.state.board.myState + fin + ganador + msg)
 
                 this.setState(
                     { board: data, turnMsg: msg}
@@ -93,16 +93,24 @@ export default class GameScreen extends Component {
     async onClick(row, col) {
         let { username, accessToken, gameId } = this.state
         await movement(username, accessToken, gameId, row, col).then(data => {
-            console.log("Data de movement: " + JSON.stringify(data));
+            //console.log("Data de movement: " + JSON.stringify(data));
             if (data.error != "error") {
                 if (data.movimientoIA) {
-
+                    if (data.disparo == "fallo") {
+                        console.log("WATER")
+                        playWater()}
                 }
                 else if (!data.fin && data.disparo == "fallo") {
                     disparo(gameId, MITURNO)
+                     playWater();
                     //ToastAndroid.show("Has fallado, es turno de tu rival", ToastAndroid.SHORT)
                 } else if (!data.fin) {
                     disparo(gameId, TURNORIVAL)
+                    if (data.disparo == 'hundido') {
+                        playBomb();
+                    } else {
+                        playHit();
+                    }
                     //ToastAndroid.show("Has acertado, sigue siendo tu turno", ToastAndroid.SHORT)
                 }
                 if (data.fin && data.infoPartida.ganador) {
@@ -115,12 +123,13 @@ export default class GameScreen extends Component {
                 this.updateBoard();
                 console.log("FIN--" + this.state.fin + this.state.ganador)
             } else {
-                var msg = data.tipo
+               /* var msg = data.tipo
                 if (data.tipo.includes("coloque sus barcos"))
-                    msg = i18n.t('EsperarRival');
+                    msg = "Espere a que tu rival coloque los barcos";
                 else if (data.tipo.includes("fuera de los"))
-                    msg = i18n.t('FueraTablero');
-                    ToastAndroid.show(msg, ToastAndroid.SHORT)
+                    msg = "Est�s disparando fuera del tablero";
+                    ToastAndroid.show(msg, ToastAndroid.SHORT)*/
+                console.log("error movement" + data)
             }
         });
     }
@@ -157,7 +166,7 @@ export default class GameScreen extends Component {
                     </View>);
                 }
                 else if (board.myState == TURNORIVAL ) {
-                    return (<TouchableWithoutFeedback onPress={() => ToastAndroid.show(i18n.t('TurnoRival'), ToastAndroid.SHORT) }>
+                    return (<TouchableWithoutFeedback onPress={() => ToastAndroid.show("Es turno de tu rival", ToastAndroid.SHORT) }>
                         <View style={oceanBox}>
                         </View>
                     </TouchableWithoutFeedback>);
@@ -191,6 +200,31 @@ export default class GameScreen extends Component {
         };
         return (<View style={styles.container}>
             <View style={styles.cuadroGrande}>
+                <View style={styles.startButtonContainer}>
+                    {this.state.fin ?
+                        <View style={{ flex: 1 }}>
+                            <TouchableHighlight style={styles.button} onPress={() => this.props.navigation.navigate('Result')}>
+                                <Text style={styles.btnText}> Ver resultados</Text>
+                            </TouchableHighlight>
+                        </View> :
+                        <View style={{ flex: 1 }}>
+                            <TouchableHighlight style={styles.button} onPress={() => this.giveUp()}>
+                                <Text style={styles.btnText}> Rendirse</Text>
+                            </TouchableHighlight>
+                        </View>
+                    }
+                    
+                    <View style={{ flex: 1 }}>
+                        <Text style={styles.turnTitle}> Partida contra {this.state.contrincante} </Text>
+                        <Text style={styles.turnText}> {this.state.turnMsg} </Text>
+                    </View>
+                    <View style={{ flex: 1 }}>
+
+                        <TouchableHighlight style={styles.button} onPress={() => this.props.navigation.navigate('Home')}>
+                            <Text style={styles.btnText}> Salir</Text>
+                        </TouchableHighlight>
+                    </View>
+                </View>
                 <View style={styles.cuadroGrande1}>
                     
                     <View style={styles.boardContainer}>
@@ -230,29 +264,6 @@ export default class GameScreen extends Component {
                         </ImageBackground> 
                     </View>
                 </View>
-                <View style={styles.startButtonContainer}>
-                    {this.state.fin ?
-                        <View style={{ flex: 1 }}>
-                            <TouchableHighlight style={styles.button} onPress={() => this.props.navigation.navigate('Result')}>
-                                    <Text style={styles.btnText}> {i18n.t('VerResultados')}</Text>
-                            </TouchableHighlight>
-                        </View> :
-                        <View style={{ flex: 1 }}>
-                            <TouchableHighlight style={styles.button} onPress={() => this.giveUp()}>
-                                <Text style={styles.btnText}> {i18n.t('Rendirse')}</Text>
-                            </TouchableHighlight>
-                        </View>
-                    }
-                    <View style={{ flex: 1 }}>
-                        <Text style={styles.turnText}> {this.state.turnMsg} </Text>
-                    </View>
-                    <View style={{ flex: 1 }}>
-                            
-                        <TouchableHighlight style={styles.button} onPress={() => this.props.navigation.navigate('Home')}>
-                            <Text style={styles.btnText}> {i18n.t('Salir')}</Text>
-                        </TouchableHighlight>
-                    </View>
-                </View>
 
             </View>
             <BarraLateral navigation={this.props.navigation} />
@@ -271,8 +282,6 @@ const styles = StyleSheet.create({
     },
     cuadroGrande: {
         flex: 4,
-        borderColor: BLACK,
-        borderWidth: 3,
         flexDirection: 'column',
         alignContent: 'center',
     },
@@ -283,7 +292,7 @@ const styles = StyleSheet.create({
     },
     head: { height: 30, backgroundColor: '#808B97' },
     text: { margin: 6 },
-    boardContainer: { flex: 1, width: 260, height: 260, padding: 5, paddingBottom: 40, backgroundColor: '#fff' },
+    boardContainer: { flex: 1, width: 260, height: 260, left: '8%', bottom:'1%' },
 
     row: {
         flexDirection: 'row', backgroundColor: 'transparent', 
@@ -293,7 +302,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
 
     },
-    button: { alignSelf: 'center', width: 100, height: 30, backgroundColor: PRIMARY, borderRadius: 50, top: '30%' },
+    button: { alignSelf: 'center', width: 100, height: 30, backgroundColor: PRIMARY, borderRadius: 50 },
 
     btnText: { textAlign: 'center', color: 'white', paddingTop: 5 },
     oceanBox: { width: 26, height: 26, backgroundColor: 'cyan', borderRadius: 0, borderColor: 'blue', borderWidth: 0.18 },
@@ -307,9 +316,9 @@ const styles = StyleSheet.create({
     image: {
         width: 20, height: 20, alignSelf: 'center', resizeMode: 'center',
     },
-    turnText: { textAlign: 'center', color: PRIMARY, fontSize: 20 },
+    turnTitle: { textAlign: 'center', color: PRIMARY, fontSize: 22, fontWeight:'bold' },
+    turnText: { textAlign: 'center', color: SECONDARY, fontSize: 20 },
     boardImageContainer: { width: 260, height: 260 },
-
 });
 
 
