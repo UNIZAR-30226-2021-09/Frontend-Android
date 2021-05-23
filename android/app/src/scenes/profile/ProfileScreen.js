@@ -6,7 +6,7 @@ import DropDownPicker from 'react-native-dropdown-picker';
 import { getHistory } from '_api/game';
 import { getInfo } from '_api/user';
 import i18n from 'i18n-js';
-//import Clipboard from '@react-native-community/clipboard';
+import {Clipboard} from 'react-native';
 
 export default class ProfileScreen extends Component {
     constructor(props) {
@@ -64,6 +64,7 @@ export default class ProfileScreen extends Component {
         this.props.navigation.navigate("BoardResult");
     }
     //{item.state?"(Victoria)":"(Derrota)"}
+
     render() {
         let { myInfo } = this.state
         var total = myInfo.partidasGanadas + myInfo.partidasPerdidas;
@@ -103,7 +104,17 @@ export default class ProfileScreen extends Component {
                 </View>
                 <View style={styles.cuadroBotones}>
                     <View style={styles.cuadroPequeno}>
-                        <TouchableOpacity style={styles.shareButton} onPress={() => Alert.alert("Funcionalidad futura")}>
+                        <TouchableOpacity style={styles.shareButton} 
+                            onPress={()=>Clipboard.setString(
+                                'Nombre: '+ this.state.username +'\n'
+                                + 'Partidas jugadas: ' + total + '\n'
+                                + 'Victorias: ' + myInfo.partidasGanadas + '\n'
+                                + 'Derrotas: ' + myInfo.partidasPerdidas + '\n'
+                                + 'Torneos ganados' + myInfo.torneosGanados + '\n'
+                                + 'Winrate: ' + ((myInfo.partidasGanadas / total)*100).toFixed(2) + '\n'
+                                + 'Puntos: ' + myInfo.puntos + '\n'
+                                
+                            )}>
                             <Text style={styles.rankText}>
                             {i18n.t('Compartir')}
                             </Text>
