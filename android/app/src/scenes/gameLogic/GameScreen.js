@@ -7,6 +7,7 @@ import { Table, TableWrapper, Cell } from 'react-native-table-component'
 import { initBoard, attack, getSolution, initAttack, initShip, initCoord, IAmove, getCoord, getBoard, placeMovement, movement, rendirse } from '_api/match';
 import { socket, disparo } from '_api/user/socket';
 import { getShipColor, getBoardImage, getBoardColor } from '../../styles/gameStyle';
+import i18n from 'i18n-js';
 
 const GANADO = "GANADO"
 const PERDIDO = "PERDIDO"
@@ -118,7 +119,7 @@ export default class GameScreen extends Component {
                 if (data.tipo.includes("coloque sus barcos"))
                     msg = "Espere a que tu rival coloque los barcos";
                 else if (data.tipo.includes("fuera de los"))
-                    msg = "Estás disparando fuera del tablero";
+                    msg = "Estï¿½s disparando fuera del tablero";
                     ToastAndroid.show(msg, ToastAndroid.SHORT)
             }
         });

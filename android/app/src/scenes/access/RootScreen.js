@@ -23,7 +23,7 @@ const RootScreen = ({
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Login')}>
                     <Text style={styles.text}>
-                        Identificarse
+                        {i18n.t('Identificarse')}
                     </Text>
                 </TouchableOpacity>
             </View>

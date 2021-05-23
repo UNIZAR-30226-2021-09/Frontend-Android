@@ -12,8 +12,27 @@ import { setBoardImage, setShipColor, getShipColor, getBoardImageName, } from '.
 
 // Set the key-value pairs for the different languages you want to support.
 i18n.translations = {
-    en: { welcome: 'Hello', name: 'Charlie' },
-    es: { welcome: 'hola' },
+    en: { 
+        welcome: 'Hello', 
+        name: 'Charlie',
+        Identificarse: 'Identify',
+        ParCiegas: 'Random game',
+
+    },
+    es: { 
+        welcome: 'hola', 
+        Identificarse: 'Identificarse',
+        Registrase: 'Registrarse',
+        NomUsuario: 'Nombre de usuario',
+        Correo: 'Correo',
+        Cont: 'Contraseña',
+        RepCont: 'Repetir contraseña',
+        AceptCondi: 'Acepto las Condiciones de Uso y la Política de Privacidad',
+        Siguiente: 'Siguiente',
+        Volver: 'Volver',
+        ParCiegas: 'Partida a ciegas',
+
+    },
 };
 // Set the locale once at the beginning of your app.
 i18n.locale = 'en';
@@ -50,7 +69,13 @@ export default class SettingScreen extends Component {
     changeLanguage(select) {
         //setLanguage(select);
         //var color = getLanguage()
+        if(select=='es'){
+            this.changeEs();
+        }else{
+            this.changeEn();
+        }
         console.log("SELECT LANGUAGE " + select)
+
     }
     changeBoard(select) {
         setBoardImage(select);
@@ -67,7 +92,7 @@ export default class SettingScreen extends Component {
             <View style={styles.cuadroGrande}>
                 <View style={styles.titleContainer}>
                     <Text style={styles.title}>
-                            Configuraci�n
+                            Configuraci�n
                     </Text>
                 </View>
                 <View style={styles.opcion}>
