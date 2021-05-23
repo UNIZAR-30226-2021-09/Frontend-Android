@@ -11,7 +11,7 @@ import {
 } from '_api/match';
 import { getShipColor, getBoardImage, getBoardColor } from '../../styles/gameStyle';
 import i18n from 'i18n-js';
-
+import { playDrop } from '_assets/sound/PlaySound'
 import { ToastAndroid } from 'react-native';
 const NO_SELECT_COLOR = 'white';
 const SELECT_COLOR = 'cyan';
@@ -44,7 +44,8 @@ export default class PlaceShipsScreen extends Component {
             shipColors: [NO_SELECT_COLOR, NO_SELECT_COLOR, NO_SELECT_COLOR, NO_SELECT_COLOR, NO_SELECT_COLOR]
         }
     }
-    onClick(row, col) {
+
+    async onClick(row, col) {
         const { myBoard, IABoard, selectShip, shipDirection } = this.state
 
         //console.log(selectShip +'DIR' + shipDirection[selectShip - 1] )
@@ -53,7 +54,8 @@ export default class PlaceShipsScreen extends Component {
             const result = placeShip(row, col, selectShip, shipDirection[selectShip - 1], myBoard);
             if (result.error != SUCCESS) {
                 ToastAndroid.show(result.error, ToastAndroid.SHORT)
-            }
+            } 
+            await playDrop();
             this.setState({
                 myBoard: result.board,
                 //IABoard: IAmove(IABoard)

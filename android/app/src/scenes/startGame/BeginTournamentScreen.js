@@ -124,6 +124,7 @@ export default class BeginTournamentScreen extends Component {
                 participante4: this.state.Amigo3,
                 AccessToken: this.state.accessToken,
             };
+            console.log("PARTICIPANTES " + JSON.stringify(newUser))
             await beginTournament(newUser).then(data => {
                 console.log("Data de tour: " + data);
                 if (data != "error") {
