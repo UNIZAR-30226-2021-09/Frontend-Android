@@ -23,6 +23,25 @@ export const beginIA = user => {
     })
 }
 
+export const beginTournament = user => {
+    return axios.post('https://proyecto-software-09.herokuapp.com/game/torneo', {
+        nombreUsuario: user.Username,
+        participante2: user.participante2,
+        participante3: user.participante3,
+        participante4: user.participante4,
+        accessToken: user.AccessToken,
+    }).then(res => {
+        console.log("Begin Tournament")
+        console.log(res.data)
+        return res
+    }).catch(error => {
+        console.log("errorrrrrrrrrrrrrrr")
+        if (error.response) {
+            console.log(error.response.data);
+        }
+        return { error: "error", tipo: error.response.data };
+    })
+}
 export const beginFriend = user => {
     return axios.post('https://proyecto-software-09.herokuapp.com/game/newGame', {
         nombreUsuario: user.Username,
