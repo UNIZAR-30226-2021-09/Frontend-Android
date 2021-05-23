@@ -67,7 +67,7 @@ export default class ResultListScreen extends Component {
         return (<View style={styles.container}>
             <View style={styles.cuadroGrande}>
                 <View style={styles.cuadroPequeno}>
-                    <Text style={styles.title} > Partidas finalizadas </Text>
+                    <Text style={styles.title} > {i18n.t('PartidasFinalizadas')} </Text>
                 </View>
                 <View style={styles.cuadroPartidas}>
                     <View style={styles.itemPartida}>
@@ -80,11 +80,11 @@ export default class ResultListScreen extends Component {
                                         <View style={styles.friend}>
                                             <View style={styles.gameVictory}>
                                                 <View style={styles.gameItem}>
-                                                    <Text style={styles.friendText} > Partida contra {item.contrincante} ({item.resultado}) </Text>
+                                                    <Text style={styles.friendText} > {i18n.t('PartidaContra')} {item.contrincante} ({item.resultado}) </Text>
                                                 </View>
                                                 <View style={styles.gameButton}>
                                                     <TouchableOpacity style={styles.showButton} onPress={() => this.goToResult(item.id)}>
-                                                        <Text style={styles.rankText} > Ver partida </Text>
+                                                        <Text style={styles.rankText} > {i18n.t('VerPartida')} </Text>
                                                     </TouchableOpacity>
                                                 </View>
                                             </View>
@@ -95,11 +95,11 @@ export default class ResultListScreen extends Component {
                                         <View style={styles.friend}>
                                             <View style={styles.gameLose}>
                                                 <View style={styles.gameItem}>
-                                                    <Text style={styles.friendText} > Partida contra {item.contrincante} ({item.resultado}) </Text>
+                                                    <Text style={styles.friendText} > {i18n.t('PartidaContra')} {item.contrincante} ({item.resultado}) </Text>
                                                 </View>
                                                 <View style={styles.gameButton}>
                                                     <TouchableOpacity style={styles.showButton} onPress={() => this.goToResult(item.id)}>
-                                                        <Text style={styles.rankText} > Ver partida </Text>
+                                                        <Text style={styles.rankText} > {i18n.t('VerPartida')} </Text>
                                                     </TouchableOpacity>
                                                 </View>
                                             </View>
@@ -115,14 +115,14 @@ export default class ResultListScreen extends Component {
                     <View style={styles.cuadroPequeno}>
                         <TouchableOpacity style={styles.shareButton} onPress={() => Alert.alert("Funcionalidad futura")}>
                             <Text style={styles.rankText}>
-                                Compartir
+                            {i18n.t('Compartir')}
                             </Text>
                         </TouchableOpacity>
                     </View>
                     <View style={styles.cuadroPequeno}>
                         <TouchableOpacity style={styles.logOutButton} onPress={() => this.props.navigation.navigate('Root')}>
                             <Text style={styles.rankText}>
-                                Cerrar Sesi�n
+                            {i18n.t('CerrarSesion')}
                             </Text>
                         </TouchableOpacity>
                     </View>

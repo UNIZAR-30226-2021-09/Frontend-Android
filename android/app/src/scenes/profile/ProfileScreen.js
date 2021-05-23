@@ -72,18 +72,18 @@ export default class ProfileScreen extends Component {
                     <Text style={styles.title} > {this.state.username}</Text>
                 </View>
                 <View style={styles.cuadroPequeno}>
-                    <Text style={styles.text} > Email: {this.state.username}</Text>
+                    <Text style={styles.text} > {i18n.t('Correo')} {this.state.username}</Text>
                 </View>
                 <View style={styles.cuadroPequeno}>
                     <View style={styles.header}>
                         <View style={styles.cuadroPequeno}>
                         <TouchableOpacity style={styles.ranking} onPress={() => this.props.navigation.navigate('Ranking')}>
-                            <Text style={styles.rankText} > Ver Clasificacion </Text>
+                            <Text style={styles.rankText} > {i18n.t('VerClasificacion')} </Text>
                         </TouchableOpacity>
                         </View>
                         <View style={styles.cuadroPequeno}>
                             <TouchableOpacity style={styles.ranking} onPress={() => this.props.navigation.navigate('ResultList')}>
-                                <Text style={styles.rankText} > Historial de partidas </Text>
+                                <Text style={styles.rankText} > {i18n.t('HistoPartidas')} </Text>
                             </TouchableOpacity>
                         </View>
                     </View>
@@ -93,25 +93,25 @@ export default class ProfileScreen extends Component {
 
                 </View>
                 <View style={styles.cuadroPartidas}>
-                    <Text style={styles.infoText} > Partidas jugadas: {total}</Text>
-                    <Text style={styles.infoText} > Victorias: {myInfo.partidasGanadas} </Text>
-                    <Text style={styles.infoText} > Derrotas: {myInfo.partidasPerdidas}</Text>
-                    <Text style={styles.infoText} > Torneos ganados: {myInfo.torneosGanados}</Text>
-                    <Text style={styles.infoText} > Ratio de victorias: {total != 0 ? ((myInfo.partidasGanadas / total)*100).toFixed(2) + "%" : "No existen datos para calcular"}</Text>
-                    <Text style={styles.infoText} > Puntos :{myInfo.puntos}</Text>
+                    <Text style={styles.infoText} > {i18n.t('ParJugadas')} {total}</Text>
+                    <Text style={styles.infoText} > {i18n.t('Victorias')} {myInfo.partidasGanadas} </Text>
+                    <Text style={styles.infoText} > {i18n.t('Derrotas')} {myInfo.partidasPerdidas}</Text>
+                    <Text style={styles.infoText} > {i18n.t('TornGana')} {myInfo.torneosGanados}</Text>
+                    <Text style={styles.infoText} > {i18n.t('Ratio')} {total != 0 ? ((myInfo.partidasGanadas / total)*100).toFixed(2) + "%" : "No existen datos para calcular"}</Text>
+                    <Text style={styles.infoText} > {i18n.t('Puntos')}{myInfo.puntos}</Text>
                 </View>
                 <View style={styles.cuadroBotones}>
                     <View style={styles.cuadroPequeno}>
                         <TouchableOpacity style={styles.shareButton} onPress={() => Alert.alert("Funcionalidad futura")}>
                             <Text style={styles.rankText}>
-                                Compartir
+                            {i18n.t('Compartir')}
                             </Text>
                         </TouchableOpacity>
                     </View>
                     <View style={styles.cuadroPequeno}>
                         <TouchableOpacity style={styles.logOutButton} onPress={() => this.props.navigation.navigate('Root')}>
                             <Text style={styles.rankText}>
-                                Cerrar Sesi�n
+                            {i18n.t('CerrarSesion')}
                             </Text>
                         </TouchableOpacity>
                     </View>

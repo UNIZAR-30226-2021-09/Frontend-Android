@@ -145,12 +145,12 @@ export default class FriendRequestScreen extends Component {
         return (<View style={styles.container}>
             <View style={styles.cuadroGrande}>
                 <View style={styles.cuadroPequeno}>
-                        <Text style={styles.title} > Peticiones de amistad</Text>
+                        <Text style={styles.title} > {i18n.t('PetAmistad')}</Text>
                 </View>
                 <View style={styles.cuadroAmigos}>
                     <View style={styles.cuadro}>
                         <View style={styles.friendContainer}>
-                            <Text style={styles.text} > Recibidas:</Text>
+                            <Text style={styles.text} > {i18n.t('Recibidas')}</Text>
                         </View>
                         <View style={styles.friendContainer}>
                             <FlatList
@@ -165,12 +165,12 @@ export default class FriendRequestScreen extends Component {
                                                 </View>
                                                 <View style={styles.gameButton}>
                                                     <TouchableOpacity style={styles.acceptButton} onPress={() => this.acceptRequest(item)}>
-                                                        <Text style={styles.rankText} > Aceptar </Text>
+                                                        <Text style={styles.rankText} > {i18n.t('Aceptar')} </Text>
                                                     </TouchableOpacity>
                                                 </View>
                                                 <View style={styles.gameButton}>
                                                     <TouchableOpacity style={styles.rejectButton} onPress={() => this.dismissRequest(item)}>
-                                                        <Text style={styles.rankText} > Rechazar </Text>
+                                                        <Text style={styles.rankText} > {i18n.t('Rechazar')} </Text>
                                                     </TouchableOpacity>
                                                 </View>
                                             </View>
@@ -184,7 +184,7 @@ export default class FriendRequestScreen extends Component {
                     </View>
                     <View style={styles.cuadro}>
                         <View style={styles.friendContainer}>
-                            <Text style={styles.text} > Enviadas:</Text>
+                            <Text style={styles.text} > {i18n.t('Enviadas')}</Text>
                         </View>
                         <View style={styles.friendContainer}>
                             <FlatList
@@ -199,7 +199,7 @@ export default class FriendRequestScreen extends Component {
                                                     </View>
                                                     <View style={styles.gameButton}>
                                                         <TouchableOpacity style={styles.rejectButton} onPress={() => this.cancelRequest(item)}>
-                                                            <Text style={styles.rankText} > Cancelar </Text>
+                                                            <Text style={styles.rankText} > {i18n.t('Cancelar')} </Text>
                                                         </TouchableOpacity>
                                                     </View>
                                                 </View>

@@ -108,7 +108,7 @@ export default class BeginFriendScreen extends Component {
         return (<View style={styles.container}>
             <View style={styles.cuadroGrande}>
                 <View style={styles.cuadroPequeno}>
-                    <Text style={styles.title} > Desafiar amigo</Text>
+                    <Text style={styles.title} > {i18n.t('ParAmigo')}</Text>
                 </View>
                 <View style={styles.cuadroAmigos}>
                     {/*<View style={styles.friendContainer}>
@@ -145,7 +145,7 @@ export default class BeginFriendScreen extends Component {
                                 <Text style={styles.text} >{INVITAR}: {this.state.selectedFriend}</Text>
                                 <TouchableOpacity style={styles.confirmButton} onPress={() => this.send()}>
                                     <Text style={styles.buttonText}>
-                                        Enviar peticion
+                                    {i18n.t('EnvPeticion')}
                                     </Text>
                                 </TouchableOpacity>
                             </View>}

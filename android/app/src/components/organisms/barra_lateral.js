@@ -7,6 +7,7 @@ import { getIncomingList, getOutgoingList, accept, dismiss } from '_api/user';
 import { socket, aceptarInvitacionAmigo, aceptarChallenge, joinGame } from '_api/user/socket';
 import { acceptFriendGame, dismissFriendGame, gameIncomingRequest } from '_api/game';
 import { StackActions } from '@react-navigation/native';
+import i18n from 'i18n-js';
 
 export default class BarraLateral extends Component {
 
@@ -241,7 +242,7 @@ export default class BarraLateral extends Component {
                     <View style={styles.centeredView}>
                         <View style={styles.modalView}>
                             <View style={{ flex: 1 }}>
-                                <Text style={styles.modalHeaderText}>Peticiones de amistad</Text>
+                                <Text style={styles.modalHeaderText}>{i18n.t('PetAmistas')}</Text>
                             </View>
                             <View style={styles.friendList2}>
                                 {this.state.incomingList.length>0 ? <FlatList
@@ -256,12 +257,12 @@ export default class BarraLateral extends Component {
                                                     </View>
                                                     <View style={styles.gameButton}>
                                                         <TouchableOpacity style={styles.acceptButton} onPress={() => this.acceptRequest(item)}>
-                                                            <Text style={styles.rankText} > Aceptar </Text>
+                                                            <Text style={styles.rankText} >{i18n.t('Aceptar')}</Text>
                                                         </TouchableOpacity>
                                                     </View>
                                                     <View style={styles.gameButton}>
                                                         <TouchableOpacity style={styles.rejectButton} onPress={() => this.dismissRequest(item)}>
-                                                            <Text style={styles.rankText} > Rechazar </Text>
+                                                            <Text style={styles.rankText} > {i18n.t('Rechazar')} </Text>
                                                         </TouchableOpacity>
                                                     </View>
                                                 </View>
@@ -270,7 +271,7 @@ export default class BarraLateral extends Component {
                                     }}
                                     keyExtractor={(item, index) => index.toString()}
                                     style={styles.friendList2}
-                                />: <Text style={styles.noPetitions}>No hay peticiones nuevas</Text>
+                                />: <Text style={styles.noPetitions}>{i18n.t('NoHayPeticiones')}</Text>
                                 }
                             </View>
                             <View style={{ flexDirection: 'row', flex: 1, justifyContent: 'space-around' }}>
@@ -279,7 +280,7 @@ export default class BarraLateral extends Component {
                                         style={styles.modalButton}
                                         onPress={() => { this.setShowFriend() }}
                                     >
-                                        <Text style={styles.textStyle}>Cerrar</Text>
+                                        <Text style={styles.textStyle}>{i18n.t('Cerrar')}</Text>
                                     </TouchableOpacity>
                                 </View>
                             </View>
@@ -298,7 +299,7 @@ export default class BarraLateral extends Component {
                     <View style={styles.centeredView}>
                         <View style={styles.modalView}>
                             <View style={{ flex: 1 }}>
-                                <Text style={styles.modalHeaderText}>Peticiones de partidas amistosas</Text>
+                                <Text style={styles.modalHeaderText}>{i18n.t('PetPartAmis')}</Text>
                             </View>
                             <View style={styles.friendList2}>
                                 {this.state.challengeList.length > 0 ? <FlatList
@@ -313,12 +314,12 @@ export default class BarraLateral extends Component {
                                                     </View>
                                                     <View style={styles.gameButton}>
                                                         <TouchableOpacity style={styles.acceptButton} onPress={() => this.acceptGame(item.id, item.contrincante)}>
-                                                            <Text style={styles.rankText} > Aceptar </Text>
+                                                            <Text style={styles.rankText} > {i18n.t('Aceptar')} </Text>
                                                         </TouchableOpacity>
                                                     </View>
                                                     <View style={styles.gameButton}>
                                                         <TouchableOpacity style={styles.rejectButton} onPress={() => this.dismissGame(item.id)}>
-                                                            <Text style={styles.rankText} > Rechazar </Text>
+                                                            <Text style={styles.rankText} > {i18n.t('Rechazar')} </Text>
                                                         </TouchableOpacity>
                                                     </View>
                                                 </View>
@@ -327,7 +328,7 @@ export default class BarraLateral extends Component {
                                     }}
                                     keyExtractor={(item, index) => index.toString()}
                                     style={styles.friendList2}
-                                /> : <Text style={styles.noPetitions}>No hay peticiones nuevas</Text>
+                                /> : <Text style={styles.noPetitions}>{i18n.t('NoHayPeticiones')}</Text>
                                 }
                             </View>
                             <View style={{ flexDirection: 'row', flex: 1, justifyContent: 'space-around' }}>
@@ -336,7 +337,7 @@ export default class BarraLateral extends Component {
                                         style={styles.modalButton}
                                         onPress={() => { this.setShowGameRequest() }}
                                     >
-                                        <Text style={styles.textStyle}>Cerrar</Text>
+                                        <Text style={styles.textStyle}>{i18n.t('Cerrar')}</Text>
                                     </TouchableOpacity>
                                 </View>
                             </View>
@@ -353,7 +354,7 @@ export default class BarraLateral extends Component {
                     <View style={{ flex: 1 }}>
                         <TouchableOpacity style={styles.button} onPress={() => this.props.navigation.navigate('Profile')}>
                             <Text style={styles.profileText}>
-                                Mi Perfil
+                            {i18n.t('MiPerfil')}
                             </Text>
                         </TouchableOpacity>
                     </View>
@@ -378,7 +379,7 @@ export default class BarraLateral extends Component {
                             <TouchableOpacity style={styles.peticion} onPress={() => this.setShowFriend()}>
                                 <View style={{flex:4}}>
                                     <Text style={styles.peticionText}>
-                                            Peticiones de amistad
+                                    {i18n.t('PetAmistas')}
                                     </Text>
                                 </View>
                                 <View style={{flex: 1}}>
@@ -396,7 +397,7 @@ export default class BarraLateral extends Component {
                             <TouchableOpacity style={styles.peticion} onPress={() => this.setShowGameRequest()}>
                                 <View style={{ flex: 4 }}>
                                     <Text style={styles.peticionText}>
-                                        Invitaciones de amigos
+                                    {i18n.t('InvDeAmigos')}
                                     </Text>
                                 </View>
                                 <View style={{ flex: 1 }}>
@@ -413,7 +414,7 @@ export default class BarraLateral extends Component {
                     <View style={styles.cuadroPequeno}>
                         <View style={styles.cuadroAdd}>
                             <Text style={styles.text}>
-                                {"Mis amigos  "}
+                            {i18n.t('MisAmigos')}
                             </Text>
                             <TouchableOpacity style={styles.addButton} onPress={() => this.props.navigation.navigate('AddFriend')}>
                                 <Text style={styles.profileText}>

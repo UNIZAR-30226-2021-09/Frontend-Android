@@ -19,7 +19,7 @@ export default class AddFriendScreen extends Component {
     }
     async sendRequest() { 
         if (this.state.selectedFriend == "") {
-            Alert.alert("Introduzca un nombre o enlace");
+            Alert.alert(i18n.t('IntNomOEnl'));
             return "error";
         }
         var _username = await AsyncStorage.getItem('username');
@@ -34,9 +34,9 @@ export default class AddFriendScreen extends Component {
             console.log("Data de addFriend: " + data);
             if (data != "error") {
                 friendPetition({ Username: this.state.selectedFriend });
-                Alert.alert("Petici�n enviada");
+                Alert.alert(i18n.t('PetEnv'));
             } else {
-                alert('Error de addFriend');
+                alert(i18n.t('ErrAddFriend'));
             }
         }).catch(err => {
             console.log("error addFriend")
@@ -48,13 +48,13 @@ export default class AddFriendScreen extends Component {
         this.setState({
             estado: ": Esperando"
         })
-        Alert.alert("Enviado");
+        Alert.alert(i18n.t('Enviado'));
     }
     render() {
         return (<View style={styles.container}>
             <View style={styles.cuadroGrande}>
                 <View style={styles.cuadroPequeno}>
-                    <Text style={styles.title} > A�adir amigo</Text>
+                    <Text style={styles.title} >{i18n.t('AnAmigo')}</Text>
                 </View>
                 <View style={styles.cuadroAmigos}>
                     <TextInput
@@ -65,7 +65,7 @@ export default class AddFriendScreen extends Component {
                             })
                         }
                         value={this.state.selectedFriend}
-                        placeholder="Nombre de usuario"
+                        placeholder={i18n.t('NomUsuario')}
                     />
                     <TextInput
                         style={styles.input}
@@ -75,11 +75,11 @@ export default class AddFriendScreen extends Component {
                             })
                         }
                         value={this.state.selectedLink}
-                        placeholder="Enlace de invitacion"
+                        placeholder={i18n.t('EnlaceInv')}
                     />
                     <View style={styles.friendContainer}>
                         <TouchableOpacity style={styles.confirmButton} onPress={() => this.sendRequest()}>
-                            <Text style={styles.sendtext} > Enviar peticion </Text>
+                            <Text style={styles.sendtext} > {i18n.t('EnvPeticion')} </Text>
                         </TouchableOpacity>
                     </View>
                 </View>

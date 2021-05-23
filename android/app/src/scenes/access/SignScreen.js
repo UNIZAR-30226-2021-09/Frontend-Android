@@ -31,27 +31,27 @@ const SignScreen = ({
 
     async function handleSubmitButton () {
         if (!user) {
-            alert('Introduzca el nombre de usuario');
+            alert(i18n.t('IntNomUsuario'));
             return;
         }
         if (!mail) {
-            alert('Introduzca un correo electr�nico');
+            alert(i18n.t('IntCorreo'));
             return;
         }
         if (!mail.includes('@')) {
-            alert('Introduzca un correo electr�nico v�lido');
+            alert(i18n.t('IntCorreoValido'));
             return;
         }
         if (!pass) {
-            alert('Introduzca una contrase�a');
+            alert(i18n.t('IntCont'));
             return;
         }
         if (pass != repeatPass) {
-            alert('Las contrase�as no coinciden');
+            alert(i18n.t('ContError'));
             return;
         }
         if (!isSelected) {
-            alert('Debe aceptar las Condiciones de Uso y la Pol�tica de Privacidad para seguir');
+            alert(i18n.t('AceptCondErr'));
             return;
         }
         const hashPass = await Crypto.digestStringAsync(
@@ -95,37 +95,37 @@ const SignScreen = ({
             <View style={styles.headerContainer} >
                 <TouchableOpacity style={styles.gobackbutton} onPress={() => navigation.navigate('Root')}>
                     <Text style={styles.gobacktext}>
-                        Volver
+                    {i18n.t('Volver')}
                     </Text>
                 </TouchableOpacity>
             </View>
             <Text style={styles.title}>
-                Registrarse
+            {i18n.t('Registrase')}
                 </Text>
             <TextInput
                 style={styles.input}
                 onChangeText={onChangeUsername}
                 value={user}
-                placeholder="Nombre de usuario"
+                placeholder={i18n.t('NomUsuario')}
             />
             <TextInput
                 style={styles.input}
                 onChangeText={onChangeEmail}
                 value={mail}
-                placeholder="Correo"
+                placeholder={i18n.t('Correo')}
             />
             <TextInput
                 style={styles.input}
                 onChangeText={onChangePassword}
                 value={pass}
-                placeholder="Contrase�a"
+                placeholder={i18n.t('Cont')}
                 secureTextEntry={true}
             />
             <TextInput
                 style={styles.input}
                 onChangeText={onChangeRepeatPassword}
                 value={repeatPass}
-                placeholder="Repetir contrase�a"
+                placeholder={i18n.t('RepCont')}
                 secureTextEntry={true}
             />
             <View style={styles.checkboxContainer}>
@@ -134,7 +134,7 @@ const SignScreen = ({
                     onValueChange={setSelection}
                     style={styles.checkbox}
                 />
-                <Text style={styles.label}>Acepto las Condiciones de Uso y la Pol�tica de Privacidad</Text>
+                <Text style={styles.label}>{i18n.t('AceptCondi')}</Text>
 
             </View>
             <View style={styles.checkboxContainer} >

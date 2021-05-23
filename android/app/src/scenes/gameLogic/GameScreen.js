@@ -69,14 +69,14 @@ export default class GameScreen extends Component {
             //console.log("Data de getBoard: " + data);
             if (data != "error") {
                 if (data.myState == MITURNO) 
-                    msg = "Tu turno"
+                    msg = i18n.t('TuTurno')
                 else if (data.myState == TURNORIVAL)
-                    msg = "Turno del rival"
+                    msg = i18n.t('TurnoRival')
 
                 if (fin && ganador)
-                    msg = "Has ganado";
+                    msg = i18n.t('HasGanado');
                 else if (fin)
-                    msg = "Has perdido";
+                    msg = i18n.t('HasGanado');
                 console.log("TURNO:    ---" + this.state.board.myState + fin + ganador + msg)
 
                 this.setState(
@@ -117,9 +117,9 @@ export default class GameScreen extends Component {
             } else {
                 var msg = data.tipo
                 if (data.tipo.includes("coloque sus barcos"))
-                    msg = "Espere a que tu rival coloque los barcos";
+                    msg = i18n.t('EsperarRival');
                 else if (data.tipo.includes("fuera de los"))
-                    msg = "Est�s disparando fuera del tablero";
+                    msg = i18n.t('FueraTablero');
                     ToastAndroid.show(msg, ToastAndroid.SHORT)
             }
         });
@@ -157,7 +157,7 @@ export default class GameScreen extends Component {
                     </View>);
                 }
                 else if (board.myState == TURNORIVAL ) {
-                    return (<TouchableWithoutFeedback onPress={() => ToastAndroid.show("Es turno de tu rival", ToastAndroid.SHORT) }>
+                    return (<TouchableWithoutFeedback onPress={() => ToastAndroid.show(i18n.t('TurnoRival'), ToastAndroid.SHORT) }>
                         <View style={oceanBox}>
                         </View>
                     </TouchableWithoutFeedback>);
@@ -234,12 +234,12 @@ export default class GameScreen extends Component {
                     {this.state.fin ?
                         <View style={{ flex: 1 }}>
                             <TouchableHighlight style={styles.button} onPress={() => this.props.navigation.navigate('Result')}>
-                                    <Text style={styles.btnText}> Ver resultados</Text>
+                                    <Text style={styles.btnText}> {i18n.t('VerResultados')}</Text>
                             </TouchableHighlight>
                         </View> :
                         <View style={{ flex: 1 }}>
                             <TouchableHighlight style={styles.button} onPress={() => this.giveUp()}>
-                                <Text style={styles.btnText}> Rendirse</Text>
+                                <Text style={styles.btnText}> {i18n.t('Rendirse')}</Text>
                             </TouchableHighlight>
                         </View>
                     }
@@ -249,7 +249,7 @@ export default class GameScreen extends Component {
                     <View style={{ flex: 1 }}>
                             
                         <TouchableHighlight style={styles.button} onPress={() => this.props.navigation.navigate('Home')}>
-                            <Text style={styles.btnText}> Salir</Text>
+                            <Text style={styles.btnText}> {i18n.t('Salir')}</Text>
                         </TouchableHighlight>
                     </View>
                 </View>

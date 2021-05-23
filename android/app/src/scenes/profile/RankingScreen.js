@@ -70,16 +70,16 @@ export default class FriendRequestScreen extends Component {
                     <View style={styles.cuadroCabecera}>  
                         <View style={styles.friendItem}>
                             <View style={styles.nameInfo}>
-                                <Text style={styles.rankUsername} > Nombre </Text>
+                                <Text style={styles.rankUsername} > {i18n.t('Nombre')} </Text>
                             </View>
                             <View style={styles.rankInfo}>
-                                <Text style={styles.rankScore2} > Puntos </Text>
+                                <Text style={styles.rankScore2} > {i18n.t('Puntos')} </Text>
                             </View>
                             <View style={styles.rankInfo}>
-                                <Text style={styles.rankScore2} > Partidas perdidas </Text>
+                                <Text style={styles.rankScore2} > {i18n.t('PartidasPerdidas')} </Text>
                             </View>
                             <View style={styles.rankInfo}>
-                                <Text style={styles.rankScore2} > Partidas ganadas </Text>
+                                <Text style={styles.rankScore2} > {i18n.t('PartidasGanadas')} </Text>
                             </View>
                         </View>
                     </View>

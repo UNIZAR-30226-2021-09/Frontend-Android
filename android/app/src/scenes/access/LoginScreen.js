@@ -15,11 +15,11 @@ const LoginScreen = ({
 
     async function handleSubmitButton() {
         if (!user) {
-            alert('Introduzca el nombre de usuario');
+            alert(i18n.t('IntNomUsuario'));
             return;
         }
         if (!pass) {
-            alert('Introduzca la contrase�a');
+            alert('IntCont');
             return;
         }
         /*if (!mail) {
@@ -58,31 +58,31 @@ const LoginScreen = ({
         <View style={styles.headerContainer}>
             <TouchableOpacity style={styles.gobackbutton} onPress={() => navigation.navigate('Root')}>
                 <Text style={styles.gobacktext}>
-                    Volver
+                    {i18n.t('Volver')}
                     </Text>
             </TouchableOpacity>
         </View>
         <Text style={styles.title}>
-            Identificarse
+        {i18n.t('Identificarse')}
         </Text>
         <TextInput
             style={styles.input}
             onChangeText={onChangeUsername}
             value={user}
-            placeholder="Nombre de usuario"
+            placeholder={i18n.t('NomUsuario')}
         />
         <TextInput
             style={styles.input}
             onChangeText={onChangeMail}
             value={mail}
-            placeholder="Correo"
+            placeholder={i18n.t('Correo')}
         />
         <TextInput
             style={styles.input}
             onChangeText={onChangePassword}
             value={pass}
             secureTextEntry={true}
-            placeholder="Contrase�a"
+            placeholder={i18n.t('Cont')}
         />
         <View style={styles.checkboxContainer}>
             <TouchableOpacity style={styles.button} onPress={() => handleSubmitButton()}>

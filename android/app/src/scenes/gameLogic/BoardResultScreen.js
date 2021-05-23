@@ -54,9 +54,9 @@ export default class BoardResultScreen extends Component {
             //console.log("Data de getBoard: " + JSON.stringify(data));
             if (data != "error") {
                 if (data.myState == MITURNO)
-                    msg = "Victoria"
+                    msg = i18n.t('Victoria')
                 else if (data.myState == TURNORIVAL)
-                    msg = "Derrota"
+                    msg = i18n.t('Derrota')
                 this.setState(
                     { board: data, turnMsg: msg }
                 )
@@ -163,7 +163,7 @@ export default class BoardResultScreen extends Component {
                 <View style={styles.startButtonContainer}>
                     <View style={{ flex: 1 }}>
                         <TouchableHighlight style={styles.button} onPress={() => this.props.navigation.navigate('ResultList')}>
-                            <Text style={styles.btnText}> Volver</Text>
+                            <Text style={styles.btnText}> {i18n.t('Volver')}</Text>
                         </TouchableHighlight>
                     </View>
                     <View style={{ flex: 1, top:'2%' }}>

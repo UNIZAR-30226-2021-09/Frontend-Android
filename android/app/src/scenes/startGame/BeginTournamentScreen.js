@@ -287,7 +287,7 @@ export default class BeginTournamentScreen extends Component {
                     <View style={styles.cuadroPequeno2}>
                         
                     <Text style={styles.titulo}>
-                        Selecciona tres amigos
+                    {i18n.t('Selec3Amigos')}
                     </Text>
 
                     <FlatList
