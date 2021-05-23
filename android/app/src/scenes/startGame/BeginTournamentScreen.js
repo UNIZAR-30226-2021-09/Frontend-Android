@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
-import { SafeAreaView, View, Text, TouchableHighlight, StyleSheet, AsyncStorage, TextInput, TouchableOpacity, FlatList, Button, Alert, Image } from 'react-native';
+import { SafeAreaView, View, Text, TouchableHighlight, StyleSheet, AsyncStorage, TextInput, TouchableOpacity, FlatList, ToastAndroid } from 'react-native';
 import { WHITE, PRIMARY, SECONDARY,BLACK } from '../../styles/colors';
 import Modal from 'react-native-modal';
 import { getFriendList } from '_api/user';
 import { getIncomingList, getOutgoingList, accept, dismiss } from '_api/user';
 import { socket, aceptarInvitacionAmigo, aceptarChallenge, joinGame } from '_api/user/socket';
-import { acceptFriendGame, dismissFriendGame, gameIncomingRequest } from '_api/game';
+import { acceptFriendGame, dismissFriendGame, gameIncomingRequest, beginTournament } from '_api/game';
 import { StackActions } from '@react-navigation/native';
 import { BarraLateral } from '_organisms'
 import i18n from 'i18n-js';
@@ -36,58 +36,24 @@ export default class BeginTournamentScreen extends Component {
             enable1: false,
             enable2: false,
             enable3: false,
+            restantes: 3,
         }
-    }
-    setShowFriend() {
-        const { showFriend } = this.state
-        this.setState ( {
-            showFriend: !showFriend
-        })
-    }
-
-    setShowGameRequest() {
-        const { showGameRequest } = this.state
-        this.setState({
-            showGameRequest: !showGameRequest
-        })
-        console.log("SHOW" + showGameRequest)
     }
 
     async componentDidMount() {
         var _username = await AsyncStorage.getItem('username');
         var _accessToken = await AsyncStorage.getItem('userToken');
         this.setState({ username: _username, accessToken: _accessToken });
-        var newUser = {
-            Username: _username,
-            AccessToken: _accessToken
-        };
-        console.log("USER" + newUser.Username);
-        await socket.on('llegaInvitacion', () => {
-            console.log("-------- Socket llegaInvitacion2 a " + newUser.Username)
-            this.updateIncoming(newUser);
 
-        })
-        await socket.on('llegaAceptarInvitacionAmigo',  () => {
-            console.log("--------Socket llegaAceptarInvitacionAmigo a " + newUser.Username)
-            this.updateIncoming(newUser);
-            this.updateFriendList(newUser);
-        });
-        await socket.on('llegaChallenge', () => {
-            console.log("--------Socket llegaChallenge a " + newUser.Username)
-            this.updateChallengeList(newUser);
-        });
+        await this.updateFriendList();
 
-        /*await socket.on('llegaAceptarChallenge', gameid => {
-            console.log("--------Socket llegaAceptarChallenge a " + newUser.Username + "GAME: " + gameid)
-            joinGame(gameid)
-        });*/
-        //console.log("LIST" + this.state.incomingList)
-        await this.updateFriendList(newUser);
-        await this.updateIncoming(newUser);
-        await this.updateChallengeList(newUser);
     }
     
-    async updateFriendList(newUser) {
+    async updateFriendList() {
+        var newUser = {
+            Username: this.state.username,
+            AccessToken: this.state.accessToken
+        };
         await getFriendList(newUser).then(data => {
             console.log("Data de barra lateral: " + data);
             if (data != "error") {
@@ -106,225 +72,195 @@ export default class BeginTournamentScreen extends Component {
         }); 
     }
 
-    async updateIncoming(newUser) {
-        await getIncomingList(newUser).then(data => {
-            console.log("Data de getIncomingList: " + data);
-            if (data != "error") {
-                this.setState(
-                    {
-                        incomingList: data,
-                        newPetition: data.length
-                    }
-                )
-            } else {
-                alert('Error de getIncomingList');
-            }
-        }).catch(err => {
-            console.log("error getIncomingList")
-            console.log(err)
-            return "error"
-        });
-    }
-    async updateChallengeList(newUser) {
-        await gameIncomingRequest(newUser).then(data => {
-            console.log("Data de updateChallengeList: " + JSON.stringify(data));
-            if (data != "error") {
-                this.setState(
-                    {
-                        challengeList: data,
-                        newRequest: data.length
-                    }
-                )
-                console.log("Data de challengeList: " + JSON.stringify(this.state.challengeList));
-
-            } else {
-                alert('Error de updateChallengeList');
-            }
-        }).catch(err => {
-            console.log("error updateChallengeList")
-            console.log(err)
-            return "error"
-        });
-    }
-    async acceptRequest(friendname) {
-        var newUser = {
-            Username: this.state.username,
-            AccessToken: this.state.accessToken,
-            Friendname: friendname
-        };
-        console.log(newUser);
-        await accept(newUser).then(data => {
-            console.log("Data de acceptRequest: " + data);
-            if (data != "error") {
-                console.log("Aceptado");
-                aceptarInvitacionAmigo({ Username: friendname });
-            } else {
-                alert('Error de acceptRequest');
-            }
-        }).catch(err => {
-            console.log("error acceptRequest")
-            console.log(err)
-            return "error"
-        });
-        this.updateIncoming(newUser);
-    }
-
-    async dismissRequest(friendname) {
-        var newUser = {
-            Username: this.state.username,
-            AccessToken: this.state.accessToken,
-            Friendname: friendname
-        };
-        console.log(newUser);
-        await dismiss(newUser).then(data => {
-            console.log("---Data de dismissRequest: " + data);
-            if (data != "error") {
-                console.log("Rechazado");
-            } else {
-                alert('Error de dismissRequest');
-            }
-        }).catch(err => {
-            console.log("error dismissRequest")
-            console.log(err)
-            return "error"
-        });
-        this.updateIncoming(newUser);
-    }
-    async acceptGame(gameID, contrincante) {
-        var newUser = {
-            Username: this.state.username,
-            AccessToken: this.state.accessToken,
-            GameId: gameID
-        };
-        console.log(newUser);
-        await acceptFriendGame(newUser).then(data => {
-            console.log("Data de acceptRequest: " + data);
-            if (data != "error") {
-                console.log("Aceptado");
-                aceptarChallenge({ Username: contrincante, GameId: gameID });
-                joinGame(gameID);
-            } else {
-                alert('Error de acceptRequest');
-            }
-        }).catch(err => {
-            console.log("error acceptRequest")
-            console.log(err)
-            return "error"
-        });
-        this.updateChallengeList(newUser);
-    }
-
-    async dismissGame(gameID) {
-        var newUser = {
-            Username: this.state.username,
-            AccessToken: this.state.accessToken,
-            GameId: gameID
-        };
-        console.log(newUser);
-        await dismissFriendGame(newUser).then(data => {
-            console.log("---Data de dismissRequest: " + data);
-            if (data != "error") {
-                console.log("Rechazado");
-            } else {
-                alert('Error de dismissRequest');
-            }
-        }).catch(err => {
-            console.log("error dismissRequest")
-            console.log(err)
-            return "error"
-        });
-        this.updateChallengeList(newUser);
-    }
-
-    async primeraSeleccion(item,index){
-        if (this.state.enable1==false){
-        this.setState({Amigo1:item});
-        console.log("Primer amigo " + item);
-        this.setState({enable1:true});
-        var extra=this.state.friendList;
-        extra.splice(index,index); 
-        this.setState({friendList:extra});
-        console.log("extra es "+ extra);
+    async primeraSeleccion(item, index) {
+        if (!this.state.enable1){
+            this.setState({Amigo1:item});
+            console.log("Primer amigo " + item);
+            this.setState({ enable1: true, restantes:2 });
+            var extra=this.state.friendList;
+            extra.splice(index, 1);
+            this.setState({ friendList: extra});
+            console.log("extra es " + extra);
         }else{
-            if (this.state.enable2==false){
+            if (!this.state.enable2){
                 this.setState({Amigo2:item});
                 console.log("Segundo amigo " + item);
-                this.setState({enable2:true});
+                this.setState({ enable2: true, restantes: 1 });
                 var extra=this.state.friendList;
-                extra.splice(index,index); 
-                this.setState({friendList:extra});
+                extra.splice(index,1); 
+                this.setState({ friendList: extra});
                 console.log("extra es "+ extra);
             }else{
                 this.setState({Amigo3:item});
                 console.log("Tercer amigo " + item);
-                this.setState({enable3:true});
+                this.setState({ enable3: true, restantes: 0 });
                 var extra=this.state.friendList;
-                extra.splice(index,index); 
-                this.setState({friendList:extra});
+                extra.splice(index,1); 
+                this.setState({ friendList: extra });
                 console.log("extra es "+ extra);
             }
         }
     }
-
-    /*
-    <View style={styles.connectFriend}>
-                                            <TouchableOpacity
-                                            disabled={this.state.enable1}
-                                            onPress={(item) => this.primeraSeleccion(index)}
-                                            >
-                                                <Text style={styles.friendText}>
-                                                
-                                                    {item}
-                                                </Text>
-                                            </TouchableOpacity>
-                                        </View>
-    */
+    async vaciar() {
+        await this.updateFriendList();
+        this.setState({
+            Amigo1: "",
+            Amigo2: "",
+            Amigo3: "",
+            enable1: false,
+            enable2: false,
+            enable3: false,
+            restantes:3
+        })
+    }
+    async startGame() {
+        let { restantes } = this.state
+        console.log(restantes+"RESTANTES")
+        if (restantes == 0) {
+            var newUser = {
+                Username: this.state.username,
+                participante2: this.state.Amigo1,
+                participante3: this.state.Amigo2,
+                participante4: this.state.Amigo3,
+                AccessToken: this.state.accessToken,
+            };
+            await beginTournament(newUser).then(data => {
+                console.log("Data de tour: " + data);
+                if (data != "error") {
+                    console.log("No ha habido fallo al comunicarse con el server " + data)
+                    //Ahora hacer que muestre un mensaje u otro dependiendo del resultado
+                    if (data.mensaje) {
+                        //ToastAndroid.show('No hay nadie esperando partida, cuando aparezca un contrincante se añadira la partida a tu lista de partidas', ToastAndroid.SHORT);
+                        //this.setState({ textValue: 'No hay nadie esperando partida, cuando aparezca un contrincante se añadira la partida a tu lista de partidas' })
+                    } else {
+                        //Aqui se ha encontrado partida asi que redirige a la partida 
+                        ToastAndroid.show('Se ha añadido una partida', ToastAndroid.SHORT);
+                        //this.props.navigation.navigate('Home');
+                    }
+                } else {
+                    alert('Error de tour');
+                }
+            }).catch(err => {
+                console.log("error tour")
+                console.log(err)
+                return "error"
+            });
+            //this.props.navigation.navigate('Home');
+        } else if (restantes == 1) {
+            ToastAndroid.show('Elija ' + restantes + ' amigo más', ToastAndroid.SHORT);
+        } else {
+            ToastAndroid.show('Elija ' + restantes + ' amigos más', ToastAndroid.SHORT);
+        }
+    }
     render() {
-
+        let { restantes } = this.state
         return (
             <View style={styles.container}>
-                    <View style={styles.cuadroPequeno2}>
-                        
-                    <Text style={styles.titulo}>
-                        Selecciona tres amigos
-                    </Text>
-
-                    <FlatList
-                        data={this.state.friendList}
-                        
-
-                        renderItem={({ item, index }) => {
-                            
-                            return (
-                                <View style={styles.friend}>
-                                    
-                                        <View style={styles.connectFriend}>
-                                            <TouchableOpacity
-                                            disabled={this.state.enable3}
-                                            onPress={() => {this.primeraSeleccion(item,index)}}
-                                            >
-                                                <Text style={styles.friendText}>
-                                                    {item}
-                                                </Text>
-                                            </TouchableOpacity>
-                                        </View>
-
-
-
-                                    
-                                </View>
-                                
-                                
-                            );
-                            
-                        }}
-
-
-
-                        keyExtractor={(item, index) => index.toString()}
-                        style={styles.friendContainer}
-                    />
+                <View style={styles.cuadroGrande}>
+                    <View style={styles.cuadroPequeno}>
+                        <Text style={styles.titulo}>
+                                Torneo
+                        </Text>
                     </View>
+                    <View style={styles.cuadroContenido}>
+                        <View style={styles.cuadroAmigos}>
+
+                            <Text style={styles.seleccionar}>
+                                {restantes != 0 ? " Selecciona "+ restantes +" amigos:": "Comienza el torneo"}
+                            </Text>
+                            <FlatList
+                                data={this.state.friendList}
+                                renderItem={({ item, index }) => {
+                                    return (
+                                        <View style={styles.friend}>
+                                    
+                                                <View style={styles.connectFriend}>
+                                                    <TouchableOpacity
+                                                    disabled={this.state.enable3}
+                                                    onPress={() => {this.primeraSeleccion(item,index)}}
+                                                    >
+                                                        <Text style={styles.friendText}>
+                                                            {item}
+                                                        </Text>
+                                                    </TouchableOpacity>
+                                                </View>
+                                        </View>
+                                    );
+                                }}
+                                keyExtractor={(item, index) => index.toString()}
+                                style={styles.friendContainer}
+                                    />
+                        </View>
+                        <View style={styles.cuadroTorneo}>
+                            <View style={styles.division}>
+                                <View style={styles.semifinal}>
+                                    <View style={styles.final}>
+                                        <Text style={styles.casillaFinal}>
+                                        </Text>
+                                        <View style={styles.lineaHorizontalEndFinal} />
+                                        <Text style={{ top: '15%', color: PRIMARY, fontWeight:'bold' }}>
+                                            vs
+                                        </Text>
+                                    </View>
+                                    <View style={styles.lineaVerticalFinal} />
+                                </View>
+                                <View style={styles.semifinal}>
+                                    <View style={styles.final}>
+                                        <View style={styles.lineaHorizontalStartFinal} />
+                                        <Text style={styles.casillaFinal2}>
+                                        </Text>
+                                    </View>
+                                    <View style={styles.lineaVerticalFinal} />
+                                </View>
+                            </View>
+                            <View style={styles.division}>
+                                <View style={styles.semi}>
+                                    <View style={styles.lineaHorizontalEnd} />
+                                    <View style={styles.lineaVertical} />
+                                    <Text style={styles.casilla}>
+                                        {this.state.username}
+                                    </Text>
+                                </View>
+                                <View style={styles.semi}>
+                                    <View style={styles.lineaHorizontalStart} />
+                                    <View style={styles.lineaVertical} />
+                                    <Text style={styles.casilla}>
+                                        {this.state.Amigo1}
+                                    </Text>
+                                </View>
+                                <View style={styles.semi}>
+                                    <View style={styles.lineaHorizontalEnd} />
+                                    <View style={styles.lineaVertical} />
+                                    <Text style={styles.casilla}>
+                                        {this.state.Amigo2}
+                                    </Text>
+                                </View>
+                                <View style={styles.semi}>
+                                    <View style={styles.lineaHorizontalStart} />
+                                    <View style={styles.lineaVertical} />
+                                    <Text style={styles.casilla}>
+                                        {this.state.Amigo3}
+                                    </Text>
+                                </View>
+                            </View>
+                        </View>
+
+                    </View>
+                    <View style={styles.cuadroBoton}>
+                        <View style={{ flex: 1 }}>
+
+                            <TouchableHighlight style={styles.button} onPress={() => this.vaciar()}>
+                                <Text style={styles.btnText}> Vaciar</Text>
+                            </TouchableHighlight>
+                        </View>
+                        <View style={{ flex: 1 }}>
+                            <TouchableHighlight style={styles.button} onPress={() => this.startGame()}>
+                                <Text style={styles.btnText}> Comenzar</Text>
+                            </TouchableHighlight>
+                        </View>
+                    </View>
+                    </View>
+
                 <BarraLateral navigation={this.props.navigation} />
             </View>
         );
@@ -340,14 +276,115 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         
     },
-    
+    division: {
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'flex-start',
+        top:'-10%'
+    },
+    semi: {
+        flex: 1,
+        flexDirection: 'column',
+        justifyContent: 'center'
+    },
+    semifinal: {
+        flex: 1,
+        flexDirection: 'column',
+        justifyContent: 'flex-end'
+    },
+    final: {
+        flexDirection: 'row',
+        flex: 1,
+        justifyContent: 'center'
+    },
+    casilla: {
+        width: '90%',
+        height: '25%',
+        backgroundColor: SECONDARY,
+        color: PRIMARY,
+        textAlign: 'center',
+        textAlignVertical: 'center',
+        fontSize: 14,
+        borderColor: PRIMARY,
+        borderWidth:1
+    },
+    casillaFinal: {
+        width: '50%',
+        height: '50%',
+        backgroundColor: SECONDARY,
+        color: PRIMARY,
+        textAlign: 'center',
+        textAlignVertical: 'center',
+        fontSize: 14,
+        borderColor: PRIMARY,
+        borderWidth: 1,
+        alignSelf: 'center',
+        top: '15%',
+        left:'90%'
+    },
+    casillaFinal2: {
+        width: '50%',
+        height: '50%',
+        backgroundColor: SECONDARY,
+        color: PRIMARY,
+        textAlign: 'center',
+        textAlignVertical: 'center',
+        fontSize: 14,
+        borderColor: PRIMARY,
+        borderWidth: 1,
+        alignSelf: 'center',
+        top: '15%',
+        right: '90%'
+    },
+    lineaVertical: {
+        height: '50%',
+        width: 1,
+        backgroundColor: PRIMARY,
+        alignSelf:'center'
+    },
+    lineaVerticalFinal: {
+        height: '50%',
+        width: 1,
+        backgroundColor: PRIMARY,
+        alignSelf: 'center',
+        top:'13%'
+    },
+    lineaHorizontalEnd: {
+        height: 1,
+        width: '50%',
+        backgroundColor: PRIMARY,
+        alignSelf: 'flex-end'
+    },
+    lineaHorizontalStart: {
+        height: 1,
+        width: '50%',
+        backgroundColor: PRIMARY,
+        alignSelf: 'flex-start'
+    },
+    lineaHorizontalEndFinal: {
+        height: 1,
+        width: '50%',
+        backgroundColor: PRIMARY,
+        alignSelf: 'flex-end',
+        left: '90%'
+    },
+    lineaHorizontalStartFinal: {
+        height: 1,
+        width: '50%',
+        backgroundColor: PRIMARY,
+        alignSelf: 'flex-end',
+        right:'70%'
+    },
     titulo:{
         flex: 1,
         height: 100,
-        
         fontSize: 25,
         alignSelf: 'center',
-
+    },
+    seleccionar: {
+        fontSize: 16,
+        alignSelf: 'center',
+        top:'-4%'
     },
     container: {
         flex: 1,
@@ -356,13 +393,14 @@ const styles = StyleSheet.create({
     },
     cuadroPequeno: {
         flex: 1,
-        borderColor: BLACK,
         flexDirection: 'column',
     },
-    cuadroPequeno2: {
-        flex: 6,
+    cuadroGrande: {
+        flex: 4,
         borderColor: BLACK,
+        borderWidth: 3,
         flexDirection: 'column',
+        alignContent: 'center',
     },
     cuadroAdd: {
         flex: 1,
@@ -403,10 +441,22 @@ const styles = StyleSheet.create({
         borderColor: BLACK,
         borderWidth: 2,
     },
-    cuadroAmigos: {
+    cuadroTorneo: {
         flex: 4,
-        borderColor: BLACK,
-        borderWidth: 2,
+        flexDirection: 'column',
+        justifyContent: 'center'
+    },
+    cuadroContenido: {
+        flex: 4,
+        flexDirection: 'row'
+    },
+    cuadroAmigos: {
+        flex: 2,
+        flexDirection: 'column'
+    },
+    cuadroBoton: {
+        flex: 1,
+        flexDirection: 'row'
     },
     text: {
         fontSize: 12,
@@ -600,5 +650,8 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         resizeMode: 'center',
     },
+    button: { alignSelf: 'center', width: 100, height: 30, backgroundColor: PRIMARY, borderRadius: 50 },
+
+    btnText: { textAlign: 'center', color: 'white', paddingTop: 5 },
 });
 
