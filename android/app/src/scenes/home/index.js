@@ -70,7 +70,7 @@ const HomeScreen = ({ navigation }) => {
                     <View style={styles.cuadroBoton}>
                         <TouchableOpacity style={styles.cubito} onPress={() => navigation.navigate('BeginFriend')}>
                             <Text style={styles.textoCubito}>
-                                    Desafiar amigo
+                            {i18n.t('ParAmigo')}
                             </Text>
                         </TouchableOpacity>
                     </View>
@@ -79,14 +79,14 @@ const HomeScreen = ({ navigation }) => {
                     <View style={styles.cuadroBoton}>
                         <TouchableOpacity style={styles.cubito} onPress={() => navigation.navigate('BeginTournament')}>
                             <Text style={styles.textoCubito}>
-                                Modo torneo
+                            {i18n.t('ParTorneo')}
                             </Text>
                         </TouchableOpacity>
                     </View>
                     <View style={styles.cuadroBoton}>
                         <TouchableOpacity style={styles.cubito} onPress={() => navigation.navigate('OngoingGame')}>
                             <Text style={styles.textoCubito}>
-                                Partidas en curso
+                            {i18n.t('PartCurso')}
                             </Text>
                         </TouchableOpacity>
                     </View>
@@ -95,7 +95,7 @@ const HomeScreen = ({ navigation }) => {
                     <View style={styles.cuadroBoton}>
                         <TouchableOpacity style={styles.cubito} onPress={() => startGame("IA")}>
                             <Text style={styles.textoCubito}>
-                                Partida contra IA
+                            {i18n.t('ParIA')}
                             </Text>
                         </TouchableOpacity>
                     </View>

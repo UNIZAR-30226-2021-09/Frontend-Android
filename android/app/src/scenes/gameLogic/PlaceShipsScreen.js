@@ -109,7 +109,7 @@ export default class PlaceShipsScreen extends Component {
             this.props.navigation.navigate('Game');
         }
         else
-            ToastAndroid.show("Coloque todos los barcos", ToastAndroid.SHORT);
+            ToastAndroid.show(i18n.t('ColoqueBarcos'), ToastAndroid.SHORT);
     }
     render() {
         let { myBoard, shipDirection, shipColors } = this.state;
@@ -180,12 +180,12 @@ export default class PlaceShipsScreen extends Component {
                 <View style={styles.startButtonContainer}>
                     <View style={{ flex: 1 }}>
                         <TouchableHighlight style={styles.button} onPress={() => this.props.navigation.navigate("OngoingGame")}>
-                            <Text style={styles.btnText}> Volver </Text>
+                            <Text style={styles.btnText}> {i18n.t('Volver')} </Text>
                         </TouchableHighlight>
                     </View>
                     <View style={{ flex: 1 }}>
                     <TouchableHighlight style={styles.button} onPress={() => this.start()}>
-                            <Text style={styles.btnText}> Comenzar</Text>
+                            <Text style={styles.btnText}> {i18n.t('Comenzar')}</Text>
                         </TouchableHighlight>
                     </View>
                 </View>

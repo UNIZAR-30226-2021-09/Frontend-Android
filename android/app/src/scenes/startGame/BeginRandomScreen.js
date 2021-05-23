@@ -29,10 +29,10 @@ export default class BeginRandomScreen extends Component {
                 //Ahora hacer que muestre un mensaje u otro dependiendo del resultado
                 if (data.mensaje) {
                     //ToastAndroid.show('No hay nadie esperando partida, cuando aparezca un contrincante se añadira la partida a tu lista de partidas', ToastAndroid.SHORT);
-                    this.setState({ textValue: 'No hay nadie esperando partida, cuando aparezca un contrincante se añadira la partida a tu lista de partidas' })
+                    this.setState({ textValue: i18n.t('PartCiegasError')} )
                 } else {
                     //Aqui se ha encontrado partida asi que redirige a la partida 
-                    ToastAndroid.show('Se ha añadido una partida', ToastAndroid.SHORT);
+                    ToastAndroid.show(i18n.t('SeHaAnadidoPartidaCiegas'), ToastAndroid.SHORT);
                     //this.props.navigation.navigate('Home');
                 }
             } else {
@@ -52,11 +52,11 @@ export default class BeginRandomScreen extends Component {
             <View style={styles.container}>
             <View style={styles.cuadroGrande}>
                 <View style={styles.cuadroPequeno}>
-                    <Text style={styles.title} > Partida a ciegas</Text>
+                    <Text style={styles.title} > {i18n.t('ParCiegas')}</Text>
                 </View>
                 <View style={styles.cuadroPequeno}>
                     <TouchableOpacity style={styles.button} onPress={() => this.startGame()}>
-                        <Text style={styles.buttonText} > Buscar Partida</Text>  
+                        <Text style={styles.buttonText} > {i18n.t('BuscarPartida')}</Text>  
                     </TouchableOpacity>
                 </View>
                 <View style={styles.cuadroPequeno2}>

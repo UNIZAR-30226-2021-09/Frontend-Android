@@ -18,7 +18,7 @@ const RootScreen = ({
             <View style={styles.checkboxContainer} >
                 <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Sign')}>
                     <Text style={styles.text}>
-                        Registrarse
+                    {i18n.t('Registrase')}
                     </Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Login')}>

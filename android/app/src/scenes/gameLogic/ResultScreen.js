@@ -46,15 +46,15 @@ export default class ResultScreen extends Component {
                         <Text style={styles.title} > {ganador ? "Has ganado " : "Has perdido "}la partida</Text>
                     </View>
                     <View style={styles.estadisticas}>
-                        <Text style={styles.text} > Puntos obtenidos: {puntos}</Text>
-                        <Text style={styles.text} > Disparos realizados: {disparosRealizados} </Text>
-                        <Text style={styles.text} > Disparos acertados: {disparosAcertados}</Text>
-                        <Text style={styles.text} > Barcos destruidos: {barcosDestruidos}</Text>
+                        <Text style={styles.text} > {i18n.t('PuntObt')} {puntos}</Text>
+                        <Text style={styles.text} > {i18n.t('DispRea')} {disparosRealizados} </Text>
+                        <Text style={styles.text} > {i18n.t('DispAce')} {disparosAcertados}</Text>
+                        <Text style={styles.text} > {i18n.t('BarcDest')} {barcosDestruidos}</Text>
                     </View>
                     <View style={styles.cuadroPequeno}>
                         <View style={{ flex: 1 }}>
                             <TouchableHighlight style={styles.button} onPress={() => this.props.navigation.navigate('Home')}>
-                                    <Text style={styles.btnText}> Terminar </Text>
+                                    <Text style={styles.btnText}> {i18n.t('Terminar')} </Text>
                             </TouchableHighlight>
                         </View>
                     </View>

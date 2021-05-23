@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import { SafeAreaView, View, Text, TouchableHighlight, StyleSheet, AsyncStorage, TextInput, TouchableOpacity, FlatList, Button, Alert, Image } from 'react-native';
-import { WHITE, PRIMARY, SECONDARY,BLACK, TITLE } from '../../styles/colors';
+import { WHITE, PRIMARY, SECONDARY,BLACK } from '../../styles/colors';
 import Modal from 'react-native-modal';
 import { getFriendList } from '_api/user';
 import { getIncomingList, getOutgoingList, accept, dismiss } from '_api/user';
 import { socket, aceptarInvitacionAmigo, aceptarChallenge, joinGame } from '_api/user/socket';
 import { acceptFriendGame, dismissFriendGame, gameIncomingRequest } from '_api/game';
 import { StackActions } from '@react-navigation/native';
+import i18n from 'i18n-js';
 
 export default class BarraLateral extends Component {
 
@@ -40,7 +41,7 @@ export default class BarraLateral extends Component {
         this.setState({
             showGameRequest: !showGameRequest
         })
-        //console.log("SHOW" + showGameRequest)
+        console.log("SHOW" + showGameRequest)
     }
 
     async componentDidMount() {
@@ -79,7 +80,7 @@ export default class BarraLateral extends Component {
     
     async updateFriendList(newUser) {
         await getFriendList(newUser).then(data => {
-            //console.log("Data de barra lateral: " + data);
+            console.log("Data de barra lateral: " + data);
             if (data != "error") {
                 this.setState(
                     {
@@ -91,14 +92,14 @@ export default class BarraLateral extends Component {
             }
         }).catch(err => {
             console.log("error barra lateral")
-            //console.log(err)
+            console.log(err)
             return "error"
         }); 
     }
 
     async updateIncoming(newUser) {
         await getIncomingList(newUser).then(data => {
-            //console.log("Data de getIncomingList: " + data);
+            console.log("Data de getIncomingList: " + data);
             if (data != "error") {
                 this.setState(
                     {
@@ -111,13 +112,13 @@ export default class BarraLateral extends Component {
             }
         }).catch(err => {
             console.log("error getIncomingList")
-            //console.log(err)
+            console.log(err)
             return "error"
         });
     }
     async updateChallengeList(newUser) {
         await gameIncomingRequest(newUser).then(data => {
-            //console.log("Data de updateChallengeList: " + JSON.stringify(data));
+            console.log("Data de updateChallengeList: " + JSON.stringify(data));
             if (data != "error") {
                 this.setState(
                     {
@@ -132,7 +133,7 @@ export default class BarraLateral extends Component {
             }
         }).catch(err => {
             console.log("error updateChallengeList")
-            //console.log(err)
+            console.log(err)
             return "error"
         });
     }
@@ -142,9 +143,9 @@ export default class BarraLateral extends Component {
             AccessToken: this.state.accessToken,
             Friendname: friendname
         };
-        //console.log(newUser);
+        console.log(newUser);
         await accept(newUser).then(data => {
-            //console.log("Data de acceptRequest: " + data);
+            console.log("Data de acceptRequest: " + data);
             if (data != "error") {
                 console.log("Aceptado");
                 aceptarInvitacionAmigo({ Username: friendname });
@@ -153,7 +154,7 @@ export default class BarraLateral extends Component {
             }
         }).catch(err => {
             console.log("error acceptRequest")
-            //console.log(err)
+            console.log(err)
             return "error"
         });
         this.updateIncoming(newUser);
@@ -165,7 +166,7 @@ export default class BarraLateral extends Component {
             AccessToken: this.state.accessToken,
             Friendname: friendname
         };
-        //console.log(newUser);
+        console.log(newUser);
         await dismiss(newUser).then(data => {
             console.log("---Data de dismissRequest: " + data);
             if (data != "error") {
@@ -175,7 +176,7 @@ export default class BarraLateral extends Component {
             }
         }).catch(err => {
             console.log("error dismissRequest")
-            //console.log(err)
+            console.log(err)
             return "error"
         });
         this.updateIncoming(newUser);
@@ -186,7 +187,7 @@ export default class BarraLateral extends Component {
             AccessToken: this.state.accessToken,
             GameId: gameID
         };
-        //console.log(newUser);
+        console.log(newUser);
         await acceptFriendGame(newUser).then(data => {
             console.log("Data de acceptRequest: " + data);
             if (data != "error") {
@@ -198,7 +199,7 @@ export default class BarraLateral extends Component {
             }
         }).catch(err => {
             console.log("error acceptRequest")
-            //console.log(err)
+            console.log(err)
             return "error"
         });
         this.updateChallengeList(newUser);
@@ -210,9 +211,9 @@ export default class BarraLateral extends Component {
             AccessToken: this.state.accessToken,
             GameId: gameID
         };
-        //console.log(newUser);
+        console.log(newUser);
         await dismissFriendGame(newUser).then(data => {
-            //console.log("---Data de dismissRequest: " + data);
+            console.log("---Data de dismissRequest: " + data);
             if (data != "error") {
                 console.log("Rechazado");
             } else {
@@ -220,7 +221,7 @@ export default class BarraLateral extends Component {
             }
         }).catch(err => {
             console.log("error dismissRequest")
-            //console.log(err)
+            console.log(err)
             return "error"
         });
         this.updateChallengeList(newUser);
@@ -241,7 +242,7 @@ export default class BarraLateral extends Component {
                     <View style={styles.centeredView}>
                         <View style={styles.modalView}>
                             <View style={{ flex: 1 }}>
-                                <Text style={styles.modalHeaderText}>Peticiones de amistad</Text>
+                                <Text style={styles.modalHeaderText}>{i18n.t('PetAmistas')}</Text>
                             </View>
                             <View style={styles.friendList2}>
                                 {this.state.incomingList.length>0 ? <FlatList
@@ -256,12 +257,12 @@ export default class BarraLateral extends Component {
                                                     </View>
                                                     <View style={styles.gameButton}>
                                                         <TouchableOpacity style={styles.acceptButton} onPress={() => this.acceptRequest(item)}>
-                                                            <Text style={styles.rankText} > Aceptar </Text>
+                                                            <Text style={styles.rankText} >{i18n.t('Aceptar')}</Text>
                                                         </TouchableOpacity>
                                                     </View>
                                                     <View style={styles.gameButton}>
                                                         <TouchableOpacity style={styles.rejectButton} onPress={() => this.dismissRequest(item)}>
-                                                            <Text style={styles.rankText} > Rechazar </Text>
+                                                            <Text style={styles.rankText} > {i18n.t('Rechazar')} </Text>
                                                         </TouchableOpacity>
                                                     </View>
                                                 </View>
@@ -270,7 +271,7 @@ export default class BarraLateral extends Component {
                                     }}
                                     keyExtractor={(item, index) => index.toString()}
                                     style={styles.friendList2}
-                                />: <Text style={styles.noPetitions}>No hay peticiones nuevas</Text>
+                                />: <Text style={styles.noPetitions}>{i18n.t('NoHayPeticiones')}</Text>
                                 }
                             </View>
                             <View style={{ flexDirection: 'row', flex: 1, justifyContent: 'space-around' }}>
@@ -279,7 +280,7 @@ export default class BarraLateral extends Component {
                                         style={styles.modalButton}
                                         onPress={() => { this.setShowFriend() }}
                                     >
-                                        <Text style={styles.textStyle}>Cerrar</Text>
+                                        <Text style={styles.textStyle}>{i18n.t('Cerrar')}</Text>
                                     </TouchableOpacity>
                                 </View>
                             </View>
@@ -298,7 +299,7 @@ export default class BarraLateral extends Component {
                     <View style={styles.centeredView}>
                         <View style={styles.modalView}>
                             <View style={{ flex: 1 }}>
-                                <Text style={styles.modalHeaderText}>Peticiones de partidas amistosas</Text>
+                                <Text style={styles.modalHeaderText}>{i18n.t('PetPartAmis')}</Text>
                             </View>
                             <View style={styles.friendList2}>
                                 {this.state.challengeList.length > 0 ? <FlatList
@@ -313,12 +314,12 @@ export default class BarraLateral extends Component {
                                                     </View>
                                                     <View style={styles.gameButton}>
                                                         <TouchableOpacity style={styles.acceptButton} onPress={() => this.acceptGame(item.id, item.contrincante)}>
-                                                            <Text style={styles.rankText} > Aceptar </Text>
+                                                            <Text style={styles.rankText} > {i18n.t('Aceptar')} </Text>
                                                         </TouchableOpacity>
                                                     </View>
                                                     <View style={styles.gameButton}>
                                                         <TouchableOpacity style={styles.rejectButton} onPress={() => this.dismissGame(item.id)}>
-                                                            <Text style={styles.rankText} > Rechazar </Text>
+                                                            <Text style={styles.rankText} > {i18n.t('Rechazar')} </Text>
                                                         </TouchableOpacity>
                                                     </View>
                                                 </View>
@@ -327,7 +328,7 @@ export default class BarraLateral extends Component {
                                     }}
                                     keyExtractor={(item, index) => index.toString()}
                                     style={styles.friendList2}
-                                /> : <Text style={styles.noPetitions}>No hay peticiones nuevas</Text>
+                                /> : <Text style={styles.noPetitions}>{i18n.t('NoHayPeticiones')}</Text>
                                 }
                             </View>
                             <View style={{ flexDirection: 'row', flex: 1, justifyContent: 'space-around' }}>
@@ -336,7 +337,7 @@ export default class BarraLateral extends Component {
                                         style={styles.modalButton}
                                         onPress={() => { this.setShowGameRequest() }}
                                     >
-                                        <Text style={styles.textStyle}>Cerrar</Text>
+                                        <Text style={styles.textStyle}>{i18n.t('Cerrar')}</Text>
                                     </TouchableOpacity>
                                 </View>
                             </View>
@@ -350,20 +351,19 @@ export default class BarraLateral extends Component {
                             {this.state.username}
                         </Text>
                     </View>
+                    <View style={{ flex: 1 }}>
+                        <TouchableOpacity style={styles.button} onPress={() => this.props.navigation.navigate('Profile')}>
+                            <Text style={styles.profileText}>
+                            {i18n.t('MiPerfil')}
+                            </Text>
+                        </TouchableOpacity>
+                    </View>
                     <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-around' }}>
                         <View style={{ flex: 1 }}>
                             <TouchableOpacity style={styles.icon} onPress={() => this.props.navigation.dispatch(
                                 StackActions.replace('Home')
                             )}>
                                 <Image source={require("_assets/images/house.png")} style={styles.image} />
-                            </TouchableOpacity>
-                        </View>
-                        <View style={{ flex: 1 }}>
-
-                            <TouchableOpacity style={styles.button} onPress={() => this.props.navigation.navigate('Profile')}>
-                                <Text style={styles.profileText}>
-                                    Mi Perfil
-                            </Text>
                             </TouchableOpacity>
                         </View>
                         <View style={{ flex: 1 }}>
@@ -377,9 +377,9 @@ export default class BarraLateral extends Component {
                     <View style={styles.cuadroPequeno}>
                         <View style={styles.cuadroAdd}>
                             <TouchableOpacity style={styles.peticion} onPress={() => this.setShowFriend()}>
-                                <View style={{flex:6}}>
+                                <View style={{flex:4}}>
                                     <Text style={styles.peticionText}>
-                                            Peticiones de amistad
+                                    {i18n.t('PetAmistas')}
                                     </Text>
                                 </View>
                                 <View style={{flex: 1}}>
@@ -395,9 +395,9 @@ export default class BarraLateral extends Component {
                     <View style={styles.cuadroPequeno}>
                         <View style={styles.cuadroAdd}>
                             <TouchableOpacity style={styles.peticion} onPress={() => this.setShowGameRequest()}>
-                                <View style={{ flex: 6 }}>
+                                <View style={{ flex: 4 }}>
                                     <Text style={styles.peticionText}>
-                                        Invitaciones de amigos
+                                    {i18n.t('InvDeAmigos')}
                                     </Text>
                                 </View>
                                 <View style={{ flex: 1 }}>
@@ -414,7 +414,7 @@ export default class BarraLateral extends Component {
                     <View style={styles.cuadroPequeno}>
                         <View style={styles.cuadroAdd}>
                             <Text style={styles.text}>
-                                {"Mis amigos  "}
+                            {i18n.t('MisAmigos')}
                             </Text>
                             <TouchableOpacity style={styles.addButton} onPress={() => this.props.navigation.navigate('AddFriend')}>
                                 <Text style={styles.profileText}>
@@ -460,6 +460,7 @@ export default class BarraLateral extends Component {
 const styles = StyleSheet.create({
     cuadroPequeno: {
         flex: 1,
+        borderColor: BLACK,
         flexDirection: 'column',
     },
     cuadroPequeno2: {
@@ -476,7 +477,7 @@ const styles = StyleSheet.create({
     },
     peticion: {
         height: 20,
-        width: '90%',
+        width: '100%',
         backgroundColor: PRIMARY,
         borderRadius: 50,
         flexDirection: 'row',
@@ -503,11 +504,13 @@ const styles = StyleSheet.create({
     },
     cuadroPerfil: {
         flex: 1,
-        backgroundColor: '#e9ecef'
+        borderColor: BLACK,
+        borderWidth: 2,
     },
     cuadroAmigos: {
         flex: 4,
-        backgroundColor:'#e9ecef'
+        borderColor: BLACK,
+        borderWidth: 2,
     },
     text: {
         fontSize: 12,
@@ -521,11 +524,10 @@ const styles = StyleSheet.create({
         
     },
     userText: {
-        fontSize: 14,
+        fontSize: 12,
         alignSelf: 'center',
         color: BLACK,
-        padding: 5,
-        fontWeight:'bold'
+        padding: 2
     },
     friendContainer: {
         width:'100%'
@@ -536,21 +538,23 @@ const styles = StyleSheet.create({
     connectFriend: {
         width: 120,
         height: 26,
-        backgroundColor: SECONDARY,
-        borderRadius: 5,
+        backgroundColor: PRIMARY,
+        borderRadius: 50,
+        borderWidth: 1,
         alignSelf: 'center',
     },
     notConnectFriend: {
         width: 120,
         height: 26,
         backgroundColor: 'red',
-        borderRadius: 5,
+        borderRadius: 50,
+        borderWidth: 1,
         alignSelf: 'center',
     },
     friendText: {
         fontSize: 15,
         textAlign: 'center',
-        color: 'white'
+        color: WHITE
     },
     centeredView: {
         width: '100%',
@@ -587,7 +591,7 @@ const styles = StyleSheet.create({
     },
     modalHeaderText: {
         textAlign: "center",
-        color: TITLE,
+        color: 'black',
         fontWeight: 'bold',
         fontSize:20
     },
@@ -613,26 +617,27 @@ const styles = StyleSheet.create({
     },
     rejectButton: {
         width: 50,
-        height: 16,
+        height: 20,
         backgroundColor: 'red',
         borderRadius: 50,
+        borderWidth: 1,
         alignSelf: 'center',
-        marginRight: 40,
-        top: '15%'
+        marginRight: 40
     },
     acceptButton: {
         width: 40,
-        height: 16,
+        height: 20,
         backgroundColor: 'green',
         borderRadius: 50,
+        borderWidth: 1,
         alignSelf: 'center',
-        top: '15%'
     },
 
     gameLose: {
         flexDirection: 'row',
         alignSelf: 'center',
         alignContent: 'center',
+        borderWidth: 1,
         color: 'blue',
         backgroundColor: 'red',
         width: 300,
@@ -643,12 +648,11 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignSelf: 'center',
         alignContent: 'center',
+        borderWidth: 1,
         borderColor: 'white',
         backgroundColor: PRIMARY,
         width: 400,
         height: 25,
-        borderRadius: 5,
-        borderWidth:1
     },
     friend2: {
         paddingTop: 1,
@@ -660,6 +664,7 @@ const styles = StyleSheet.create({
         height: 20,
         backgroundColor: SECONDARY,
         borderRadius: 50,
+        borderWidth: 1,
         alignSelf: 'center',
     },
     confirmButton: {
@@ -668,6 +673,7 @@ const styles = StyleSheet.create({
         height: 40,
         backgroundColor: PRIMARY,
         borderRadius: 50,
+        borderWidth: 1,
         alignSelf: 'center'
     },
     friendList2: {
@@ -683,8 +689,8 @@ const styles = StyleSheet.create({
     circle: {
         backgroundColor: 'red',
         borderRadius: 50,
-        width: 14,
-        height: 14
+        width: 12,
+        height: 12
     },
     icon: {
         borderRadius: 50,
