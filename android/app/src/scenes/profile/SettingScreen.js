@@ -8,7 +8,7 @@ import { Picker } from '@react-native-picker/picker';
 
 import i18n from 'i18n-js';
 import { StackActions } from '@react-navigation/native';
-import { setBoardImage, setShipColor, getShipColor,  } from '../../styles/gameStyle';
+import { setBoardImage, setShipColor, getShipColor, getBoardImageName, } from '../../styles/gameStyle';
 
 // Set the key-value pairs for the different languages you want to support.
 i18n.translations = {
@@ -24,8 +24,8 @@ export default class SettingScreen extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            shipColor: "",
-            boardColor: "",
+            shipColor: getShipColor(),
+            boardColor: getBoardImageName(),
             language: "",
             listShip: ["blue", "red", "green"],
             listBoard: ["Oceano", "Desierto", "Cesped", "Espacio", "Lava"],

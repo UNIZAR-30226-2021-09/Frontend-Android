@@ -4,6 +4,7 @@ import { WHITE, PRIMARY, SECONDARY } from '../../styles/colors';
 import { login } from '_api/user';
 import { logMe, getIntoAllGames } from '_api/user/socket';
 import * as Crypto from 'expo-crypto';
+import i18n from 'i18n-js';
 
 const LoginScreen = ({
     navigation,
@@ -18,11 +19,11 @@ const LoginScreen = ({
             return;
         }
         if (!pass) {
-            alert('Introduzca la contraseña');
+            alert('Introduzca la contraseï¿½a');
             return;
         }
         /*if (!mail) {
-            alert('Introduzca el correo electrónico');
+            alert('Introduzca el correo electrï¿½nico');
             return;
         }*/
         const hashPass = await Crypto.digestStringAsync(
@@ -81,7 +82,7 @@ const LoginScreen = ({
             onChangeText={onChangePassword}
             value={pass}
             secureTextEntry={true}
-            placeholder="Contraseña"
+            placeholder="Contraseï¿½a"
         />
         <View style={styles.checkboxContainer}>
             <TouchableOpacity style={styles.button} onPress={() => handleSubmitButton()}>

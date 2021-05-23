@@ -391,8 +391,8 @@ export const getBoard = (username, token, gameId) => {
 		gameid: gameId
 	}
 	return axios.post('https://proyecto-software-09.herokuapp.com/match/cogerTablero', data).then(res => {
-		//console.log("getBOARD------")
-		//console.log(res.data)
+		console.log("getBOARD------")
+		console.log(res.data)
 		//console.log(res.data.tuTablero)
 		//console.log(res.data.disparos)
 

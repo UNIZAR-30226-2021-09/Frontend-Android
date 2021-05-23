@@ -4,6 +4,7 @@ import { PRIMARY, SECONDARY, BLACK, WHITE } from '../../styles/colors';
 import { BarraLateral } from '_organisms'
 import DropDownPicker from 'react-native-dropdown-picker';
 import { beginRandom } from '_api/game';
+import i18n from 'i18n-js';
 
 export default class BeginRandomScreen extends Component {
     constructor(props) {

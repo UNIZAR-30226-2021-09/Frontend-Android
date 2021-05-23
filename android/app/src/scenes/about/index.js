@@ -1,6 +1,7 @@
 import React from 'react';
 import { SafeAreaView, Text, TouchableHighlight, StyleSheet, View} from 'react-native';
 import { PRIMARY, SECONDARY } from '../../styles/colors';
+import i18n from 'i18n-js';
 
 const AboutScreen = ({ navigation }) => (
     <SafeAreaView style={styles.container}>
