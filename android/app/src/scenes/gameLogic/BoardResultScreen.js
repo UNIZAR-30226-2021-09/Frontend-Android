@@ -7,6 +7,7 @@ import { Table, TableWrapper, Cell } from 'react-native-table-component'
 import { initBoard, attack, getSolution, initAttack, initShip, initCoord, IAmove, getCoord, getBoard, placeMovement, movement, rendirse } from '_api/match';
 import { socket, disparo } from '_api/user/socket';
 import { getShipColor, getBoardImage, getBoardColor } from '../../styles/gameStyle';
+import i18n from 'i18n-js';
 
 const GANADO = "GANADO"
 const PERDIDO = "PERDIDO"

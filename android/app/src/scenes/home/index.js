@@ -63,7 +63,7 @@ const HomeScreen = ({ navigation }) => {
                     <View style={styles.cuadroBoton}>
                         <TouchableOpacity style={styles.cubito} onPress={() => navigation.navigate('BeginRandom')}>
                             <Text style={styles.textoCubito}>
-                                Partida a ciegas
+                                {i18n.t('ParCiegas')}
                             </Text>
                         </TouchableOpacity>
                     </View>

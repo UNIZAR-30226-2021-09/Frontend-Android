@@ -240,6 +240,7 @@ export default class BeginTournamentScreen extends Component {
         if (this.state.enable1==false){
         this.setState({Amigo1:item});
         console.log("Primer amigo " + item);
+        console.log("Primer index es "+index);
         this.setState({enable1:true});
         var extra=this.state.friendList;
         extra.splice(index,index); 

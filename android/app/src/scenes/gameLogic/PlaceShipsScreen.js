@@ -10,6 +10,7 @@ import {
     startGame
 } from '_api/match';
 import { getShipColor, getBoardImage, getBoardColor } from '../../styles/gameStyle';
+import i18n from 'i18n-js';
 
 import { ToastAndroid } from 'react-native';
 const NO_SELECT_COLOR = 'white';
