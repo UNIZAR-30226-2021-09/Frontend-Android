@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { SafeAreaView, View, Text, TouchableHighlight, StyleSheet, AsyncStorage, TextInput, TouchableOpacity, FlatList, Button, Alert, Image } from 'react-native';
-import { WHITE, PRIMARY, SECONDARY,BLACK } from '../../styles/colors';
+import { WHITE, PRIMARY, SECONDARY,BLACK, GRAY_LIGHT, TITLE } from '../../styles/colors';
 import Modal from 'react-native-modal';
 import { getFriendList } from '_api/user';
 import { getIncomingList, getOutgoingList, accept, dismiss } from '_api/user';
@@ -486,7 +486,8 @@ const styles = StyleSheet.create({
     peticionText: {
         fontSize: 10,
         color: WHITE,
-        textAlign: 'center'
+        textAlign: 'center',
+        top:'10%'
     },
     button: {
         height: 20,
@@ -501,21 +502,20 @@ const styles = StyleSheet.create({
         backgroundColor: PRIMARY,
         alignSelf: 'center',
         borderRadius: 50,
+        left:'10%'
     },
     cuadroPerfil: {
         flex: 1,
-        borderColor: BLACK,
-        borderWidth: 2,
+        backgroundColor: GRAY_LIGHT
     },
     cuadroAmigos: {
         flex: 4,
-        borderColor: BLACK,
-        borderWidth: 2,
+        backgroundColor: GRAY_LIGHT
     },
     text: {
         fontSize: 12,
         alignSelf: 'center',
-        color: BLACK,
+        color: TITLE,
     },
     profileText: {
         fontSize: 12,
@@ -524,10 +524,10 @@ const styles = StyleSheet.create({
         
     },
     userText: {
-        fontSize: 12,
+        fontSize: 14,
         alignSelf: 'center',
-        color: BLACK,
-        padding: 2
+        color: TITLE,
+        fontWeight: 'bold',
     },
     friendContainer: {
         width:'100%'
@@ -540,7 +540,6 @@ const styles = StyleSheet.create({
         height: 26,
         backgroundColor: PRIMARY,
         borderRadius: 50,
-        borderWidth: 1,
         alignSelf: 'center',
     },
     notConnectFriend: {
@@ -548,7 +547,6 @@ const styles = StyleSheet.create({
         height: 26,
         backgroundColor: 'red',
         borderRadius: 50,
-        borderWidth: 1,
         alignSelf: 'center',
     },
     friendText: {
@@ -593,7 +591,7 @@ const styles = StyleSheet.create({
         textAlign: "center",
         color: 'black',
         fontWeight: 'bold',
-        fontSize:20
+        fontSize: 20,
     },
     noPetitions: {
         textAlign: "center",
@@ -689,8 +687,9 @@ const styles = StyleSheet.create({
     circle: {
         backgroundColor: 'red',
         borderRadius: 50,
-        width: 12,
-        height: 12
+        width: 14,
+        height: 14,
+        top:'10%'
     },
     icon: {
         borderRadius: 50,

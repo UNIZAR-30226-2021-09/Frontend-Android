@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import { View, Text, TouchableHighlight, TouchableOpacity, StyleSheet, Image, Alert, FlatList, ScrollView, AsyncStorage } from 'react-native';
-import { PRIMARY, SECONDARY, BLACK } from '../../styles/colors';
+import { PRIMARY, SECONDARY, BLACK, TITLE, WHITE } from '../../styles/colors';
 import { BarraLateral } from '_organisms';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { getGameInProgess } from '_api/game';
 import { COLOCANDO, RIVALCOLOCANDO, MITURNO, TURNORIVAL } from '_api/match';
 import { socket, joinGame } from '_api/user/socket';
 import i18n from 'i18n-js';
+import { getIntoAllGames } from '_api/user/socket';
 
 export default class OngoingGameScreen extends Component {
     constructor(props) {
@@ -26,6 +27,7 @@ export default class OngoingGameScreen extends Component {
             Username: _username,
             AccessToken: accessToken
         };
+        //getIntoAllGames(user);
         console.log("USER " + JSON.stringify(user));
         await this.updateList(user);
         await socket.on('llegaAceptarChallenge', gameid => {
@@ -61,6 +63,7 @@ export default class OngoingGameScreen extends Component {
         await AsyncStorage.setItem('gameId', item.id);
         console.log("Datos obtenidos al pretar el boton= "+item.id);
         this.props.navigation.navigate("PlaceShips");
+        joinGame(item.id);
     }
 
     async goToGame(item) {
@@ -68,6 +71,7 @@ export default class OngoingGameScreen extends Component {
         await AsyncStorage.setItem('gameId', item.id);
         console.log("Datos obtenidos al pretar el boton= " + item.id);
         this.props.navigation.navigate("Game");
+        joinGame(item.id);
     }
 
     render() {
@@ -123,8 +127,6 @@ const styles = StyleSheet.create({
     },
     cuadroGrande: {
         flex: 4,
-        borderColor: BLACK,
-        borderWidth: 3,
         flexDirection: 'column',
         alignContent: 'center',
     },
@@ -174,7 +176,7 @@ const styles = StyleSheet.create({
     },
     title: {
         textAlign: 'center',
-        color: 'black',
+        color: TITLE,
         paddingTop: 20,
         fontSize: 38,
         fontWeight: 'bold',
@@ -191,7 +193,7 @@ const styles = StyleSheet.create({
     friendText: {
         fontSize: 15,
         textAlign: 'center',
-        color: PRIMARY
+        color: WHITE
     },
     messageText: {
         fontSize: 17,

@@ -11,7 +11,7 @@ import {
 } from '_api/match';
 import { getShipColor, getBoardImage, getBoardColor } from '../../styles/gameStyle';
 import i18n from 'i18n-js';
-import { playDrop } from '_assets/sound/PlaySound'
+import { playDrop, stop } from '_assets/sound/PlaySound'
 import { ToastAndroid } from 'react-native';
 const NO_SELECT_COLOR = 'white';
 const SELECT_COLOR = 'cyan';
@@ -62,7 +62,9 @@ export default class PlaceShipsScreen extends Component {
             })
         }
     }
-
+    async componentWillUnmount() {
+        stop()
+    }
     _alertIndex(index, col) {
         Alert.alert(`This is row ${index + 1} + ${col + 1}`);
     }

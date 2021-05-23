@@ -1,7 +1,7 @@
 import { Audio } from 'expo-av';
-
+var sound;
 export const playBomb = async () => {
-    const sound = new Audio.Sound();
+    sound = new Audio.Sound();
     try {
         await sound.loadAsync(require('./src_assets_bomb.mp3'));
         await sound.playAsync();
@@ -18,7 +18,7 @@ export const playBomb = async () => {
 }
 
 export const playDrop = async () => {
-    const sound = new Audio.Sound();
+    sound = new Audio.Sound();
     try {
         await sound.loadAsync(require('./src_assets_drop.mp3'));
         await sound.playAsync();
@@ -34,7 +34,7 @@ export const playDrop = async () => {
 }
 
 export const playWater = async () => {
-    const sound = new Audio.Sound();
+    sound = new Audio.Sound();
     try {
         await sound.loadAsync(require('./src_assets_water.mp3'));
         await sound.playAsync();
@@ -51,7 +51,7 @@ export const playWater = async () => {
 }
 
 export const playHit = async () => {
-    const sound = new Audio.Sound();
+    sound = new Audio.Sound();
     try {
         await sound.loadAsync(require('./src_assets_hit.mp3'));
         await sound.playAsync();
@@ -64,5 +64,14 @@ export const playHit = async () => {
         console.log("ERROR sound hit")
 
         // An error occurred!
+    }
+}
+
+export const stop = async () => {
+    try {
+
+        await sound.unloadAsync();
+    } catch (error) {
+        console.log("ERROR sound h")
     }
 }
