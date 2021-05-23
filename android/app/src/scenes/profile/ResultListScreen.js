@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+﻿import React, { Component } from 'react';
 import { View, Text, TouchableHighlight, TouchableOpacity, StyleSheet, Image, Alert, FlatList, ScrollView, AsyncStorage } from 'react-native';
 import { PRIMARY, SECONDARY, BLACK, WHITE } from '../../styles/colors';
 import { BarraLateral } from '_organisms'
@@ -7,7 +7,7 @@ import { getHistory } from '_api/game';
 import { getInfo } from '_api/user';
 import i18n from 'i18n-js';
 
-export default class ProfileScreen extends Component {
+export default class ResultListScreen extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -64,41 +64,52 @@ export default class ProfileScreen extends Component {
     }
     //{item.state?"(Victoria)":"(Derrota)"}
     render() {
-        let { myInfo } = this.state
-        var total = myInfo.partidasGanadas + myInfo.partidasPerdidas;
         return (<View style={styles.container}>
             <View style={styles.cuadroGrande}>
                 <View style={styles.cuadroPequeno}>
-                    <Text style={styles.title} > {this.state.username}</Text>
-                </View>
-                <View style={styles.cuadroPequeno}>
-                    <Text style={styles.text} > Email: {this.state.username}</Text>
-                </View>
-                <View style={styles.cuadroPequeno}>
-                    <View style={styles.header}>
-                        <View style={styles.cuadroPequeno}>
-                        <TouchableOpacity style={styles.ranking} onPress={() => this.props.navigation.navigate('Ranking')}>
-                            <Text style={styles.rankText} > Ver Clasificacion </Text>
-                        </TouchableOpacity>
-                        </View>
-                        <View style={styles.cuadroPequeno}>
-                            <TouchableOpacity style={styles.ranking} onPress={() => this.props.navigation.navigate('ResultList')}>
-                                <Text style={styles.rankText} > Historial de partidas </Text>
-                            </TouchableOpacity>
-                        </View>
-                    </View>
-                </View>
-
-                <View style={styles.cuadroPequeno}>
-
+                    <Text style={styles.title} > Partidas finalizadas </Text>
                 </View>
                 <View style={styles.cuadroPartidas}>
-                    <Text style={styles.infoText} > Partidas jugadas: {total}</Text>
-                    <Text style={styles.infoText} > Victorias: {myInfo.partidasGanadas} </Text>
-                    <Text style={styles.infoText} > Derrotas: {myInfo.partidasPerdidas}</Text>
-                    <Text style={styles.infoText} > Torneos ganados: {myInfo.torneosGanados}</Text>
-                    <Text style={styles.infoText} > Ratio de victorias: {total != 0 ? ((myInfo.partidasGanadas / total)*100).toFixed(2) + "%" : "No existen datos para calcular"}</Text>
-                    <Text style={styles.infoText} > Puntos :{myInfo.puntos}</Text>
+                    <View style={styles.itemPartida}>
+                        <FlatList
+                            data={this.state.gameList}
+                            extraData={this.state.showItemIndex}
+                            renderItem={({ item, index }) => {
+                                if (item.resultado == 'victoria')
+                                    return (
+                                        <View style={styles.friend}>
+                                            <View style={styles.gameVictory}>
+                                                <View style={styles.gameItem}>
+                                                    <Text style={styles.friendText} > Partida contra {item.contrincante} ({item.resultado}) </Text>
+                                                </View>
+                                                <View style={styles.gameButton}>
+                                                    <TouchableOpacity style={styles.showButton} onPress={() => this.goToResult(item.id)}>
+                                                        <Text style={styles.rankText} > Ver partida </Text>
+                                                    </TouchableOpacity>
+                                                </View>
+                                            </View>
+                                        </View>
+                                    );
+                                else
+                                    return (
+                                        <View style={styles.friend}>
+                                            <View style={styles.gameLose}>
+                                                <View style={styles.gameItem}>
+                                                    <Text style={styles.friendText} > Partida contra {item.contrincante} ({item.resultado}) </Text>
+                                                </View>
+                                                <View style={styles.gameButton}>
+                                                    <TouchableOpacity style={styles.showButton} onPress={() => this.goToResult(item.id)}>
+                                                        <Text style={styles.rankText} > Ver partida </Text>
+                                                    </TouchableOpacity>
+                                                </View>
+                                            </View>
+                                        </View>
+                                    );
+                            }}
+                            keyExtractor={(item, index) => index.toString()}
+                            style={styles.listaPartidas}
+                        />
+                    </View>
                 </View>
                 <View style={styles.cuadroBotones}>
                     <View style={styles.cuadroPequeno}>
@@ -216,7 +227,7 @@ const styles = StyleSheet.create({
     },
 
     friendContainer: {
-        flex:6,
+        flex: 6,
         paddingTop: 5,
         alignSelf: 'center',
     },
@@ -253,7 +264,7 @@ const styles = StyleSheet.create({
         backgroundColor: PRIMARY,
         borderRadius: 50,
         borderWidth: 1,
-        marginBottom:5
+        marginBottom: 5
     },
     logOutButton: {
         width: 120,
@@ -279,10 +290,6 @@ const styles = StyleSheet.create({
         fontSize: 20,
         textAlign: 'center'
     },
-    infoText: {
-        fontSize: 20,
-        textAlign: 'left'
-    },
     rankText: {
         fontSize: 15,
         textAlign: 'center',
@@ -305,7 +312,7 @@ const styles = StyleSheet.create({
         fontSize: 18, justifyContent: 'center', color: 'black'
     },
     listaPartidas: {
-        marginBottom:10
+        marginBottom: 10
     }
 });
 

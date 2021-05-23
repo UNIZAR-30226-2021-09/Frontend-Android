@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { View, Text, TouchableHighlight, TouchableWithoutFeedback, StyleSheet, Image, Alert, ImageBackground, AsyncStorage } from 'react-native';
 var boardColor = 'white';
-var shipColor = 'green';
+var shipColor = 'blue';
 var boardImage = require("_assets/images/oceano.jpg");
-
+var boardImageName = 'Oceano';
 
 export const setBoardImage = (image) => {
     //console.log("SELECT Board " + shipColor)
@@ -32,6 +32,7 @@ export const setBoardImage = (image) => {
     }
     boardImage = path;
     boardColor = color;
+    boardImageName = image;
 }
 
 export const getBoardColor = () => {
@@ -51,4 +52,9 @@ export const getShipColor = () => {
 export const getBoardImage = () => {
     //console.log("SELECT Board --" + shipColor)
     return boardImage;
+}
+
+export const getBoardImageName = () => {
+    //console.log("SELECT Board --" + shipColor)
+    return boardImageName;
 }

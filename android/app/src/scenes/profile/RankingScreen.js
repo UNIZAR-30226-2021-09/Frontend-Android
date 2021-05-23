@@ -69,17 +69,17 @@ export default class FriendRequestScreen extends Component {
                 <View style={styles.cuadroAmigos}>
                     <View style={styles.cuadroCabecera}>  
                         <View style={styles.friendItem}>
-                            <View style={styles.rankInfo}>
+                            <View style={styles.nameInfo}>
                                 <Text style={styles.rankUsername} > Nombre </Text>
                             </View>
                             <View style={styles.rankInfo}>
-                                <Text style={styles.rankScore} > Puntos </Text>
+                                <Text style={styles.rankScore2} > Puntos </Text>
                             </View>
                             <View style={styles.rankInfo}>
-                                <Text style={styles.rankScore} > Partidas perdidas </Text>
+                                <Text style={styles.rankScore2} > Partidas perdidas </Text>
                             </View>
                             <View style={styles.rankInfo}>
-                                <Text style={styles.rankScore} > Partidas ganadas </Text>
+                                <Text style={styles.rankScore2} > Partidas ganadas </Text>
                             </View>
                         </View>
                     </View>
@@ -93,7 +93,7 @@ export default class FriendRequestScreen extends Component {
                                     return (
                                         <View style={styles.friend}>
                                             <View style={styles.positionItem}>
-                                                <View style={styles.rankInfo}>
+                                                <View style={styles.nameInfo}>
                                                     <Text style={styles.rankUsername} > {index + 1}. {item.nombreUsuario} </Text>
                                                 </View>
                                                 <View style={styles.rankInfo}>
@@ -112,7 +112,7 @@ export default class FriendRequestScreen extends Component {
                                     return (
                                         <View style={styles.friend}>
                                             <View style={styles.friendItem}>
-                                                <View style={styles.rankInfo}>
+                                                <View style={styles.nameInfo}>
                                                     <Text style={styles.rankUsername} > {index + 1}. {item.nombreUsuario} </Text>
                                                 </View>
                                                 <View style={styles.rankInfo}>
@@ -134,17 +134,17 @@ export default class FriendRequestScreen extends Component {
                     </View>
                     <View style={styles.cuadroCabecera}>
                         <View style={styles.positionItem}>
-                            <View style={styles.rankInfo}>
+                            <View style={styles.nameInfo}>
                                 <Text style={styles.rankUsername} > {this.state.myPosition}. {this.state.myInfo.nombreUsuario}  </Text>
                             </View>
                             <View style={styles.rankInfo}>
                                 <Text style={styles.rankScore} > {myInfo.puntos} </Text>
                             </View>
                             <View style={styles.rankInfo}>
-                                <Text style={styles.rankScore} >  {myInfo.partidasGanadas}</Text>
+                                <Text style={styles.rankScore} >  {myInfo.partidasPerdidas}</Text>
                             </View>
                             <View style={styles.rankInfo}>
-                                <Text style={styles.rankScore} > {myInfo.partidasPerdidas} </Text>
+                                <Text style={styles.rankScore} > {myInfo.partidasGanadas } </Text>
                             </View>
                         </View>
                     </View>
@@ -176,8 +176,10 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
     },
     rankInfo: {
-        flex: 1,
-        
+        flex: 2,
+    },
+    nameInfo: {
+        flex:4
     },
     gameButton: {
         flex: 1,
@@ -332,8 +334,13 @@ const styles = StyleSheet.create({
         color: WHITE,
         alignSelf: 'center'
     },
+    rankScore2: {
+        fontSize: 12,
+        color: WHITE,
+        alignSelf: 'center'
+    },
     rankUsername: {
-        fontSize: 15,
+        fontSize: 14,
         color: WHITE,
         alignSelf: 'flex-start',
         paddingStart:30
