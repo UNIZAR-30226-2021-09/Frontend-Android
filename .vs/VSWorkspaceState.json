@@ -3,14 +3,15 @@
     "",
     "\\android",
     "\\android\\app",
-    "\\android\\app\\src\\api",
-    "\\android\\app\\src\\api\\game",
+    "\\android\\app\\src",
+    "\\android\\app\\src\\assets",
+    "\\android\\app\\src\\assets\\images",
+    "\\android\\app\\src\\components",
+    "\\android\\app\\src\\components\\organisms",
+    "\\android\\app\\src\\navigations",
     "\\android\\app\\src\\scenes",
-    "\\android\\app\\src\\scenes\\gameLogic",
-    "\\android\\app\\src\\scenes\\home",
-    "\\android\\app\\src\\scenes\\profile",
-    "\\android\\app\\src\\styles"
+    "\\android\\app\\src\\scenes\\friend"
   ],
-  "SelectedNode": "\\app.json",
+  "SelectedNode": "\\android\\app\\src\\scenes\\profile\\ResultListScreen.js",
   "PreviewInSolutionExplorer": false
 }

@@ -111,22 +111,6 @@ export default class ResultListScreen extends Component {
                         />
                     </View>
                 </View>
-                <View style={styles.cuadroBotones}>
-                    <View style={styles.cuadroPequeno}>
-                        <TouchableOpacity style={styles.shareButton} onPress={() => Alert.alert("Funcionalidad futura")}>
-                            <Text style={styles.rankText}>
-                            {i18n.t('Compartir')}
-                            </Text>
-                        </TouchableOpacity>
-                    </View>
-                    <View style={styles.cuadroPequeno}>
-                        <TouchableOpacity style={styles.logOutButton} onPress={() => this.props.navigation.navigate('Root')}>
-                            <Text style={styles.rankText}>
-                            {i18n.t('CerrarSesion')}
-                            </Text>
-                        </TouchableOpacity>
-                    </View>
-                </View>
 
             </View>
             <BarraLateral navigation={this.props.navigation} />

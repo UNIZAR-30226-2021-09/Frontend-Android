@@ -20,7 +20,7 @@ const LoginScreen = ({
             return;
         }
         if (!pass) {
-            alert('IntCont');
+            alert(i18n.t('IntCont'));
             return;
         }
         /*if (!mail) {
@@ -44,7 +44,7 @@ const LoginScreen = ({
             if (data != "error") {
                 logMe(newUser);
                 getIntoAllGames(user);
-                navigation.navigate('Home')
+                navigation.navigate('Tutorial')
             } else {
                 alert('Error de login');
             }

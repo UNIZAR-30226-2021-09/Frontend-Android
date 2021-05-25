@@ -116,12 +116,20 @@ export default class OtherProfileScreen extends Component {
                         </TouchableOpacity>
                     </View>
                     <View style={styles.cuadroPequeno}>
+                        <TouchableOpacity style={styles.watchButton} onPress={() => this.props.navigation.navigate('Tutorial')}>
+                            <Text style={styles.rankText}>
+                            {i18n.t('VerTutorial')}
+                            </Text>
+                        </TouchableOpacity>
+                    </View>
+                    <View style={styles.cuadroPequeno}>
                         <TouchableOpacity style={styles.logOutButton} onPress={() => this.props.navigation.navigate('Root')}>
                             <Text style={styles.rankText}>
                             {i18n.t('CerrarSesion')}
                             </Text>
                         </TouchableOpacity>
                     </View>
+                    
                 </View>
 
             </View>
@@ -259,6 +267,13 @@ const styles = StyleSheet.create({
         borderRadius: 50,
         marginBottom:5
     },
+    watchButton: {
+        width: 150,
+        height: 30,
+        backgroundColor: PRIMARY,
+        borderRadius: 50,
+        marginBottom:5
+    },
     logOutButton: {
         width: 120,
         height: 30,
@@ -291,7 +306,7 @@ const styles = StyleSheet.create({
 
     },
     rankText: {
-        fontSize: 15,
+        fontSize: 14,
         textAlign: 'center',
         color: WHITE,
         top:'10%'

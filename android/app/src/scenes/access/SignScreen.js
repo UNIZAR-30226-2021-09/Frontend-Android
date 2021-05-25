@@ -79,14 +79,14 @@ const SignScreen = ({
             if (data != "error") {
                 logMe(newUser);
                 getIntoAllGames(user);
-                navigation.navigate('Home');
+                navigation.navigate('Tutorial');
             } else {
                 alert('No se ha podido registrar');
             }
 
         }).catch(err => {
             console.log("error pantalla register")
-            Alert.alert("El usuario o el correo ya existen");
+            Alert.alert("Username or email already exist");
             return "error"
         });
     };

@@ -15,7 +15,7 @@ i18n.translations = {
     en: { 
         welcome: 'hola', 
         Identificarse: 'Identify',
-        Registrase: 'Sing up',
+        Registrase: 'Sign up',
         NomUsuario: 'User name',
         Correo: 'Mail',
         Cont: 'Password',
@@ -61,6 +61,7 @@ i18n.translations = {
         IntCont: 'Enter password',
         ContErr: 'Passwords does not match',
         AceptCondErr: 'You must accept the Terms of Use and the Privacy Policy to continue',
+        AlreadyExist: 'Username or email already exist',
 
         AnAmigo: 'Add friend',
         EnlaceInv: 'Send Invitation',
@@ -101,7 +102,7 @@ i18n.translations = {
         Cerrar: 'Close',
         PetPartAmis: 'Friendly game requests',
         Torneo: 'Tournament',
-        BattleShip: 'BattleShip',
+        BattleShip: 'Naval battle',
         Selecciona: 'Choose',
         Friend: 'friend',
         ComienzaTorneo: 'Start tournament',
@@ -118,7 +119,11 @@ i18n.translations = {
         Espanyol: 'Spanish',
         Ingles: 'English',
         Terminado: 'Finished',
-        MensajeCopiado: 'Link copied to clipboard'
+        MensajeCopiado: 'Link copied to clipboard',
+        Cerrar:'Close',
+        VerTutorial:'Watch the tutorial'
+
+
 
     },
     es: { 
@@ -167,10 +172,10 @@ i18n.translations = {
         IntNomUsuario: 'Introduzca el nombre de usuario',
         IntCorreo: 'Introduzca un correo electrónico',
         IntCorreoValido: 'Introduzca un correo electrónico válido',
-        IntCont: 'Introduzca una contrase�a',
-        ContErr: 'Las contrase�as no coinciden',
+        IntCont: 'Introduzca una contraseña',
+        ContErr: 'Las contraseñas no coinciden',
         AceptCondErr: 'Debe aceptar las Condiciones de Uso y la Política de Privacidad para seguir',
-
+        AlreadyExist: 'Nombre de usuario o correo ya existente',
         AnAmigo: 'Añadir amigo',
         EnlaceInv: 'Enlace de invitación',
         IntNomOEnl: 'Introduzca nombre o enlace',
@@ -189,7 +194,7 @@ i18n.translations = {
         HasGanado: 'Has ganado',
         HasPerdido: 'Has perdido',
         EsperarRival: 'Espere a que tu rival coloque los barcos',
-        FueraTablero: 'Est�s disparando fuera del tablero',
+        FueraTablero: 'Estás disparando fuera del tablero',
         VerResultados: 'Ver resultados',
         Rendirse: 'Rendirse',
         Salir: 'Salir',
@@ -227,7 +232,9 @@ i18n.translations = {
         Espanyol: 'Español',
         Ingles: 'Inglés',
         Terminado: 'Terminado',
-        MensajeCopiado: 'Enlace copiado al portapapeles'
+        MensajeCopiado: 'Enlace copiado al portapapeles',
+        Cerrar:'Cerrar',
+        VerTutorial:'Ver tutorial'
     },
 };
 // Set the locale once at the beginning of your app.
