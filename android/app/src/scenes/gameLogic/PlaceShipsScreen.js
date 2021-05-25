@@ -60,10 +60,11 @@ export default class PlaceShipsScreen extends Component {
                 myBoard: result.board,
                 //IABoard: IAmove(IABoard)
             })
+            //await stop();
         }
     }
     async componentWillUnmount() {
-        stop()
+         stop()
     }
     _alertIndex(index, col) {
         Alert.alert(`This is row ${index + 1} + ${col + 1}`);
@@ -107,17 +108,21 @@ export default class PlaceShipsScreen extends Component {
             var _username = await AsyncStorage.getItem('username');
             var _accessToken = await AsyncStorage.getItem('userToken');
             var _gameId = await AsyncStorage.getItem('gameId');
+            console.log("Place id---" + _gameId)
+
             startGame(_username, _accessToken, _gameId, myBoard);
             this.props.navigation.navigate('Game');
         }
         else
             ToastAndroid.show(i18n.t('ColoqueBarcos'), ToastAndroid.SHORT);
     }
+    async componentWillUnmount() {
+        await stop();
+    }
     render() {
         let { myBoard, shipDirection, shipColors } = this.state;
         const getMyBox = (box, row, col) => {
             var color = getBoardColor();
-            console.log("BOARD COLOR"+color);
             if (box != NO_ATACK_BOX) {
                 let boxStyle = { width: 26, height: 26, backgroundColor: 'transparent', borderRadius: 0, borderColor: color, borderWidth: 0.2, alignSelf: 'center' };
                 if (box != OCEAN_BOX)

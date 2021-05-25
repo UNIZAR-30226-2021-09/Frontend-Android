@@ -67,16 +67,6 @@ export default class AddFriendScreen extends Component {
                         value={this.state.selectedFriend}
                         placeholder={i18n.t('NomUsuario')}
                     />
-                    <TextInput
-                        style={styles.input}
-                        onChangeText={friend =>
-                            this.setState({
-                                selectedLink: friend,
-                            })
-                        }
-                        value={this.state.selectedLink}
-                        placeholder={i18n.t('EnlaceInv')}
-                    />
                     <View style={styles.friendContainer}>
                         <TouchableOpacity style={styles.confirmButton} onPress={() => this.sendRequest()}>
                             <Text style={styles.sendtext} > {i18n.t('EnvPeticion')} </Text>

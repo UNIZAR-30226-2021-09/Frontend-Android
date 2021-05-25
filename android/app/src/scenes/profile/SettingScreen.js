@@ -8,7 +8,7 @@ import { Picker } from '@react-native-picker/picker';
 
 import i18n from 'i18n-js';
 import { StackActions } from '@react-navigation/native';
-import { setBoardImage, setShipColor, getShipColor, getBoardImageName, } from '../../styles/gameStyle';
+import { setBoardImage, setShipColor, getShipColor, getBoardImageName, getShipColorName, } from '../../styles/gameStyle';
 
 // Set the key-value pairs for the different languages you want to support.
 i18n.translations = {
@@ -78,7 +78,7 @@ i18n.translations = {
         TuTurno: 'Your turn',
         TurnoRival: 'Rival\'s turn',
         HasGanado: 'You won',
-        HasPerido: 'You lost',
+        HasPerdido: 'You lost',
         EsperarRival: 'Wait for your rival to place the ships',
         FueraTablero: 'You\'re shooting off the board',
         VerResultados: 'See results',
@@ -101,6 +101,24 @@ i18n.translations = {
         Cerrar: 'Close',
         PetPartAmis: 'Friendly game requests',
         Torneo: 'Tournament',
+        BattleShip: 'BattleShip',
+        Selecciona: 'Choose',
+        Friend: 'friend',
+        ComienzaTorneo: 'Start tournament',
+        Vaciar: 'Clear',
+        LaPartida: 'game',
+        Oceano: 'Ocean',
+        Desierto: 'Desert',
+        Cesped: 'Grass',
+        Espacio: 'Space',
+        Lava: 'Wash',
+        Azul: 'Blue',
+        Rojo: 'Red',
+        Verde: 'Green',
+        Espanyol: 'Spanish',
+        Ingles: 'English',
+        Terminado: 'Finished',
+        MensajeCopiado: 'Link copied to clipboard'
 
     },
     es: { 
@@ -147,11 +165,11 @@ i18n.translations = {
         Idioma: 'Idioma',
 
         IntNomUsuario: 'Introduzca el nombre de usuario',
-        IntCorreo: 'Introduzca un correo electr�nico',
-        IntCorreoValido: 'Introduzca un correo electr�nico v�lido',
+        IntCorreo: 'Introduzca un correo electrónico',
+        IntCorreoValido: 'Introduzca un correo electrónico válido',
         IntCont: 'Introduzca una contrase�a',
         ContErr: 'Las contrase�as no coinciden',
-        AceptCondErr: 'Debe aceptar las Condiciones de Uso y la Pol�tica de Privacidad para seguir',
+        AceptCondErr: 'Debe aceptar las Condiciones de Uso y la Política de Privacidad para seguir',
 
         AnAmigo: 'Añadir amigo',
         EnlaceInv: 'Enlace de invitación',
@@ -169,7 +187,7 @@ i18n.translations = {
         TuTurno: 'Tu turno',
         TurnoRival: 'Turno del rival',
         HasGanado: 'Has ganado',
-        HasPerido: 'Has perdido',
+        HasPerdido: 'Has perdido',
         EsperarRival: 'Espere a que tu rival coloque los barcos',
         FueraTablero: 'Est�s disparando fuera del tablero',
         VerResultados: 'Ver resultados',
@@ -187,14 +205,29 @@ i18n.translations = {
         PartidasFinalizadas: 'Partidas finalizadas',
         PartidaContra: 'Partida contra',
         VerPartida: 'Ver partida',
-        SeHaAnadidoPartidaCiegas: 'Se ha añadido una partidas',
+        SeHaAnadidoPartidaCiegas: 'Se ha añadido una partida a tu listado',
         NoHayPeticiones: 'No hay peticiones nuevas',
         Cerrar: 'Cerrar',
         PetPartAmis: 'Peticiones de partidas amistosas',
         Torneo: 'Torneo',
-
-
-        
+        BattleShip: 'Juego de barcos',
+        Selecciona: 'Selecciona',
+        Friend: 'amigo',
+        ComienzaTorneo: 'Comienza el torneo',
+        Vaciar: 'Vaciar',
+        LaPartida: 'la partida',
+        Oceano:'Oceano',
+        Desierto:'Desierto',
+        Cesped:'Cesped',
+        Espacio:'Espacio',
+        Lava: 'Lava',
+        Azul: 'Azul',
+        Rojo: 'Rojo',
+        Verde: 'Verde',
+        Espanyol: 'Español',
+        Ingles: 'Inglés',
+        Terminado: 'Terminado',
+        MensajeCopiado: 'Enlace copiado al portapapeles'
     },
 };
 // Set the locale once at the beginning of your app.
@@ -205,13 +238,16 @@ i18n.fallbacks = true;
 export default class SettingScreen extends Component {
     constructor(props) {
         super(props);
+        var lan = i18n.t("Ingles");
+        console.log("LOG LANG" + i18n.locale)
+        if (i18n.locale == 'es') lan = i18n.t("Espanyol");
         this.state = {
-            shipColor: getShipColor(),
+            shipColor: getShipColorName(),
             boardColor: getBoardImageName(),
-            language: "",
-            listShip: ["blue", "red", "green"],
-            listBoard: ["Oceano", "Desierto", "Cesped", "Espacio", "Lava"],
-            listLanguage: ["en", "es"],
+            language:  lan,
+            listShip: [i18n.t('Verde'), i18n.t('Rojo'), i18n.t('Azul')],
+            listBoard: [i18n.t('Oceano'), i18n.t('Desierto'), i18n.t('Cesped'), i18n.t('Espacio'), i18n.t('Lava')],
+            listLanguage: [i18n.t("Ingles"), i18n.t("Espanyol")],
         }
     }
     changeEn = () => {
@@ -232,7 +268,7 @@ export default class SettingScreen extends Component {
     changeLanguage(select) {
         //setLanguage(select);
         //var color = getLanguage()
-        if(select=='es'){
+        if (select == i18n.t("Espanyol")){
             this.changeEs();
         }else{
             this.changeEn();
@@ -255,13 +291,14 @@ export default class SettingScreen extends Component {
             <View style={styles.cuadroGrande}>
                 <View style={styles.titleContainer}>
                     <Text style={styles.title}>
-                            Configuraci�n
+                        {i18n.t('Configuracion')}
                     </Text>
                 </View>
                 <View style={styles.opcion}>
                     <View style={styles.opcion2}>
                         <Text style={styles.opcionText}>
-                            Color de los barcos
+                            {i18n.t('ColorBarcos')}
+
                         </Text>
                     </View>
                     <Picker
@@ -292,7 +329,7 @@ export default class SettingScreen extends Component {
                 <View style={styles.opcion}>
                     <View style={styles.opcion2}>
                         <Text style={styles.opcionText}>
-                            Color del tablero
+                            {i18n.t('ColorTablero')}
                         </Text>
                     </View>
                     <Picker
@@ -308,13 +345,13 @@ export default class SettingScreen extends Component {
                 <View style={styles.opcion}>
                     <View style={styles.opcion2}>
                         <Text style={styles.opcionText}>
-                            Idioma
+                            {i18n.t('Idioma')}
                         </Text>
                     </View>
                     <Picker
                         style={styles.opcion3}
                         mode="dropdown"
-                        selectedValue={this.state.boardColor}
+                        selectedValue={this.state.language}
                         onValueChange={(s) => this.changeLanguage(s)}>
                         {this.state.listLanguage.map((item, index) => {
                             return (<Picker.Item label={item} value={item} key={index} />)
@@ -346,7 +383,8 @@ const styles = StyleSheet.create({
         flex: 1,
         width: '60%',
         alignSelf: 'center',
-        padding:'10%'
+        padding: '10%',
+        top:'-3%'
     },
     opcion3: {
         flex: 1,
@@ -358,7 +396,7 @@ const styles = StyleSheet.create({
     opcionText: {
         fontSize: 24,
         fontWeight: 'bold',
-        color: PRIMARY
+        color: PRIMARY,
     },
     title: {
         textAlign: 'center',

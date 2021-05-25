@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "277265195740",
+    "project_id": "battleshiponline-e9305",
+    "storage_bucket": "battleshiponline-e9305.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:277265195740:android:5ec8bbd586dccf375d8a19",
+        "android_client_info": {
+          "package_name": "com.eina.equipo9.battleshiponline"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "277265195740-pnkjheeb6i946r3br5trcq6931ueeu99.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBrymngu1a_Xe2qF0e6hvYA9CRA3ejBI54"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "277265195740-pnkjheeb6i946r3br5trcq6931ueeu99.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

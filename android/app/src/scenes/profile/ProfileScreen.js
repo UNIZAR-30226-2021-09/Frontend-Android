@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, TouchableHighlight, TouchableOpacity, StyleSheet, Image, Alert, FlatList, ScrollView, AsyncStorage } from 'react-native';
+import { View, Text, TouchableHighlight, TouchableOpacity, StyleSheet, Image, Alert, FlatList, ScrollView, AsyncStorage, ToastAndroid } from 'react-native';
 import { PRIMARY, SECONDARY, BLACK, WHITE, TITLE } from '../../styles/colors';
 import { BarraLateral } from '_organisms'
 import DropDownPicker from 'react-native-dropdown-picker';
@@ -8,7 +8,7 @@ import { getInfo } from '_api/user';
 import i18n from 'i18n-js';
 import {Clipboard} from 'react-native';
 
-export default class ProfileScreen extends Component {
+export default class OtherProfileScreen extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -74,7 +74,7 @@ export default class ProfileScreen extends Component {
                     <Text style={styles.title} > {this.state.username}</Text>
                 </View>
                 <View style={styles.cuadroPequeno}>
-                    <Text style={styles.text} > {i18n.t('Correo')} {this.state.username}</Text>
+                    <Text style={styles.text} > {i18n.t('Correo')}: {myInfo.email}</Text>
                 </View>
                 <View style={styles.cuadroPequeno}>
                     <View style={styles.header}>
@@ -104,17 +104,12 @@ export default class ProfileScreen extends Component {
                 </View>
                 <View style={styles.cuadroBotones}>
                     <View style={styles.cuadroPequeno}>
-                        <TouchableOpacity style={styles.shareButton} 
-                            onPress={()=>Clipboard.setString(
-                                'Nombre: '+ this.state.username +'\n'
-                                + 'Partidas jugadas: ' + total + '\n'
-                                + 'Victorias: ' + myInfo.partidasGanadas + '\n'
-                                + 'Derrotas: ' + myInfo.partidasPerdidas + '\n'
-                                + 'Torneos ganados' + myInfo.torneosGanados + '\n'
-                                + 'Winrate: ' + ((myInfo.partidasGanadas / total)*100).toFixed(2) + '\n'
-                                + 'Puntos: ' + myInfo.puntos + '\n'
-                                
-                            )}>
+                        <TouchableOpacity style={styles.shareButton}
+                            onPress={() => {
+                                Clipboard.setString(
+                                    'https://keen-thompson-0eaf88.netlify.app/perfil/' + this.state.username);
+                                ToastAndroid.show(i18n.t('MensajeCopiado'), ToastAndroid.SHORT);
+                            }}>
                             <Text style={styles.rankText}>
                             {i18n.t('Compartir')}
                             </Text>
@@ -201,6 +196,7 @@ const styles = StyleSheet.create({
         borderColor: BLACK,
         flexDirection: 'column',
         alignSelf: 'center',
+        padding:2
     },
     cuadroBotones: {
         flexDirection: 'row',
@@ -283,9 +279,10 @@ const styles = StyleSheet.create({
         fontSize: 20,
     },
     text: {
-        fontSize: 20,
+        fontSize: 21,
         textAlign: 'center',
-        color: PRIMARY
+        color: PRIMARY,
+        top:'-10%'
     },
     infoText: {
         fontSize: 20,

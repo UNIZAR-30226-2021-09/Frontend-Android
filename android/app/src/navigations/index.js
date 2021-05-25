@@ -26,11 +26,11 @@ const Stack = createStackNavigator();
 import { RootScreen, LoginScreen, SignScreen } from '_scenes/access';
 import AboutScreen from '_scenes/about'
 import HomeScreen from '_scenes/home';
-import { ProfileScreen, RankingScreen, SettingScreen, ResultListScreen } from '_scenes/profile';
+import { ProfileScreen, RankingScreen, SettingScreen, ResultListScreen, OtherResultListScreen, OtherProfileScreen } from '_scenes/profile';
 import { AddFriendScreen } from '_scenes/friend';
 import { BeginTournamentScreen, BeginRandomScreen, BeginFriendScreen, OngoingGameScreen }
     from '_scenes/startGame';
-import { GameScreen, PlaceShipsScreen, ResultScreen, BoardResultScreen } from '_scenes/gameLogic';
+import { GameScreen, PlaceShipsScreen, ResultScreen, BoardResultScreen, OtherBoardResultScreen } from '_scenes/gameLogic';
 
 function RootNavigator() {
     return (
@@ -53,6 +53,9 @@ function RootNavigator() {
             <Stack.Screen name="Setting" component={SettingScreen} />
             <Stack.Screen name="BoardResult" component={BoardResultScreen} />
             <Stack.Screen name="ResultList" component={ResultListScreen} />
+            <Stack.Screen name="OtherProfile" component={OtherProfileScreen} />
+            <Stack.Screen name="OtherResultList" component={OtherResultListScreen} />
+            <Stack.Screen name="OtherBoardResult" component={OtherBoardResultScreen} />
 
         </Stack.Navigator>
     );

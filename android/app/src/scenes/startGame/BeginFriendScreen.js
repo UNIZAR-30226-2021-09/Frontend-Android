@@ -18,15 +18,11 @@ export default class BeginFriendScreen extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            tourList: [
-                { label: 'Torneo 1', value: 'torneo1', },
-                { label: 'Torneo 2', value: 'torneo2' },
-                { label: 'Torneo 3', value: 'torneo3' },
-            ],
+            tourList: [],
             selectedFriend: '',
             username: '',
             estado: ELEGIR,
-            friendList: ["cheerful", "sweet", "natured", "cheerful", "sweet", "natured"],
+            friendList: [],
             show: true,
         }
 
@@ -117,7 +113,7 @@ export default class BeginFriendScreen extends Component {
                     {this.state.estado != ELEGIR ?
                         null :
                         <View style={styles.friendContainer}>
-                                <Text style={styles.messageText} > {this.state.estado} </Text>
+                            <Text style={styles.messageText} > {i18n.t('InvitarAmigo')} </Text>
                         </View>
                     }
                     <View style={styles.friendContainer}>
@@ -138,9 +134,9 @@ export default class BeginFriendScreen extends Component {
                             keyExtractor={(item, index) => index.toString()}
                             style={styles.friendContainer}
                         /> : <View style={styles.friendContainer}>
-                                <Text style={styles.text} >{INVITAR}: {this.state.selectedFriend}</Text>
+                                <Text style={styles.text} >{i18n.t('VasAInvitar')} {this.state.selectedFriend}</Text>
                                 <TouchableOpacity style={styles.chooseButton} onPress={() => this.showFriend()}>
-                                    <Text style={styles.buttonChooseText} > {this.state.estado} </Text>
+                                    <Text style={styles.buttonChooseText} > {i18n.t('ElegirOtro')} </Text>
                                 </TouchableOpacity>
                                 <TouchableOpacity style={styles.confirmButton} onPress={() => this.send()}>
                                     <Text style={styles.buttonText}>

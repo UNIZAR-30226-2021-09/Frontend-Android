@@ -19,7 +19,7 @@ export const beginIA = user => {
     }).then(res => {
         console.log("Begin IA")
         console.log(res.data)
-        return res
+        return res.data
     })
 }
 
@@ -106,7 +106,7 @@ export const acceptFriendGame = (user) => {
     }).then(res => {
         console.log(" aceptar peticiones de partida contra amigo")
         console.log(res.data)
-        return res
+        return res.data
     })
 }
 
@@ -118,18 +118,24 @@ export const dismissFriendGame = (user) => {
     }).then(res => {
         console.log("rechazar peticiones de partida contra amigo")
         console.log(res.data)
-        return res
+        return res.data
     })
 }
 //get
 export const getHistory = (user) => {
-    return axios.post('https://proyecto-software-09.herokuapp.com/game/history', {
+    return axios.post('https://proyecto-software-09.herokuapp.com/history', {
         nombreUsuario: user.Username,
         accessToken: user.AccessToken,
     }).then(res => {
         console.log("getHistory")
         console.log(res.data)
         return res.data
+    }).catch(error => {
+        console.log("errorrrrrrrrrrrrrrr")
+        if (error.response) {
+            console.log(error.response.data);
+        }
+        return { error: "error", tipo: error.response.data };
     })
 }
 

@@ -1,6 +1,8 @@
 import axios from 'axios'
 import { AsyncStorage } from 'react-native'
-
+import Constants from 'expo-constants';
+import * as Notifications from 'expo-notifications';
+import { ToastAndroid, Alert} from 'react-native';
 
 export const register = newUser => {
     return axios.post('https://proyecto-software-09.herokuapp.com/signin', {
@@ -9,22 +11,19 @@ export const register = newUser => {
         contrasena: newUser.Password,
     })
         .then(async (response) => {
-            //console.log("El response")
-            //console.log(response.data)
+            console.log("El response LOGIN")
+            console.log(response.data)
             await AsyncStorage.setItem('userToken', response.data.accessToken)
             await AsyncStorage.setItem('username', response.data.nombreUsuario)
+            var device = await registerForPushNotificationsAsync();
+            setToken(newUser.Username, device)
             return response.data
         })
-        .catch(err => {
-            console.log("errorrrrrrrrrrrrrrr")
-            if (err.response) {
-                console.log(err.response.data);
-            }
-            return "error"
-        })
+        
 }
 
 export const login = newUser => {
+   // console.log("----console" + JSON.stringify(newUser))
     return axios.post('https://proyecto-software-09.herokuapp.com/login', {
         email: newUser.Mail,
         nombreUsuario: newUser.Username,
@@ -32,9 +31,12 @@ export const login = newUser => {
     })
         .then(async (response) => {
            // console.log("El response")
-            console.log(response.data.accessToken)
+            //console.log(response.data.accessToken)
             await AsyncStorage.setItem('userToken',response.data.accessToken)
             await AsyncStorage.setItem('username', response.data.nombreUsuario)
+            var device = await registerForPushNotificationsAsync();
+            console.log("----DEVICE  "+device)
+            setToken(newUser.Username, device)
             return response.data
         })
         .catch(err => {
@@ -45,7 +47,54 @@ export const login = newUser => {
             return "error"
         })
 }
+const registerForPushNotificationsAsync=async ()=> {
+    let token;
+    if (Constants.isDevice) {
+        const { status: existingStatus } = await Notifications.getPermissionsAsync();
+        let finalStatus = existingStatus;
+        if (existingStatus !== 'granted') {
+            const { status } = await Notifications.requestPermissionsAsync();
+            finalStatus = status;
+        }
+        if (finalStatus !== 'granted') {
+            Alert.alert('Failed to get push token for push notification!');
+            return;
+        }
+        token = (await Notifications.getExpoPushTokenAsync()).data;
+        //ToastAndroid.show("TOKEN " + token, 1);
+    } else {
+        Alert.alert('Must use physical device for Push Notifications');
+    }
 
+    if (Platform.OS === 'android') {
+        Notifications.setNotificationChannelAsync('default', {
+            name: 'default',
+            importance: Notifications.AndroidImportance.MAX,
+            vibrationPattern: [0, 250, 250, 250],
+            lightColor: '#FF231F7C',
+        });
+    }
+    return token;
+}
+export const setToken = (username, token) => {
+
+    return axios.post('https://proyecto-software-09.herokuapp.com/setToken', {
+        nombreUsuario: username,
+        token: token,
+    })
+        .then(async (response) => {
+            console.log("setToken")
+            console.log(response.data)
+            return response.data
+        })
+        .catch(err => {
+            console.log("errorrrrrrrrrrrrrrr")
+            if (err.response) {
+                console.log(err.response.data);
+            }
+            return "error"
+        })
+}
 
 export const getFriendList = (user) => {
     return axios.post('https://proyecto-software-09.herokuapp.com/user/friendList', {
@@ -130,7 +179,7 @@ export const getInfo = (user) => {
     console.log("----INFO ")
 
     //console.log(user);
-    return axios.post('https://proyecto-software-09.herokuapp.com/user/me', {
+    return axios.post('https://proyecto-software-09.herokuapp.com/profile', {
         nombreUsuario: user.Username,
         accessToken: user.AccessToken,
     }).then(res => {
@@ -138,4 +187,3 @@ export const getInfo = (user) => {
         return res.data
     })
 }
-

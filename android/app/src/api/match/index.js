@@ -298,7 +298,7 @@ export const startGame = (username, token, gameId, myBoard) => {
 		console.log("colocarBarcosRESPUESTA------")
 		console.log(res.data)
 		if (res.data.turno == TURNORIVAL)
-			disparo(gameId, COLOCADO)
+			disparo(gameId, "TuTurno")
 		return res.data
 	}).catch(error => {
 		console.log("errorrrrrrrrrrrrrrr")
@@ -406,6 +406,27 @@ export const getBoard = (username, token, gameId) => {
 	})
 }
 
+export const getBoardOther = (username, token, gameId) => {
+	var data = {
+		nombreUsuario: username,
+		accessToken: token,
+		gameid: gameId
+	}
+	return axios.post('https://proyecto-software-09.herokuapp.com/cogerTableroFin', data).then(res => {
+		console.log("getBOARD------")
+		//console.log(res.data)
+		//console.log(res.data.tuTablero)
+		//console.log(res.data.disparos)
+
+		return adaptBoard(res.data);
+	}).catch(error => {
+		console.log("errorrrrrrrrrrrrrrr  " + error)
+		if (error.response) {
+			console.log(error.response.data);
+		}
+		return "error"
+	})
+}
 export const movement = (username, token, gameId, row, col) => {
 	var data = {
 		nombreUsuario: username,
@@ -434,7 +455,7 @@ export const infoPartida = (username, token, gameId) => {
 		accessToken: token,
 		gameid: gameId,
 	}
-	return axios.post('https://proyecto-software-09.herokuapp.com/match/infoPartida', data).then(res => {
+	return axios.post('https://proyecto-software-09.herokuapp.com/infoPartida', data).then(res => {
 		console.log("infoPartida------")
 		console.log(res.data)
 		return res.data.infoPartida;

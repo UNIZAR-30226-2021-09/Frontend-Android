@@ -8,9 +8,9 @@ import { initBoard, attack, getSolution, initAttack, initShip, initCoord, IAmove
 import { socket, disparo } from '_api/user/socket';
 import { getShipColor, getBoardImage, getBoardColor } from '../../styles/gameStyle';
 import i18n from 'i18n-js';
-import { playBomb, playWater, playHit } from '../../assets/sound/PlaySound';
-const GANADO = "GANADO"
-const PERDIDO = "PERDIDO"
+import { playBomb, playWater, playHit, stop } from '../../assets/sound/PlaySound';
+const GANADO = "finPartida"
+const PERDIDO = "finPartida"
 const MITURNO = "tuTurno"
 const TURNORIVAL = "turnoRival"
 
@@ -40,6 +40,7 @@ export default class GameScreen extends Component {
         var _username = await AsyncStorage.getItem('username');
         var _accessToken = await AsyncStorage.getItem('userToken');
         var _gameId = await AsyncStorage.getItem('gameId');
+        console.log("Game id---" + _gameId)
         var _contrincante = await AsyncStorage.getItem('contrincante');
         this.setState({ username: _username, accessToken: _accessToken, gameId: _gameId, contrincante: _contrincante });
 
@@ -53,6 +54,7 @@ export default class GameScreen extends Component {
                 this.setState({ fin: true, ganador: true })
             } else if (data.nuevoTurno == PERDIDO) {
                 this.setState({ fin: true, ganador: false })
+                
             } 
             this.updateBoard();
         })
@@ -60,7 +62,7 @@ export default class GameScreen extends Component {
         await this.updateBoard();
     }
     async componentWillUnmount() {
-        this._ismounted = false;
+         stop();
     }
     async updateBoard() {
         let { username, accessToken, gameId, fin, ganador } = this.state
@@ -68,22 +70,22 @@ export default class GameScreen extends Component {
         await getBoard(username, accessToken, gameId).then(data => {
             //console.log("Data de getBoard: " + data);
             if (data != "error") {
-                if (data.myState == MITURNO) 
-                    msg = "Tu turno"
+                if (data.myState == MITURNO)
+                    msg = i18n.t('TuTurno')
                 else if (data.myState == TURNORIVAL)
-                    msg = "Turno del rival"
+                    msg = i18n.t('TurnoRival');
 
                 if (fin && ganador)
-                    msg = "Has ganado";
+                    msg = i18n.t('Terminado') ;
                 else if (fin)
-                    msg = "Has perdido";
+                    msg = i18n.t('Terminado');
                 //console.log("TURNO:    ---" + this.state.board.myState + fin + ganador + msg)
 
                 this.setState(
                     { board: data, turnMsg: msg}
                 )
             } else {
-                alert('Error de getBoard');
+                //alert('Error de getBoard');
             }
         });
     }
@@ -101,14 +103,16 @@ export default class GameScreen extends Component {
                         playWater()}
                 }
                 else if (!data.fin && data.disparo == "fallo") {
-                    disparo(gameId, MITURNO)
+                    disparo(gameId, "TuTurno")
                      playWater();
                     //ToastAndroid.show("Has fallado, es turno de tu rival", ToastAndroid.SHORT)
                 } else if (!data.fin) {
                     disparo(gameId, TURNORIVAL)
                     if (data.disparo == 'hundido') {
+                        disparo(gameId, "TurnoRival")
                         playBomb();
                     } else {
+                        disparo(gameId, "TurnoRival")
                         playHit();
                     }
                     //ToastAndroid.show("Has acertado, sigue siendo tu turno", ToastAndroid.SHORT)
@@ -121,6 +125,7 @@ export default class GameScreen extends Component {
                     this.setState({ fin: true, ganador: false })
                 }
                 this.updateBoard();
+                stop();
                 console.log("FIN--" + this.state.fin + this.state.ganador)
             } else {
                /* var msg = data.tipo
@@ -141,6 +146,7 @@ export default class GameScreen extends Component {
         let { username, accessToken, gameId } = this.state
         await rendirse(username, accessToken, gameId)
             .then(data => {
+                disparo(gameId, "finPartida")
                 this.props.navigation.navigate('Result')
             })
     }
@@ -204,24 +210,24 @@ export default class GameScreen extends Component {
                     {this.state.fin ?
                         <View style={{ flex: 1 }}>
                             <TouchableHighlight style={styles.button} onPress={() => this.props.navigation.navigate('Result')}>
-                                <Text style={styles.btnText}> Ver resultados</Text>
+                                <Text style={styles.btnText}> {i18n.t('VerResultados')}</Text>
                             </TouchableHighlight>
                         </View> :
                         <View style={{ flex: 1 }}>
                             <TouchableHighlight style={styles.button} onPress={() => this.giveUp()}>
-                                <Text style={styles.btnText}> Rendirse</Text>
+                                <Text style={styles.btnText}> {i18n.t('Rendirse')}</Text>
                             </TouchableHighlight>
                         </View>
                     }
                     
                     <View style={{ flex: 1 }}>
-                        <Text style={styles.turnTitle}> Partida contra {this.state.contrincante} </Text>
+                        <Text style={styles.turnTitle}> {i18n.t('PartidaContra')} {this.state.contrincante} </Text>
                         <Text style={styles.turnText}> {this.state.turnMsg} </Text>
                     </View>
                     <View style={{ flex: 1 }}>
 
                         <TouchableHighlight style={styles.button} onPress={() => this.props.navigation.navigate('Home')}>
-                            <Text style={styles.btnText}> Salir</Text>
+                            <Text style={styles.btnText}> {i18n.t('Salir')} </Text>
                         </TouchableHighlight>
                     </View>
                 </View>

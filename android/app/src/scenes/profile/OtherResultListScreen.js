@@ -1,4 +1,4 @@
-﻿import React, { Component } from 'react';
+import React, { Component } from 'react';
 import { View, Text, TouchableHighlight, TouchableOpacity, StyleSheet, Image, Alert, FlatList, ScrollView, AsyncStorage } from 'react-native';
 import { PRIMARY, SECONDARY, BLACK, WHITE, TITLE, GRAY_MEDIUM, SUCCESS } from '../../styles/colors';
 import { BarraLateral } from '_organisms'
@@ -7,7 +7,7 @@ import { getHistory } from '_api/game';
 import { getInfo } from '_api/user';
 import i18n from 'i18n-js';
 
-export default class ResultListScreen extends Component {
+export default class OtherResultListScreen extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -21,7 +21,7 @@ export default class ResultListScreen extends Component {
 
     }
     async componentDidMount() {
-        var _username = await AsyncStorage.getItem('username');
+        var _username = await AsyncStorage.getItem('otherUser');
         var _accessToken = await AsyncStorage.getItem('userToken');
         this.setState({ username: _username, accessToken: _accessToken });
         var newUser = {
@@ -60,14 +60,14 @@ export default class ResultListScreen extends Component {
     }
     async goToResult(id) {
         await AsyncStorage.setItem('gameId', id);
-        this.props.navigation.navigate("BoardResult");
+        this.props.navigation.navigate("OtherBoardResult");
     }
     //{item.state?"(Victoria)":"(Derrota)"}
     render() {
         return (<View style={styles.container}>
             <View style={styles.cuadroGrande}>
                 <View style={styles.cuadroPequeno}>
-                    <Text style={styles.title} > {i18n.t('PartidasFinalizadas')} </Text>
+                    <Text style={styles.title} > {i18n.t('PartidasFinalizadas')} of {this.state.username} </Text>
                 </View>
                 <View style={styles.cuadroPartidas}>
                     <View style={styles.itemPartida}>
@@ -111,23 +111,6 @@ export default class ResultListScreen extends Component {
                         />
                     </View>
                 </View>
-                <View style={styles.cuadroBotones}>
-                    <View style={styles.cuadroPequeno}>
-                        <TouchableOpacity style={styles.shareButton} onPress={() => Alert.alert("Funcionalidad futura")}>
-                            <Text style={styles.rankText}>
-                            {i18n.t('Compartir')}
-                            </Text>
-                        </TouchableOpacity>
-                    </View>
-                    <View style={styles.cuadroPequeno}>
-                        <TouchableOpacity style={styles.logOutButton} onPress={() => this.props.navigation.navigate('Root')}>
-                            <Text style={styles.rankText}>
-                            {i18n.t('CerrarSesion')}
-                            </Text>
-                        </TouchableOpacity>
-                    </View>
-                </View>
-
             </View>
             <BarraLateral navigation={this.props.navigation} />
 
@@ -171,7 +154,7 @@ const styles = StyleSheet.create({
         backgroundColor: PRIMARY,
         borderRadius: 50,
         alignSelf: 'center',
-        top:'10%'
+        top: '10%'
     },
     gameLose: {
         flexDirection: 'row',
@@ -196,7 +179,7 @@ const styles = StyleSheet.create({
         height: 25,
         borderRadius: 5,
         borderWidth: 1,
-        borderColor:'transparent'
+        borderColor: 'transparent'
     },
     cuadroGrande: {
         flex: 4,
@@ -219,7 +202,7 @@ const styles = StyleSheet.create({
     },
     cuadroPartidas: {
         alignSelf: 'center',
-        flex: 1,
+        flex: 2,
         padding:10
     },
     cuadroAmigos: {
@@ -285,7 +268,7 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         color: 'black',
         fontSize: 20,
-        top:'15%'
+        top: '15%'
     },
     text: {
         fontSize: 20,
@@ -295,7 +278,7 @@ const styles = StyleSheet.create({
         fontSize: 15,
         textAlign: 'center',
         color: WHITE,
-        top:'10%'
+        top: '10%'
     },
     viewText: {
         fontSize: 15,

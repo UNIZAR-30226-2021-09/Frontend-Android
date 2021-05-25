@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
-import { SafeAreaView, View, Text, TouchableHighlight, CheckBox, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
+import { SafeAreaView, View, Text, TouchableHighlight, CheckBox, StyleSheet, TextInput, TouchableOpacity, Alert } from 'react-native';
 import { WHITE, PRIMARY, SECONDARY, GRAY_MEDIUM, GRAY_LIGHT, TITLE } from '../../styles/colors';
-import { register } from '_api/user';
+import { register,setToken } from '_api/user';
 import * as Crypto from 'expo-crypto';
 import { logMe, getIntoAllGames } from '_api/user/socket';
 import i18n from 'i18n-js';
@@ -38,7 +38,7 @@ const SignScreen = ({
             alert(i18n.t('IntCorreo'));
             return;
         }
-        if (!mail.includes('@')) {
+        if (!mail.includes('@') || !mail.includes('.')) {
             alert(i18n.t('IntCorreoValido'));
             return;
         }
@@ -47,7 +47,7 @@ const SignScreen = ({
             return;
         }
         if (pass != repeatPass) {
-            alert(i18n.t('ContError'));
+            alert(i18n.t('ContErr'));
             return;
         }
         if (!isSelected) {
@@ -73,12 +73,13 @@ const SignScreen = ({
             Password: hashPass,
         }
         console.log(newUser);
+
         register(newUser).then(data => {
             console.log("Data de registro: " + data);
             if (data != "error") {
-                navigation.navigate('Home');
                 logMe(newUser);
                 getIntoAllGames(user);
+                navigation.navigate('Home');
             } else {
                 alert('No se ha podido registrar');
             }

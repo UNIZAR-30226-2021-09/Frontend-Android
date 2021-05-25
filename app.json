@@ -10,7 +10,9 @@
     ],
     "android": {
       "package": "com.eina.equipo9.battleshiponline",
-      "versionCode": 1
+      "versionCode": 1,
+      "useNextNotificationsApi": true,
+      "googleServicesFile": "./android/app/google-services.json"
     }
   }
 }

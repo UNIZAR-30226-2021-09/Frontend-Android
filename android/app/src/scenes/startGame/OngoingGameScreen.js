@@ -44,7 +44,7 @@ export default class OngoingGameScreen extends Component {
     async updateList(user) {
 
         await getGameInProgess(user).then(data => {
-            //console.log("Data de getProgress: " + JSON.stringify(data));
+            console.log("Data de getProgress: " + JSON.stringify(data));
             if (data != "error") {
                 this.setState(
                     { gameList: data }
@@ -85,22 +85,22 @@ export default class OngoingGameScreen extends Component {
                         data={this.state.gameList}
                         extraData={this.state.showItemIndex}
                         renderItem={({ item, index }) => {
-                            if (item.tuTurno != COLOCANDO)
+                            if (item.tuTurno != COLOCANDO && item.contrincante!=null)
                                 return (
                                     <View style={styles.friend}>
                                         <TouchableOpacity style={styles.gameButton} onPress={() => this.goToGame(item)}>
                                             <Text style={styles.friendText}>
-                                            {i18n.t('PartidaContra')} {item.contrincante}
+                                                {item.tipo == "torneo"? i18n.t('Torneo')+":":""} {i18n.t('PartidaContra')} {item.contrincante}
                                             </Text>
                                         </TouchableOpacity>
                                     </View>
                                 );
-                            else
+                            else if (item.contrincante != null)
                                 return (
                                     <View style={styles.friend}>
                                         <TouchableOpacity style={styles.gameButton} onPress={() => this.goToPlaceShip(item)}>
                                             <Text style={styles.friendText}>
-                                            {i18n.t('PartidaContra')} {item.contrincante}
+                                                {item.tipo == "torneo" ? i18n.t('Torneo') + ":" : ""} {i18n.t('PartidaContra')} {item.contrincante}
                                             </Text>
                                         </TouchableOpacity>
                                     </View>
@@ -154,8 +154,8 @@ const styles = StyleSheet.create({
         height: 30,
         backgroundColor: SECONDARY,
         borderRadius: 50,
-        borderWidth: 1,
         alignSelf: 'center',
+        borderRadius:5
     },
     myTurnButton: {
         width: 300,

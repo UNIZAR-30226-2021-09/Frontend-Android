@@ -18,9 +18,13 @@ const HomeScreen = ({ navigation }) => {
         switch (mode) {
             case "IA":
                 await beginIA(user).then(data => {
-                    console.log("Data de begin IA3: " + data);
+                    console.log("Data de begin IA3: " + JSON.stringify(data));
                     if (data != "error") {
-                        navigation.navigate('PlaceShips');
+
+                         AsyncStorage.setItem('contrincante', "I.A");
+                        AsyncStorage.setItem('gameId', data._id);
+                        console.log("id---"+data._id)
+                        navigation.replace('PlaceShips');
                     } else {
                         alert('Error de  begin IA');
                     }
@@ -34,7 +38,7 @@ const HomeScreen = ({ navigation }) => {
                 await emparejamientoACiegas(user).then(data => {
                     console.log("Data de random: " + data);
                     if (data != "error") {
-                        navigation.navigate('BeginRandom');
+                        navigation.replace('BeginRandom');
                     } else {
                         alert('Error de  random de partida a ciegas');
                     }
@@ -43,7 +47,7 @@ const HomeScreen = ({ navigation }) => {
                     console.log(err)
                     return "error"
                 });
-                navigation.navigate('BeginRandom');
+                navigation.replace('BeginRandom');
 
                 break;
         }
@@ -55,7 +59,7 @@ const HomeScreen = ({ navigation }) => {
                 <View style={styles.cuadroCuaduple}>
                     <View style={styles.cuadroTitulo}>
                         <Text style={styles.title}>
-                            Juego de barcos
+                            {i18n.t('BattleShip')}
                         </Text>
                     </View>
                 </View>
@@ -126,8 +130,8 @@ const styles = StyleSheet.create({
         alignSelf: 'center'
     },
     cubito: {
-        width: 140,
-        height: 50,
+        width: 150,
+        height: 40,
         backgroundColor: PRIMARY,
         borderRadius: 50,
         alignSelf:'center'
@@ -153,53 +157,11 @@ const styles = StyleSheet.create({
         color: BLACK,
         
     },
- 
-    cubito1:{
-        top:30, left:60,
-        width: 140,
-        height:50,
-        backgroundColor: PRIMARY,
-        borderRadius:50,
-        borderWidth: 1,
-        
-    },
-    cubito2:{
-        top:-20, left:375,
-        width: 140,
-        height:50,
-        backgroundColor: PRIMARY,
-        borderRadius:50,
-        borderWidth: 1,
-    },
-    cubito3:{
-        top:30, left:60,
-        width: 140,
-        height:50,
-        backgroundColor: PRIMARY,
-        borderRadius:50,
-        borderWidth: 1,
-    },
-    cubito4:{
-        top:-15, left:375,
-        width: 140,
-        height:50,
-        backgroundColor: PRIMARY,
-        borderRadius:50,
-        borderWidth: 1,
-    },
-    cubito5:{
-        top:0, left:218,
-        width: 140,
-        height:50,
-        backgroundColor: PRIMARY,
-        borderRadius:50,
-        borderWidth: 1,
-    },
     textoCubito:{
         fontSize: 16,
         alignSelf: 'center',
         color: WHITE,
-        marginTop: '10%',
+        marginTop: '5%',
     },
     container: {
         flex: 1,

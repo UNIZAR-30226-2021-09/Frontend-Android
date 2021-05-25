@@ -3,14 +3,14 @@
     "",
     "\\android",
     "\\android\\app",
-    "\\android\\app\\src",
     "\\android\\app\\src\\api",
     "\\android\\app\\src\\api\\game",
-    "\\android\\app\\src\\api\\gameLogic",
-    "\\android\\app\\src\\components",
-    "\\android\\app\\src\\components\\organisms",
-    "\\android\\app\\src\\scenes"
+    "\\android\\app\\src\\scenes",
+    "\\android\\app\\src\\scenes\\gameLogic",
+    "\\android\\app\\src\\scenes\\home",
+    "\\android\\app\\src\\scenes\\profile",
+    "\\android\\app\\src\\styles"
   ],
-  "SelectedNode": "\\android\\app\\src\\components\\organisms\\barra_lateral.js",
+  "SelectedNode": "\\app.json",
   "PreviewInSolutionExplorer": false
 }

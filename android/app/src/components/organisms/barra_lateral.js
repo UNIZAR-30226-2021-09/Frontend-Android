@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { SafeAreaView, View, Text, TouchableHighlight, StyleSheet, AsyncStorage, TextInput, TouchableOpacity, FlatList, Button, Alert, Image } from 'react-native';
-import { WHITE, PRIMARY, SECONDARY,BLACK, GRAY_LIGHT, TITLE } from '../../styles/colors';
+import { WHITE, PRIMARY, SECONDARY,BLACK, GRAY_LIGHT, TITLE, SUCCESS } from '../../styles/colors';
 import Modal from 'react-native-modal';
 import { getFriendList } from '_api/user';
 import { getIncomingList, getOutgoingList, accept, dismiss } from '_api/user';
@@ -22,7 +22,7 @@ export default class BarraLateral extends Component {
             showFriend: false,
             showGameRequest: false,
             refreshing: false,
-            incomingList: ["cheerful", "sweet", "natured", "cheerful", "sweet", "natured"],
+            incomingList: [],
             challengeList: [],
             accessToken: "",
             newPetition: 0,
@@ -226,7 +226,12 @@ export default class BarraLateral extends Component {
         });
         this.updateChallengeList(newUser);
     }
-
+    async goToFriendProfile(friend) {
+        await AsyncStorage.setItem('otherUser', friend);
+        this.props.navigation.dispatch(
+            StackActions.replace('OtherProfile')
+        )
+    }
     render() {
 
         return (
@@ -430,18 +435,11 @@ export default class BarraLateral extends Component {
                             renderItem={({ item, index }) => {
                                 return (
                                     <View style={styles.friend}>
-                                        {true ?
-                                            <View style={styles.connectFriend}>
-                                                <Text style={styles.friendText}>
-                                                    {item}
-                                                </Text>
-                                            </View> :
-                                            <View style={styles.notConnectFriend}>
-                                                <Text style={styles.friendText}>
-                                                    {item}
-                                                </Text>
-                                            </View>
-                                        }
+                                        <TouchableOpacity style={styles.connectFriend} onPress={() => this.goToFriendProfile(item)}>
+                                            <Text style={styles.friendText}>
+                                                {item}
+                                            </Text>
+                                        </TouchableOpacity> 
                                     </View>
                                 );
                             }}
@@ -477,7 +475,7 @@ const styles = StyleSheet.create({
     },
     peticion: {
         height: 20,
-        width: '100%',
+        width: '85%',
         backgroundColor: PRIMARY,
         borderRadius: 50,
         flexDirection: 'row',
@@ -539,8 +537,9 @@ const styles = StyleSheet.create({
         width: 120,
         height: 26,
         backgroundColor: PRIMARY,
-        borderRadius: 50,
+        borderRadius: 5,
         alignSelf: 'center',
+        
     },
     notConnectFriend: {
         width: 120,
@@ -589,7 +588,7 @@ const styles = StyleSheet.create({
     },
     modalHeaderText: {
         textAlign: "center",
-        color: 'black',
+        color: TITLE,
         fontWeight: 'bold',
         fontSize: 20,
     },
@@ -615,20 +614,22 @@ const styles = StyleSheet.create({
     },
     rejectButton: {
         width: 50,
-        height: 20,
+        height: 18,
         backgroundColor: 'red',
         borderRadius: 50,
-        borderWidth: 1,
         alignSelf: 'center',
-        marginRight: 40
+        marginRight: 40,
+        top: '10%'
+
     },
     acceptButton: {
         width: 40,
-        height: 20,
-        backgroundColor: 'green',
+        height: 18,
+        backgroundColor: SUCCESS,
         borderRadius: 50,
-        borderWidth: 1,
         alignSelf: 'center',
+        top: '10%'
+
     },
 
     gameLose: {
@@ -651,6 +652,7 @@ const styles = StyleSheet.create({
         backgroundColor: PRIMARY,
         width: 400,
         height: 25,
+        borderRadius:5
     },
     friend2: {
         paddingTop: 1,
@@ -672,7 +674,8 @@ const styles = StyleSheet.create({
         backgroundColor: PRIMARY,
         borderRadius: 50,
         borderWidth: 1,
-        alignSelf: 'center'
+        alignSelf: 'center',
+
     },
     friendList2: {
         alignSelf: 'center',
@@ -682,7 +685,8 @@ const styles = StyleSheet.create({
     rankText: {
         fontSize: 10,
         textAlign: 'center',
-        color: WHITE
+        color: WHITE,
+        top:'10%'
     },
     circle: {
         backgroundColor: 'red',

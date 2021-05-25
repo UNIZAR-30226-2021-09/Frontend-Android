@@ -43,7 +43,7 @@ export default class ResultScreen extends Component {
             <View style={styles.container}>
                 <View style={styles.cuadroGrande}>
                     <View style={styles.cuadroPequeno}>
-                        <Text style={styles.title} > {ganador ? "Has ganado " : "Has perdido "}la partida</Text>
+                        <Text style={styles.title} > {ganador ? i18n.t('HasGanado') : i18n.t('HasPerdido')} {i18n.t('LaPartida')}</Text>
                     </View>
                     <View style={styles.estadisticas}>
                         <Text style={styles.text} > {i18n.t('PuntObt')} {puntos}</Text>

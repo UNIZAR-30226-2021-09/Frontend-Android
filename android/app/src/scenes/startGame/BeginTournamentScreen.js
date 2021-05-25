@@ -145,7 +145,7 @@ export default class BeginTournamentScreen extends Component {
                         //this.setState({ textValue: 'No hay nadie esperando partida, cuando aparezca un contrincante se a�adira la partida a tu lista de partidas' })
                     } else {
                         //Aqui se ha encontrado partida asi que redirige a la partida 
-                        ToastAndroid.show('Se ha a�adido una partida', ToastAndroid.SHORT);
+                        ToastAndroid.show(i18n.t('SeHaAnadidoPartidaCiegas'), ToastAndroid.SHORT);
                         //this.props.navigation.navigate('Home');
                     }
                 } else {
@@ -177,7 +177,7 @@ export default class BeginTournamentScreen extends Component {
                         <View style={styles.cuadroAmigos}>
 
                             <Text style={styles.seleccionar}>
-                                {restantes != 0 ? " Selecciona "+ restantes +" amigos:": "Comienza el torneo"}
+                                {restantes != 0 ? i18n.t('Selecciona') + " " + restantes + " " + i18n.t('Friend') + "s " : i18n.t('ComienzaTorneo')}
                             </Text>
                             <FlatList
                                 data={this.state.friendList}
@@ -261,12 +261,12 @@ export default class BeginTournamentScreen extends Component {
                         <View style={{ flex: 1 }}>
 
                             <TouchableHighlight style={styles.button} onPress={() => this.vaciar()}>
-                                <Text style={styles.btnText}> Vaciar</Text>
+                                <Text style={styles.btnText}> {i18n.t('Vaciar')}</Text>
                             </TouchableHighlight>
                         </View>
                         <View style={{ flex: 1 }}>
                             <TouchableHighlight style={styles.button} onPress={() => this.startGame()}>
-                                <Text style={styles.btnText}> Comenzar</Text>
+                                <Text style={styles.btnText}> {i18n.t('Comenzar')}</Text>
                             </TouchableHighlight>
                         </View>
                     </View>

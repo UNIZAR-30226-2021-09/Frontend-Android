@@ -1,11 +1,12 @@
 import React from 'react';
-import { SafeAreaView, View, Text, TouchableHighlight, StyleSheet, TextInput,TouchableOpacity } from 'react-native';
+import { SafeAreaView, View, Text, TouchableHighlight, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
 import { WHITE, PRIMARY, SECONDARY, GRAY_MEDIUM, GRAY_LIGHT, TITLE } from '../../styles/colors';
 import { login } from '_api/user';
 import { logMe, getIntoAllGames } from '_api/user/socket';
 import * as Crypto from 'expo-crypto';
 import i18n from 'i18n-js';
-
+import Constants from 'expo-constants';
+import * as Notifications from 'expo-notifications';
 const LoginScreen = ({
     navigation,
 }) => {
@@ -41,9 +42,9 @@ const LoginScreen = ({
         login(newUser).then(data => {
             console.log("Data de registro: " + data);
             if (data != "error") {
-                navigation.navigate('Home')
                 logMe(newUser);
                 getIntoAllGames(user);
+                navigation.navigate('Home')
             } else {
                 alert('Error de login');
             }
@@ -70,12 +71,6 @@ const LoginScreen = ({
             onChangeText={onChangeUsername}
             value={user}
             placeholder={i18n.t('NomUsuario')}
-        />
-        <TextInput
-            style={styles.input}
-            onChangeText={onChangeMail}
-            value={mail}
-            placeholder={i18n.t('Correo')}
         />
         <TextInput
             style={styles.input}
